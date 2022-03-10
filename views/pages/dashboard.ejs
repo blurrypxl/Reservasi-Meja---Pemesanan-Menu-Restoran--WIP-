@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <%- include("../partials/head.ejs"); %>
+  </head>
+
+  <body>
+    <header>
+      <%- include("../partials/header.ejs", {user: user}); %>
+    </header>
+
+    <main class="container">
+      <div class="nav-bar">
+        <%- include("../partials/navbar.ejs", {user: user}); %>
+      </div>
+      
+      <div class="content-box">
+        <div class="container-header">
+          <h1>Daftar Menu</h1>
+        </div>
+        <table>
+          <% menu.forEach(item => { %>
+            <%- include("../datas/tableMenu", {item: item}) %>
+          <% }); %>
+        </table>
+
+        <br>
+
+        <div class="container-header">
+          <h1>Daftar Meja</h1>
+        </div>
+        <table>
+          <% meja.forEach(item => { %>
+            <%- include("../datas/tableMeja", {item: item}); %>
+          <% }); %>
+        </table>
+      </div>
+
+      <script src="/styles/funcModals.js"></script>
+    </main>
+  </body>
+
+</html>

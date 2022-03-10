@@ -1,0 +1,27 @@
+<ul>
+  <li>
+    <a href="/dashboard">DASHBOARD</a>
+  </li>
+
+  <% if (user === "super-admin") { %>
+    <li>
+      <a href="/products-menu">PRODUCTS</a>
+    </li>
+    
+    <li>
+      <a href="">KONFIRMASI TRANSAKSI</a>
+    </li>
+
+    <li>
+      <a href="">LAPORAN</a>
+    </li>
+  <% } else if (user === "admin-kasir") { %>
+    <li>
+      <a href="">KONFIRMASI RESERVASI</a>
+    </li>
+  <% } %>
+
+  <li>
+    <a href="">LOG OUT</a>
+  </li>
+</ul>

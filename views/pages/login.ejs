@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <%- include("../partials/head.ejs"); %>
+  </head>
+
+  <body>
+
+    <header>
+      <%- include("../partials/header.ejs"); %>
+    </header>
+
+    <main class="container">
+      <div class="login-box">
+        <form action="/auth-account" method="post">
+          <div class="form-group">
+            <label for="email-login">Email:</label>
+            <input type="email" name="email_login" id="email-login" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="pass-login">Password:</label>
+            <input type="password" name="pass_login" id="pass-login" required>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="submit-button">Log In</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="image-login"></div>
+    </main>
+
+  </body>
+
+</html>

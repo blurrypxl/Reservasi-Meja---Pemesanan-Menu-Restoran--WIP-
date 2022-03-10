@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <%- include("../partials/head.ejs"); %>
+  </head>
+
+  <body>
+    <header>
+      <%- include("../partials/header.ejs", {user: user}); %>
+    </header>
+
+    <main class="container">
+      <div class="nav-bar">
+        <%- include("../partials/navbar.ejs", {user: user}); %>
+      </div>
+
+      <div class="content-box">
+        <div class="notif-bar"></div>
+        
+        <div class="page-routes">
+          <ul>
+            <li>
+              <a href="/products-menu" class="active">Daftar Menu</a>
+              <a href="/products-meja">Daftar Meja</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="container-header">
+          <h1>Daftar Menu</h1>
+          <button class="new-button btn-modals" data-bs-toggle="modal" data-bs-target="#modal-create">+
+            Tambahkan</button>
+        </div>
+        <!-- Create Menu Modal-->
+        <div class="modal-container" role="dialog" id="modal-create">
+          <div class="modal-box-title">
+            <h3>Tambah Menu</h3>
+            <button class="close-modal">X</button>
+          </div>
+
+          <div class="modal-box-content">
+            <form action="/products-menu" method="post">
+              <div class="form-group">
+                <label for="nama-input">Nama Menu:</label>
+                <input type="text" name="nama" id="nama-input" required>
+              </div>
+
+              <div class="form-group">
+                <label for="harga-input">Harga Menu:</label>
+                <input type="text" name="harga" id="harga-input" required>
+              </div>
+
+              <div class="form-group">
+                <label for="jenis-input">Jenis Menu:</label>
+                <input type="text" name="jenis" id="jenis-input" required>
+              </div>
+
+              <div class="form-group">
+                <button type="submit" class="submit-button">TAMBAH</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <table>
+          <tr>
+            <td class="id-column"><b>ID</b></td>
+            <td class="name-column"><b>Nama Menu</b></td>
+            <td class="name-column"><b>Harga Menu</b></td>
+            <td class="name-column"><b>Jenis Menu</b></td>
+            <td class="name-column"><b>Actions</b></td>
+          </tr>
+
+          <% menu.forEach(item=> { %>
+            <%- include("../datas/tableMenu", {item: item}) %>
+
+            <!-- Update Menu Modal -->
+            <div class="modal-container" role="dialog" id="modal-update">
+              <div class="modal-box-title">
+                <h3>Edit Menu</h3>
+                <button class="close-modal">X</button>
+              </div>
+            
+              <div class="modal-box-content">
+                <form action="/products-menu/<%= item.id_menu %>?_method=PUT" method="post">
+                  <div class="form-group">
+                    <label for="nama-input">Nama Menu:</label>
+                    <input type="text" name="nama" value="<%= item.nama_menu %>" id="nama-input" required>
+                  </div>
+                
+                  <div class="form-group">
+                    <label for="harga-input">Harga Menu:</label>
+                    <input type="text" name="harga" value="<%= item.harga %>" id="harga-input" required>
+                  </div>
+                
+                  <div class="form-group">
+                    <label for="jenis-input">Jenis Menu:</label>
+                    <input type="text" name="jenis" value="<%= item.jenis_menu %>" id="jenis-input" required>
+                  </div>
+                
+                  <div class="form-group">
+                    <button class="submit-button" type="submit">UPDATE</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Delete Menu Modal -->
+            <div class="modal-container" role="dialog" id="modal-delete">
+              <div class="modal-box-title">
+                <h3>Delete Menu</h3>
+                <button class="close-modal">X</button>
+              </div>
+            
+              <div class="modal-box-content">
+                <form action="/products-menu/<%= item.id_menu %>?_method=DELETE" method="post">
+                  <div class="form-group">
+                    <label>Anda yakin ingin menghapus data menu ini?</label>
+                  </div>
+                
+                  <div class="form-group">
+                    <button class="submit-button" type="submit">DELETE</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          <% }); %>
+        </table>
+        <br>
+        <a class="index-button" href="/">Kembali</a>
+      </div>
+      <script src="/styles/funcModals.js"></script>
+    </main>
+
+  </body>
+
+</html>
