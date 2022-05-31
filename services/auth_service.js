@@ -5,19 +5,17 @@ function checkAccount(req, res, next) {
   const { email_login, pass_login } = req.body;
 
   email_login !== null && md5(pass_login) !== null ?
-    db.query(`SELECT email, pass_admin, type FROM data_admin WHERE email='${email_login}' AND pass_admin='${md5(pass_login)}'`, (err, results) => {
-      const dataUsr = results.map(item => item.type);
-
+    db.query(`SELECT email, role FROM users WHERE email='${email_login}' AND password='${pass_login}'`, (err, results) => {
       if (err) {
         res.send({ msg: err });
       }
       else if (!err) {
-        if (dataUsr.length != 0) {
-          console.log([email_login, ...dataUsr]);
-          res.locals.typeUsr = dataUsr[0];
+        if (results.length != 0) {
+          console.log(results);
+          res.locals.roleUsr = results[0].role;
           next();
         }
-        else if (dataUsr.length == 0) {
+        else if (results.length === 0) {
           console.log("Unauthorized: Tidak dikenal");
           res.redirect("/login");
         }
@@ -27,7 +25,7 @@ function checkAccount(req, res, next) {
 
 function logIn(req, res, next) {
   req.session.loggedIn = true;
-  req.session.user = res.locals.typeUsr;
+  req.session.user = res.locals.roleUsr;
   res.redirect(`/dashboard`);
 }
 

@@ -5,17 +5,45 @@
 
   <% if (user === "super-admin") { %>
     <li>
-      <a href="/products-menu">PRODUCTS</a>
-    </li>
-    
-    <li>
-      <a href="">KONFIRMASI TRANSAKSI</a>
+      <a href="/users">DATA USERS</a>
     </li>
 
-    <li>
-      <a href="">LAPORAN</a>
-    </li>
-  <% } else if (user === "admin-kasir") { %>
+    <div class="list">
+      <div class="menu-parent">
+        <p>PENGELOLAAN RESERVASI</p>
+        <img class="arrow" src="../images/icon-arrow-down.svg" alt="">
+      </div>
+
+      <div class="content">
+        <li>
+          <a href="">DATA MENU</a>
+        </li>
+
+        <li>
+          <a href="">DATA MEJA</a>
+        </li>
+      </div>
+    </div>
+
+    <div class="list">
+      <div class="menu-parent">
+        <p>PENGELOLAAN TRANSAKSI</p>
+        <img class="arrow" src="../images/icon-arrow-down.svg" alt="">
+      </div>
+
+      <div class="content">
+        <li>
+          <a href="">VALIDASI TRANSAKSI</a>
+        </li>
+
+        <li>
+          <a href="">DATA TRANSAKSI</a>
+        </li>
+      </div>
+    </div>
+  <% } %>
+
+  <% if (user === "admin-kasir") { %>
     <li>
       <a href="">KONFIRMASI RESERVASI</a>
     </li>

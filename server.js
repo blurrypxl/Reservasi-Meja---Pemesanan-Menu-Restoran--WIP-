@@ -5,7 +5,7 @@ const conn = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "db_moji"
+  database: "moji_db"
 });
 
 module.exports = conn;

@@ -7,7 +7,7 @@ function readMenu(req, res, next) {
       
       err == true ?
         res.json({ msg: err }) : next();
-    }) : res.status(200).redirect("/login");
+    }) : res.status(200).redirect("/");
 }
 
 function createMenu(req, res, next) {

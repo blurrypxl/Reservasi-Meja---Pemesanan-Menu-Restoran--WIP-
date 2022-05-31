@@ -113,9 +113,9 @@ h1 {
 
 /* header ================================ */
 header {
-  height: 56px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #f0f4f9;
+  /* height: 56px; */
+  background-color: #DB090A;
+  /* border-bottom: 1px solid #f0f4f9; */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -123,18 +123,27 @@ header {
   right: 0;
   left: 0;
   top: 0;
+  height: 15vh;
+  z-index: 1;
 }
 .header-logo {
-  margin-left: 56px;
-  font-weight: 600;
-  font-size: 20px;
+  /* border: 1px solid black; */
+  /* margin-left: 56px; */
+  /* font-weight: 600;
+  font-size: 20px; */
   line-height: 56px;
-  color: #6c7686;
-  display: inline;
+  /* color: #6c7686;
+  display: inline; */
+  background-image: url(../images/moji-bg-red.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 20%;
+  height: 100%;
 }
-.header-logo:hover {
+/* .header-logo:hover {
   color: #58d2b2;
-}
+} */
 
 /* container ================================ */
 .container {
@@ -150,16 +159,57 @@ header {
 }
 
 .nav-bar {
-  /* border: 1px solid orange; */
+  width: 25vw;
+  /* min-height: 100vh; */
+  margin-top: 6vh;
+}
+.nav-bar a {
+  /* border: 1px solid black; */
+  color: white;
+  margin: 1em 0;
+}
+.nav-content {
+    /* border: 1px solid orange; */
   /* width: fit-content; */
-  width: 25%;
-  background-color: #58d2b2;
+  width: 20vw;
+  min-height: 100vh;
+  /* margin-top: 6vh; */
+  /* padding-top: 1em; */
+  /* background-color: #58d2b2; */
+  background-color: #484848;
+  padding: 0 1em;
+  position: fixed;
+  z-index: 0;
+}
+.nav-content a, .nav-content p {
+  font-size: small;
+}
+.list {
+  /* border: 1px solid black; */
+  cursor: pointer;
+  margin: 1em 0;
+  color: white;
+}
+.menu-parent {
+  /* border: 1px solid black; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.content {
+  display: block;
+}
+.content li {
+  margin-left: 2em;
+}
+.list.open .content {
+  display: none;
 }
 
 .content-box {
   /* border: 1px solid red; */
   width: 100%;
-  padding: 0 2em;
+  padding: 3em 2em;
 }
 
 .login-box {
@@ -212,6 +262,7 @@ header {
 }
 
 .container-header {
+  border: 1px solid black;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -397,4 +448,19 @@ form {
   justify-content: flex-start;
   align-items: flex-start;
   z-index: 1;
+}
+
+/* FOOTER */
+footer {
+  /* height: 56px; */
+  background-color: #DB090A;
+  /* border-bottom: 1px solid #f0f4f9; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* position: fixed;
+  right: 0;
+  left: 0;
+  bottom: 0; */
+  height: 15vh;
 }

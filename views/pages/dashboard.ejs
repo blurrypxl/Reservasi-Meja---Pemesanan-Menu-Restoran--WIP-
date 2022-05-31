@@ -7,38 +7,34 @@
 
   <body>
     <header>
-      <%- include("../partials/header.ejs", {user: user}); %>
+      <%- include("../partials/header.ejs"); %>
     </header>
 
     <main class="container">
       <div class="nav-bar">
-        <%- include("../partials/navbar.ejs", {user: user}); %>
+        <div class="nav-content">
+          <%- include("../partials/navbar.ejs", {user: user}); %>
+        </div>
       </div>
       
       <div class="content-box">
         <div class="container-header">
-          <h1>Daftar Menu</h1>
+          <h1>DASHBOARD</h1>
+          <p><%= typeof user != "undefined" ? user : "" %></p>
         </div>
-        <table>
-          <% menu.forEach(item => { %>
-            <%- include("../datas/tableMenu", {item: item}) %>
-          <% }); %>
-        </table>
-
-        <br>
 
         <div class="container-header">
-          <h1>Daftar Meja</h1>
+          <h1>Daftar Menu</h1>
         </div>
-        <table>
-          <% meja.forEach(item => { %>
-            <%- include("../datas/tableMeja", {item: item}); %>
-          <% }); %>
-        </table>
       </div>
-
-      <script src="/styles/funcModals.js"></script>
     </main>
+    
+    <footer>
+      <%- include("../partials/footer.ejs"); %>
+    </footer>
+
+    <script src="/styles/funcModals.js"></script>
+    <script src="/styles/navDropDown.js"></script>
   </body>
 
 </html>

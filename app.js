@@ -21,7 +21,7 @@ app.use(session({
   name: "uniqueSessionID",
   saveUninitialized: false
 }));
-app.post("/auth-account", authService.checkAccount, authService.logIn);
+app.post("/auth-account", authService.checkAccount, authService.logIn); // Authentication
 
 // # Set view engine
 app.set("view engine", "ejs");
