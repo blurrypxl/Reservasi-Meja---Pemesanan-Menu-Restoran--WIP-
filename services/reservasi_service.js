@@ -1,11 +1,12 @@
 const db = require("../server");
 
-function readReservasi(req, res) {
-  db.query("SELECT * FROM data_reservasi ORDER BY id_reservasi ASC", (err, results) => {
+function readReservasi(req, res, next) {
+  db.query("SELECT reservasi.id_pelanggan, pelanggan.id_meja, reservasi.email, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id", (err, results) => {
     if (err) {
       res.json({ msg: err });
     } else if (!err) {
-      res.status(200).render("pages/dataReservasi", { reservasi: results });
+      res.locals.allReservasi = results;
+      next();
     }
   });
 }

@@ -1,13 +1,12 @@
 const db = require("../server");
 
 function readMenu(req, res, next) {
-  req.session.loggedIn == true ?
-    db.query("SELECT * FROM data_menu ORDER BY id_menu ASC", (err, results) => {
-      res.locals.dataMenu = results;
-      
-      err == true ?
-        res.json({ msg: err }) : next();
-    }) : res.status(200).redirect("/");
+  db.query("SELECT * FROM data_menu ORDER BY id_menu ASC", (err, results) => {
+    res.locals.dataMenu = results;
+
+    err == true ?
+      res.json({ msg: err }) : next();
+  });
 }
 
 function createMenu(req, res, next) {

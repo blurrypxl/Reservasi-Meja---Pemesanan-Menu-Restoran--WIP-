@@ -34,7 +34,7 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6, p {
-  margin: 0;
+  margin: 0 !important;
 }
 
 h1 {
@@ -144,9 +144,32 @@ header {
 /* .header-logo:hover {
   color: #58d2b2;
 } */
+.profil-box {
+  /* border: 1px solid black; */
+  border-radius: 50px;
+  margin-right: 2em;
+  width: 5em;
+  height: 2.3em;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.profil-box .icon-menu {
+  width: 1em;
+}
+.profil-box .icon-user {
+  width: 1.5em;
+}
+.profil-content {
+  display: none;
+}
+.profil-box.open .profil-content {
+  display: block;
+}
 
 /* container ================================ */
-.container {
+.main-content {
   /* border: 1px solid blue; */
   display: flex;
   min-height: 100vh;
@@ -161,7 +184,8 @@ header {
 .nav-bar {
   width: 25vw;
   /* min-height: 100vh; */
-  margin-top: 6vh;
+  /* margin-top: 6vh; */
+  background-color: #484848;
 }
 .nav-bar a {
   /* border: 1px solid black; */
@@ -173,10 +197,10 @@ header {
   /* width: fit-content; */
   width: 20vw;
   min-height: 100vh;
-  /* margin-top: 6vh; */
+  margin-top: 6vh;
   /* padding-top: 1em; */
   /* background-color: #58d2b2; */
-  background-color: #484848;
+  /* background-color: #484848; */
   padding: 0 1em;
   position: fixed;
   z-index: 0;
@@ -269,7 +293,10 @@ header {
   margin-bottom: 12px;
 }
 .container-header h1 {
-  font-size: 24px;
+  font-size: 18px;
+}
+.container-header h1, .container-header p {
+  color: #484848;
 }
 
 .new-button {
@@ -454,13 +481,19 @@ form {
 footer {
   /* height: 56px; */
   background-color: #DB090A;
+  padding-left: 2em;
   /* border-bottom: 1px solid #f0f4f9; */
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   /* position: fixed;
   right: 0;
   left: 0;
   bottom: 0; */
-  height: 15vh;
+  height: 80px;
+  z-index: 2;
+}
+footer p {
+  color: white;
+  font-size: small;
 }

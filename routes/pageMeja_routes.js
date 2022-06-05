@@ -1,7 +1,5 @@
-const express = require('express');
+const router = require('express').Router();
 const meja_s = require("../services/meja_service");
-
-const router = express.Router();
 
 function toPageMeja(req, res) {
   res.status(200).redirect("/products-meja");

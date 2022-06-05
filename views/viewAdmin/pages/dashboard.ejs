@@ -10,7 +10,7 @@
       <%- include("../partials/header.ejs"); %>
     </header>
 
-    <main class="container">
+    <main class="main-content">
       <div class="nav-bar">
         <div class="nav-content">
           <%- include("../partials/navbar.ejs", {user: user}); %>
@@ -19,12 +19,13 @@
       
       <div class="content-box">
         <div class="container-header">
-          <h1>DASHBOARD</h1>
+          <h1>DASHBOARD /</h1>
           <p><%= typeof user != "undefined" ? user : "" %></p>
         </div>
 
-        <div class="container-header">
-          <h1>Daftar Menu</h1>
+        <div class="total-box">
+          <h2>Total Menu</h2>
+          <p></p>
         </div>
       </div>
     </main>

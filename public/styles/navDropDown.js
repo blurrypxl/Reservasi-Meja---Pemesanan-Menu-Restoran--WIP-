@@ -1,8 +1,14 @@
-const list = document.querySelectorAll('.list');
+function toggleFunc(element, clss) {
+    element.onclick = function() {
+        console.log(element);
+        element.classList.toggle(clss);
+    };
+}
 
+const list = document.querySelectorAll('.list');
 list.forEach(function(nav) {
-    nav.addEventListener('click', function() {
-        console.log(nav);
-        nav.classList.toggle('open');
-    });
+    toggleFunc(nav, 'open');
 });
+
+const profilBox = document.querySelector('.profil-box');
+toggleFunc(profilBox, 'open');

@@ -17,16 +17,25 @@ function checkAccount(req, res, next) {
         }
         else if (results.length === 0) {
           console.log("Unauthorized: Tidak dikenal");
-          res.redirect("/login");
+          res.redirect("/admin/login");
         }
       }
     }) : res.send("Username & Password Kosong!");
 }
 
-function logIn(req, res, next) {
+function logIn(req, res) {
   req.session.loggedIn = true;
   req.session.user = res.locals.roleUsr;
-  res.redirect(`/dashboard`);
+  res.redirect('/admin');
 }
 
-module.exports = { checkAccount, logIn };
+function checkAuth(req, res, next) {
+  // console.log(req.session.loggedIn);
+  req.session.loggedIn === true ? next() : res.redirect('/admin/login');
+}
+
+module.exports = {
+  checkAccount,
+  logIn,
+  checkAuth,
+};

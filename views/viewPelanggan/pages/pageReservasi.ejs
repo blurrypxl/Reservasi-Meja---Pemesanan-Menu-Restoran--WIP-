@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("../partials/headPelanggan.ejs"); %> 
+  </head>
+
+  <body>
+    <header>
+      <%- include("../partials/headerPelanggan.ejs"); %> 
+    </header>
+
+    <main>
+      <!-- <div class="main-content"></div> -->
+      
+      <% dataMeja.forEach(meja => { %>
+        <div style="border: 1px solid black;">
+          <h2>
+            Id Meja: <%= meja.id; %>
+          </h2>
+          <p>
+            Nomor Meja: <%= meja.nomor_meja; %>
+          </p>
+        </div>
+
+        <% dataReservasi.forEach(reservasi => { %>
+          <% if (reservasi.id_meja === meja.id) { %>
+            <div style="border-bottom: 1px solid black;">
+              <h3><%= reservasi.id_pelanggan; %></h3>
+              <p><%= reservasi.email; %></p>
+              <p><%= reservasi.untuk_tanggal; %></p>
+            </div>
+          <% } %>
+        <% }); %>
+        <br>
+      <% }); %>
+    </main>
+  </body>
+</html>

@@ -5,6 +5,7 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const pageMenuRouter = require("./routes/pageMenu_routes");
 const mejaRouter = require("./routes/pageMeja_routes");
+const reservasiRouter = require("./routes/reservasi_routes");
 const authService = require("./services/auth_service");
 const dashboardRouter = require("./routes/dashboard_routes");
 
@@ -21,20 +22,20 @@ app.use(session({
   name: "uniqueSessionID",
   saveUninitialized: false
 }));
-app.post("/auth-account", authService.checkAccount, authService.logIn); // Authentication
+app.post("/auth-account", authService.checkAccount, authService.logIn); // Authentication Admin
 
 // # Set view engine
 app.set("view engine", "ejs");
 
-// Set default view page
-app.get('/', (req, res) => {
-  req.session.loggedIn == true ?
-    res.render("pages/index") : res.redirect("/login");
-});
+// Set dashboard view page
+// app.get('/admin', (req, res) => {
+//   req.session.loggedIn === true ?
+//     res.render("viewAdmin/pages/dashboard") : res.redirect("/admin/login");
+// });
 
 // # View Login File
-app.get('/login', (req, res) => {
-  res.status(200).render("pages/login");
+app.get('/admin/login', (req, res) => {
+  res.status(200).render("viewAdmin/pages/login");
 });
 
 // # View Dashboard Admin
@@ -45,6 +46,28 @@ app.use(pageMenuRouter);
 
 // # View Data Meja
 app.use(mejaRouter);
+
+// # View Reservasi
+app.use(reservasiRouter);
+
+// # 404 Not Found Handler
+app.use((req, res, next) => {
+  const err = new Error("Page Not Found :(");
+
+  err.status = 404;
+  
+  next(err);
+});
+
+// # Error's Handler
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({
+    error: {
+      status: err.status || 500,
+      message: err.message
+    }
+  });
+});
 
 app.listen(devenv.port, () => {
   console.log(`Server running at port ${devenv.port}`);

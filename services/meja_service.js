@@ -1,18 +1,16 @@
 const db = require("../server");
 
 function readMeja(req, res, next) {
-  req.session.loggedIn == true ?
-    db.query("SELECT * FROM data_meja ORDER BY id_meja ASC", (err,  results) => {
-      res.locals.dataMeja = results;
+  db.query("SELECT * FROM meja ORDER BY id ASC", (err, results) => {
+    res.locals.dataMeja = results;
 
-      err == true ?
-        res.json({ msg: err }) : next();
-    }) : res.status(200).redirect("/login");
+    err == true ? res.json({ msg: err }) : next();
+  });
 }
 
 function createMeja(req, res, next) {
   const { max, status } = req.body;
-  
+
   db.query(`INSERT INTO data_meja (max_orang, status_reservasi) VALUES ('${max}', '${status}')`, err => {
     err == true ?
       res.json({ msg: err }) : next();
