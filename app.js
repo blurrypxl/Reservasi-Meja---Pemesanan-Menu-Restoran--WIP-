@@ -1,7 +1,7 @@
 const express = require("express");
 const devenv = require("./devEnvConfig");
 const methodOverride = require("method-override");
-const session = require("express-session");
+// const session = require("express-session");
 const bodyParser = require("body-parser");
 const pageMenuRouter = require("./routes/pageMenu_routes");
 const mejaRouter = require("./routes/pageMeja_routes");
@@ -16,12 +16,12 @@ app.use(express.static("public"));
 app.use(methodOverride("_method"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session({
-  secret: "hello-agent47",
-  resave: false,
-  name: "uniqueSessionID",
-  saveUninitialized: false
-}));
+// app.use(session({
+//   secret: "hello-agent47",
+//   resave: false,
+//   name: "uniqueSessionID",
+//   saveUninitialized: false
+// }));
 app.post("/auth-account", authService.checkAccount, authService.logIn); // Authentication Admin
 
 // # Set view engine

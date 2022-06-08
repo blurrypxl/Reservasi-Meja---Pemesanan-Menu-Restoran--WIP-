@@ -11,7 +11,8 @@
     "jquery": "^3.6.0",
     "md5": "^2.3.0",
     "method-override": "^3.0.0",
-    "mysql": "github:mysqljs/mysql"
+    "mysql": "github:mysqljs/mysql",
+    "time-stamp": "^2.2.0"
   },
   "scripts": {
     "start": "node app.js"

@@ -1,38 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include("../partials/headPelanggan.ejs"); %> 
+    <%- include("../partials/headPelanggan.ejs"); %>
   </head>
 
   <body>
-    <header>
-      <%- include("../partials/headerPelanggan.ejs"); %> 
-    </header>
+    <!-- <header></header> -->
 
     <main>
       <!-- <div class="main-content"></div> -->
       
       <% dataMeja.forEach(meja => { %>
-        <div style="border: 1px solid black;">
+        <div class="content-card" style="border: 1px solid black;">
           <h2>
             Id Meja: <%= meja.id; %>
           </h2>
           <p>
             Nomor Meja: <%= meja.nomor_meja; %>
           </p>
+          <div class="button-box">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#form-reservasi-box<%= meja.id %>">RESERVASI</button>
+          </div>
         </div>
 
-        <% dataReservasi.forEach(reservasi => { %>
-          <% if (reservasi.id_meja === meja.id) { %>
-            <div style="border-bottom: 1px solid black;">
-              <h3><%= reservasi.id_pelanggan; %></h3>
-              <p><%= reservasi.email; %></p>
-              <p><%= reservasi.untuk_tanggal; %></p>
+        <!-- Modal -->
+        <div class="modal fade" id="form-reservasi-box<%= meja.id %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+
+              <form action="/validasi-tgl-reservasi" method="post" class="modal-body">
+                <div class="reservasi-form-box">
+                  <input type="hidden" name="id_meja" value="<%= meja.id %>" required readonly>
+
+                  <!-- Input Nama Field -->
+                  <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Nama</span>
+                    <input type="text" name="nama" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                  </div>
+
+                  <!-- Input Email Field -->
+                  <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Email</span>
+                    <input type="text" name="email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                  </div>
+                </div>
+
+                <div class="reservasi-form-box">
+                  <details style="border-bottom: 1px solid black;">
+                    <summary style="font-weight: bold;">List Reservasi Pada ID Meja <%= meja.id %></summary>
+  
+                    <% let filteredReservasi = dataReservasi.filter(item => item.id_meja === meja.id); %>
+  
+                    <% filteredReservasi.forEach(fReservasi => { %>
+                      <div style="border-top: 1px solid black;">
+                        <!-- <h3>ID PELANGGAN: <%= fReservasi.id_pelanggan; %></h3>
+                        <p>EMAIL PELANGGAN: <%= fReservasi.email; %></p> -->
+                        <p class="tgl-reservasi"><%= fReservasi.untuk_tanggal; %></p>
+                      </div>
+                    <% }); %>
+                  </details>
+                  
+                  <br>
+  
+                  <div class="datepicker"></div>
+                  <input type="hidden" name="untuk_tgl" class="inputdate">
+  
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Validasi</button>
+                  </div>
+                </div>
+              </form>
             </div>
-          <% } %>
-        <% }); %>
+          </div>
+        </div>
+
         <br>
       <% }); %>
     </main>
+
+    <script>
+      $(document).ready(function () {
+        // # Datepicker Script
+        const datepicker = document.querySelectorAll('.datepicker');
+        const inputdate = document.querySelectorAll('.inputdate');
+        // const tglReservasi = document.querySelectorAll('.tgl-reservasi');
+        // const tglReservasiVal = [];
+
+        // console.log(tglReservasiVal);
+
+        $.each(datepicker, function (index) {
+          // $.each(tglReservasi, function (index) {
+          //   tglReservasiVal.push(tglReservasi[index].textContent);
+          // });
+
+          $(datepicker[index]).datepicker({
+            format: 'dd/mm/yyyy',
+            startDate: '0d',
+            todayBtn: 'linked',
+            todayHighlight: true,
+            endDate: "+30d",
+            datesDisabled: [],
+          });
+
+          $(datepicker[index]).on('changeDate', function () {
+            $(inputdate[index]).val($(datepicker[index]).datepicker('getFormattedDate'));
+          });
+        });
+      });
+    </script>
   </body>
 </html>
