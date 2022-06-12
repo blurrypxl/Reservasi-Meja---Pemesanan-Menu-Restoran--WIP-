@@ -9,6 +9,15 @@
 
     <main>
       <!-- <div class="main-content"></div> -->
+
+      <!-- Flash Messages -->
+      <% if (locals.messages) { %>
+        <div class="alert alert-<%= messages.type %>" role="alert">
+          <strong><%= messages.intro %></strong> <%= messages.message %>
+
+          <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+        </div>
+      <% } %>
       
       <% dataMeja.forEach(meja => { %>
         <div class="content-card" style="border: 1px solid black;">
@@ -32,7 +41,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
 
-              <form action="/validasi-tgl-reservasi" method="post" class="modal-body">
+              <form action="/pemesanan" method="post" class="modal-body">
                 <div class="reservasi-form-box">
                   <input type="hidden" name="id_meja" value="<%= meja.id %>" required readonly>
 
@@ -63,12 +72,12 @@
                       </div>
                     <% }); %>
                   </details>
-                  
+
                   <br>
-  
+
                   <div class="datepicker"></div>
-                  <input type="hidden" name="untuk_tgl" class="inputdate">
-  
+                  <input type="hidden" name="untuk_tgl" class="inputdate" required readonly>
+
                   <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Validasi</button>
                   </div>
@@ -87,23 +96,14 @@
         // # Datepicker Script
         const datepicker = document.querySelectorAll('.datepicker');
         const inputdate = document.querySelectorAll('.inputdate');
-        // const tglReservasi = document.querySelectorAll('.tgl-reservasi');
-        // const tglReservasiVal = [];
-
-        // console.log(tglReservasiVal);
 
         $.each(datepicker, function (index) {
-          // $.each(tglReservasi, function (index) {
-          //   tglReservasiVal.push(tglReservasi[index].textContent);
-          // });
-
           $(datepicker[index]).datepicker({
-            format: 'dd/mm/yyyy',
+            format: 'yyyy-mm-dd',
             startDate: '0d',
             todayBtn: 'linked',
             todayHighlight: true,
             endDate: "+30d",
-            datesDisabled: [],
           });
 
           $(datepicker[index]).on('changeDate', function () {

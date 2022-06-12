@@ -6,14 +6,23 @@ const userChecker = require('../services/auth_service');
 // Route ini digunakan untuk keperluan pelanggan
 router.route('/reservasi')
     .get(reservasiServices.readReservasi, mejaServices.readMeja, (req, res) => {
-        res.status(201).render('viewPelanggan/pages/pageReservasi', { dataReservasi: res.locals.allReservasi, dataMeja: res.locals.dataMeja });
+        res.render('viewPelanggan/pages/pageReservasi', { dataReservasi: res.locals.allReservasi, dataMeja: res.locals.dataMeja });
     });
 
-router.route('/validasi-tgl-reservasi')
+router.route('/pemesanan')
     .post(reservasiServices.validasiTanggalReservasi, (req, res) => {
-        res.status(201).send({
-            message: res.locals.validasiReservasi || res.locals.errMsgValidasi
-        }); // NOTE: Untuk keperluan testing
+        if (res.locals.errMsgValidasi === undefined) {
+            res.render('viewPelanggan/pages/pageFormReservasi', { dataTglReservasi: res.locals.validasiReservasi });
+        } else if (res.locals.errMsgValidasi !== undefined) {
+            // Object untuk Flash Messages
+            req.session.messages = {
+                type: 'danger',
+                intro: 'Validasi Tanggal Reservasi',
+                message: res.locals.errMsgValidasi
+            }
+
+            res.redirect('/reservasi');
+        }
     });
 
 // Route ini digunakan untuk keperluan admin/super-admin

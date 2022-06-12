@@ -5,11 +5,28 @@ function readReservasi(req, res, next) {
   db.query(`SELECT reservasi.id_pelanggan, pelanggan.id_meja, reservasi.email, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}'`, (err, results) => {
     if (err) res.json({ msg: err });
     
-    const tglHariIni = new Date(timestamp("DD/MM/YYYY"));
+    const tglHariIni = new Date(timestamp("YYYY-MM-DD")).setHours(0,0,0,0);
 
-    const filterReservasi = results.filter(item => new Date(item.untuk_tanggal) >= tglHariIni);
+    // console.log(tglHariIni);
+
+    // value pada variabel filterReservasi berisi object reservasi yang memiliki tanggal reservasi yang sama dengan hari ini dan lebih dari tanggal hari ini.
+    const filterReservasi = [];
+
+    for(let i = 0; i < results.length; i++) {
+      // console.log(new Date(results[i].untuk_tanggal).setHours(0,0,0,0));
+
+      if (new Date(results[i].untuk_tanggal).setHours(0,0,0,0) >= tglHariIni) {   
+        filterReservasi.push({
+          id_pelanggan: results[i].id_pelanggan,
+          id_meja: results[i].id_meja,
+          email: results[i].email,
+          untuk_tanggal: results[i].untuk_tanggal
+        });
+      }
+    }
 
     // console.log(filterReservasi);
+    // console.log(results);
 
     res.locals.allReservasi = filterReservasi;
 
@@ -23,23 +40,40 @@ function validasiTanggalReservasi(req, res, next) {
   db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE pelanggan.id_meja = '${id_meja}' AND reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}'`, (err, results) => {
     if (err) throw err; // Tampilkan Error
 
-    const tglHariIni = new Date(timestamp("DD/MM/YYYY"));
+    const tglHariIni = new Date(timestamp("YYYY-MM-DD")).setHours(0,0,0,0);
 
-    const filterReservasi = results.filter(item => new Date(item.untuk_tanggal) >= tglHariIni).filter(item => item.untuk_tanggal === untuk_tgl); // Menggunakan Array.filter() untuk menyaring reservasi terbaru & reservasi dengan tanggal yang sama
+    // menyaring reservasi terbaru & reservasi dengan tanggal yang sama
+    const filterReservasi = [];
 
-    // console.log(filterReservasi);
+    for(let i = 0; i < results.length; i++) {
+      if (new Date(results[i].untuk_tanggal).setHours(0,0,0,0) >= tglHariIni) {
+        if (results[i].untuk_tanggal === untuk_tgl) {
+          filterReservasi.push(results[i].untuk_tanggal);
+        }
+      }
+    }
 
-    if (filterReservasi.length >! 0) {
+    // console.log('panjang isi filter reservasi = '+filterReservasi.length);
+
+    console.log(filterReservasi);
+
+    if (filterReservasi.length === 0) {
+      res.locals.validasiReservasi = [nama, email, id_meja, untuk_tgl];
+
+      next();
+    } else if (filterReservasi.length > 0) {
       res.locals.errMsgValidasi = 'Meja ini sudah direservasi oleh pelanggan lain. Silahkan pilih Nomor Meja yang berbeda atau pilih lain hari.';
 
       next();
     }
-    
-    res.locals.validasiReservasi = [nama, email, id_meja, untuk_tgl];
-
-    next();
   });
 }
+
+function createReservasi(req, res, next) {}
+
+function updateStatusReservasi(req, res, next) {}
+
+function updateDateReservasi(req, res, next) {}
 
 module.exports = {
   readReservasi,

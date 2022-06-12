@@ -1,8 +1,8 @@
 const express = require("express");
-const devenv = require("./devEnvConfig");
 const methodOverride = require("method-override");
-// const session = require("express-session");
+const session = require("express-session");
 const bodyParser = require("body-parser");
+
 const pageMenuRouter = require("./routes/pageMenu_routes");
 const mejaRouter = require("./routes/pageMeja_routes");
 const reservasiRouter = require("./routes/reservasi_routes");
@@ -16,22 +16,25 @@ app.use(express.static("public"));
 app.use(methodOverride("_method"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(session({
-//   secret: "hello-agent47",
-//   resave: false,
-//   name: "uniqueSessionID",
-//   saveUninitialized: false
-// }));
-app.post("/auth-account", authService.checkAccount, authService.logIn); // Authentication Admin
+app.use(session({
+  secret: 'DelapanAngka',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: null }
+}));
+
+// # Flash Messages Middleware
+app.use((req, res, next) => {
+  res.locals.messages = req.session.messages;
+  delete res.locals.messages;
+  next();
+});
+
+// # Authentication Admin
+app.post("/auth-account", authService.checkAccount, authService.logIn);
 
 // # Set view engine
 app.set("view engine", "ejs");
-
-// Set dashboard view page
-// app.get('/admin', (req, res) => {
-//   req.session.loggedIn === true ?
-//     res.render("viewAdmin/pages/dashboard") : res.redirect("/admin/login");
-// });
 
 // # View Login File
 app.get('/admin/login', (req, res) => {
@@ -69,6 +72,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(devenv.port, () => {
-  console.log(`Server running at port ${devenv.port}`);
+app.listen(3000, () => {
+  console.log(`Server running at port 3000`);
 });
