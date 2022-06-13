@@ -19,14 +19,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
   secret: 'DelapanAngka',
   resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: null }
+  saveUninitialized: false
 }));
 
 // # Flash Messages Middleware
 app.use((req, res, next) => {
   res.locals.messages = req.session.messages;
-  delete res.locals.messages;
+  delete req.session.messages;
   next();
 });
 

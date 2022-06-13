@@ -17,7 +17,7 @@ router.route('/pemesanan')
             // Object untuk Flash Messages
             req.session.messages = {
                 type: 'danger',
-                intro: 'Validasi Tanggal Reservasi',
+                intro: 'Tanggal Reservasi Tidak Valid.',
                 message: res.locals.errMsgValidasi
             }
 
