@@ -35,10 +35,14 @@ function readReservasi(req, res, next) {
 }
 
 function validasiTanggalReservasi(req, res, next) {
-  const { nama, email, id_meja, untuk_tgl } = req.body;
+  const { nama, email, id_meja, nomor_meja, untuk_tgl } = req.body;
 
-  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE pelanggan.id_meja = '${id_meja}' AND reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}'`, (err, results) => {
+  // console.log(id_meja);
+
+  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE pelanggan.id_meja = '${id_meja}' AND (reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}')`, (err, results) => {
     if (err) throw err; // Tampilkan Error
+
+    // console.log(results);
 
     const tglHariIni = new Date(timestamp("YYYY-MM-DD")).setHours(0,0,0,0);
 
@@ -54,11 +58,10 @@ function validasiTanggalReservasi(req, res, next) {
     }
 
     // console.log('panjang isi filter reservasi = '+filterReservasi.length);
-
-    console.log(filterReservasi);
+    // console.log(filterReservasi);
 
     if (filterReservasi.length === 0) {
-      res.locals.validasiReservasi = [nama, email, id_meja, untuk_tgl];
+      res.locals.validasiReservasi = [nama, email, id_meja, nomor_meja, untuk_tgl];
 
       next();
     } else if (filterReservasi.length > 0) {

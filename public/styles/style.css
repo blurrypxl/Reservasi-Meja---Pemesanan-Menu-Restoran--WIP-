@@ -253,12 +253,6 @@ header {
   min-width: 70%;
 }
 
-.notif-bar {
-  border: 1px solid blue;
-  width: 100%;
-  min-height: 2em;
-}
-
 .page-routes {
   border-bottom: 1px solid black;
   margin: 1.5em 0;
@@ -299,40 +293,12 @@ header {
   color: #484848;
 }
 
-.new-button {
-  background: #80bcff;
-  /* border-radius: 30px; */
-  font-size: 14px;
-  width: 120px;
-  height: 45px;
-  line-height: 43px;
-  text-align: center;
-  color: #ffffff;
-  border: 2px solid #80bcff;
-}
-.new-button:hover {
-  background-color: #ffffff;
-  color: #80bcff;
-  transition: all 0.3s ease;
-  cursor: pointer;
+/* FORM */
+.form-container {
+  /* border: 1px solid black; */
+  margin: 1em;
 }
 
-.submit-button {
-  background: #80bcff;
-  font-size: 14px;
-  width: 100%;
-  height: 45px;
-  line-height: 43px;
-  text-align: center;
-  color: #ffffff;
-  border: 2px solid #80bcff;
-}
-.submit-button:hover {
-  background-color: #ffffff;
-  color: #80bcff;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
 /* index ================================ */
 /* .table-head {
   display: flex;
@@ -344,7 +310,7 @@ header {
   color: #ffffff;
 } */
 
-.table-head {
+/* .table-head {
   background-color: #b7cadc;
 }
 
@@ -354,9 +320,9 @@ header {
   line-height: 74px;
   display: flex;
   color: #ffffff;
-}
+} */
 
-.id-column {
+/* .id-column {
   font-size: 16px;
   padding: 0 1em;
   border: 1px solid black;
@@ -378,7 +344,7 @@ header {
   border-top: none;
   line-height: 74px;
   display: flex;
-}
+} */
 /* 
 .table-body .id-column {
   font-size: 16px;
@@ -394,7 +360,7 @@ header {
   border: 1px solid black;
 } */
 
-table {
+/* table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
@@ -410,10 +376,10 @@ tr:nth-child(even) {
 
 form {
   width: 100%;
-}
+} */
 
-.form-group {
-  /* border: 1px solid black; */
+/* .form-group {
+  border: 1px solid black;
   margin: 0.5em 0;
   width: 100%;
 }
@@ -426,10 +392,10 @@ form {
 .form-group input {
   width: 100%;
   height: 2em;
-}
+} */
 
 /* Modal Styles */
-.modal-container {
+/* .modal-container {
   display: none;
   font-size: larger;
   font-weight: bolder;
@@ -445,8 +411,6 @@ form {
   left: 0;
   right: 0;
   bottom: 0;
-  /* height: 100vh; */
-  /* width: 100%; */
   background-color: rgba(0, 0, 0, 0.329);
   z-index: 0;
 }
@@ -475,7 +439,7 @@ form {
   justify-content: flex-start;
   align-items: flex-start;
   z-index: 1;
-}
+} */
 
 /* FOOTER */
 footer {
