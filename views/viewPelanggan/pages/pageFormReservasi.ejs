@@ -162,7 +162,6 @@
             return dataPesananArr.push(objPesanan);
         }
 
-        // TODO: Selesaikan fungsi btnKurangFunc
         function btnKurangFunc(objKurangMenu) {
             objKurangMenu.el_btn_kurang.onclick = () => {
                 objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty -= 1;
@@ -178,14 +177,12 @@
                     objKurangMenu.el_td_harga.innerHTML = "Rp."+objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].total; // menampilkan harga menu
 
                     // # Script Menampilkan Update Total Harga Pesanan Pelanggan
-                    objKurangMenu.el_ttl_harga.innerHTML = hargaTotal(dataHargaPesanan, totalHargaVal);
+                    objKurangMenu.el_ttl_harga.innerHTML = hargaTotal(objKurangMenu.data_harga, objKurangMenu.ttl_val);
 
-                    objKurangMenu.el_input_ttl.value = hargaTotal(dataHargaPesanan, totalHargaVal);
-
-                    // console.log(dataHargaPesanan);
+                    objKurangMenu.el_input_ttl.value = hargaTotal(objKurangMenu.data_harga, objKurangMenu.ttl_val);
                     
                     // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
-                    arrPesanan.value = JSON.stringify(dataHargaPesanan);
+                    objKurangMenu.el_arr_pesanan.value = JSON.stringify(objKurangMenu.data_harga);
                 }
             }
         }
@@ -201,35 +198,35 @@
                 objTambahMenu.el_td_qty.innerHTML = objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].qty;
 
                 // # Script Menampilkan Update Total Harga Pesanan Pelanggan
-                objTambahMenu.el_ttl_harga.innerHTML = hargaTotal(dataHargaPesanan, totalHargaVal);
+                objTambahMenu.el_ttl_harga.innerHTML = hargaTotal(objTambahMenu.data_harga, objTambahMenu.ttl_val);
                     
-                objTambahMenu.el_input_ttl.value = hargaTotal(dataHargaPesanan, totalHargaVal);
+                objTambahMenu.el_input_ttl.value = hargaTotal(objTambahMenu.data_harga, objTambahMenu.ttl_val);
 
-                // console.log(dataHargaPesanan);
-
-                arrPesanan.value = JSON.stringify(dataHargaPesanan); // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
+                // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
+                objTambahMenu.el_arr_pesanan.value = JSON.stringify(objTambahMenu.data_harga);
             }
         }
 
-        // TODO: Selesaikan fungsi btnCancelFunc
         function btnCancelFunc(objCancelMenu) {
-            btnCancel.onclick = () => {
-                // # Script Update Hitung & Menampilkan Total Harga Pesanan Pelanggan
+            objCancelMenu.el_btn_cancel.onclick = () => {
                 let indexDaftarPesanan;
             
-                dataHargaPesanan.forEach(item => {
-                    if (item.idMenu === dataMenu[i].value.split(',')[0]) indexDaftarPesanan = dataHargaPesanan.indexOf(item);
+                objCancelMenu.data_harga.forEach(dh => {
+                    if (dh.idMenu === objCancelMenu.id_menu) indexDaftarPesanan = objCancelMenu.data_harga.indexOf(dh);
                 });
             
-                console.log(indexDaftarPesanan);
+                // console.log(indexDaftarPesanan);
 
-                dataHargaPesanan.splice(indexDaftarPesanan, 1);
+                objCancelMenu.data_harga.splice(indexDaftarPesanan, 1);
             
-                console.log(dataHargaPesanan);
+                // console.log(objCancelMenu.data_harga);
             
-                ttlHargaPesanan.innerHTML = hargaTotal(dataHargaPesanan, totalHargaVal);
+                objCancelMenu.el_ttl_harga.innerHTML = hargaTotal(objCancelMenu.data_harga, objCancelMenu.ttl_val);
             
-                trElement.remove();
+                objCancelMenu.el_tr.remove();
+
+                // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
+                objCancelMenu.el_arr_pesanan.value = JSON.stringify(objCancelMenu.data_harga);
             }
         }
 
@@ -299,7 +296,9 @@
                         el_td_qty: tdQtyMenu,
                         el_td_harga: tdHargaMenu,
                         el_ttl_harga: ttlHargaPesanan,
-                        el_input_ttl: totalValInput
+                        el_input_ttl: totalValInput,
+                        ttl_val: totalHargaVal,
+                        el_arr_pesanan: arrPesanan
                     });
 
                     btnTambahFunc({
@@ -311,10 +310,20 @@
                         el_td_qty: tdQtyMenu,
                         el_td_harga: tdHargaMenu,
                         el_ttl_harga: ttlHargaPesanan,
-                        el_input_ttl: totalValInput
+                        el_input_ttl: totalValInput,
+                        ttl_val: totalHargaVal,
+                        el_arr_pesanan: arrPesanan
                     });
 
-                    // btnCancelFunc();
+                    btnCancelFunc({
+                        el_btn_cancel: btnCancel,
+                        data_harga: dataHargaPesanan,
+                        id_menu: dataMenu[i].value.split(',')[0],
+                        el_tr: trElement,
+                        el_ttl_harga: ttlHargaPesanan,
+                        ttl_val: totalHargaVal,
+                        el_arr_pesanan: arrPesanan
+                    });
                 }
             }
         }
