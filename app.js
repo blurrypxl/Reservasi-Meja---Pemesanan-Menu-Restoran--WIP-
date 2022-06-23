@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const pageMenuRouter = require("./routes/pageMenu_routes");
 const mejaRouter = require("./routes/pageMeja_routes");
 const reservasiRouter = require("./routes/reservasi_routes");
+const pemesananRouter = require("./routes/pemesanan_routes");
 const authService = require("./services/auth_service");
 const dashboardRouter = require("./routes/dashboard_routes");
 
@@ -40,17 +41,20 @@ app.get('/admin/login', (req, res) => {
   res.status(200).render("viewAdmin/pages/login");
 });
 
-// # View Dashboard Admin
+// # Dashboard Admin
 app.use(dashboardRouter);
 
-// # View Data Menu
+// # Data Menu
 app.use(pageMenuRouter);
 
-// # View Data Meja
+// # Data Meja
 app.use(mejaRouter);
 
-// # View Reservasi
+// # Reservasi
 app.use(reservasiRouter);
+
+// # Pemesanan
+app.use(pemesananRouter);
 
 // # 404 Not Found Handler
 app.use((req, res, next) => {

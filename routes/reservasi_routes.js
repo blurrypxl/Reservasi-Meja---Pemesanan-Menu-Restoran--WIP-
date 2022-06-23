@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const reservasiServices = require('../services/reservasi_service');
-const mejaServices = require('../services/meja_service');
 const menuServices = require('../services/menu_service');
+const mejaServices = require('../services/meja_service');
 const userChecker = require('../services/auth_service');
 
 // Route ini digunakan untuk keperluan pelanggan

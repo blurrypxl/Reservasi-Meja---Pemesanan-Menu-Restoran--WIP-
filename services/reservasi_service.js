@@ -72,8 +72,6 @@ function validasiTanggalReservasi(req, res, next) {
   });
 }
 
-function createReservasi(req, res, next) {}
-
 function updateStatusReservasi(req, res, next) {}
 
 function updateDateReservasi(req, res, next) {}

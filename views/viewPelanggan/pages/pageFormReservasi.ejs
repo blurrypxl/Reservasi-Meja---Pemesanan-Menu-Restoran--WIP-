@@ -22,7 +22,7 @@
             </div>
         <% } %>
 
-        <form class="form-container" action="/pembayaran" method="POST">
+        <form class="form-container" action="/konfirmasi-pesanan" method="POST">
             <div class="card mb-3" style="width: 18rem;">
                 <div class="card-header" style="text-align: center;">
                   Informasi Reservasi
@@ -49,7 +49,7 @@
                     <p>
                         Nomor Meja:
                     </p>
-                    <input class="w-100" type="text" name="nomor_meja" value="<%= dataTglReservasi[3]; %>" readonly required>
+                    <input class="w-100" type="text" name="nomor_meja" value="<%= dataTglReservasi[3]; %>" readonly>
                   </li>
 
                   <li class="list-group-item">
@@ -105,13 +105,11 @@
                 <table class="table">
                     <thead>
                       <tr>
-                        <!-- <th scope="col">#</th> -->
                         <th scope="col">ID Menu</th>
                         <th scope="col">Nama Menu</th>
                         <th scope="col">Quantity</th>
                         <th scope="col">Harga</th>
                         <th scope="col">Action</th>
-                        <!-- <th scope="col">Cancel Pesanan</th> -->
                       </tr>
                     </thead>
 
@@ -127,7 +125,12 @@
 
                     <input type="hidden" id="total-val-input" name="total_harga">
                 </div>
+
+                <input type="text" name="arr_pesanan" id="arr-pesanan" readonly required>
+                <!-- <input type="hidden" name="total" id="total" readonly required> -->
             </div>
+
+            <button type="submit" class="btn btn-success">KONFIRMASI RESERVASI & PESANAN</button>
         </form>
     </main>
 
@@ -138,6 +141,8 @@
         const dataMenu = document.querySelectorAll('.data-menu');
         const totalValInput = document.getElementById('total-val-input');
         const ttlHargaPesanan = document.getElementById('total-harga-pesanan');
+        const arrPesanan = document.getElementById('arr-pesanan');
+
         const dataHargaPesanan = [];
         let totalHargaVal = 0;
 
@@ -146,7 +151,7 @@
 
             if (dataPesananArr.length === 1) return totalPesanan += parseInt(dataPesananArr[0].total);
 
-            for(let iPesanan = 0; iPesanan < dataPesananArr.length; iPesanan++) {
+            for (let iPesanan = 0; iPesanan < dataPesananArr.length; iPesanan++) {
                 totalPesanan += parseInt(dataPesananArr[iPesanan].total);
             }
 
@@ -157,119 +162,159 @@
             return dataPesananArr.push(objPesanan);
         }
 
+        // TODO: Selesaikan fungsi btnKurangFunc
+        function btnKurangFunc(objKurangMenu) {
+            objKurangMenu.el_btn_kurang.onclick = () => {
+                objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty -= 1;
+                
+                if (objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty <= 0) {
+                    objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty += 1;
+                }
+                else if (objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty > 0) {
+                    objKurangMenu.el_td_qty.innerHTML = objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty; // menampilkan quantity menu
+
+                    objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].total -= objKurangMenu.harga_satuan; // update total harga menu pesanan
+                    
+                    objKurangMenu.el_td_harga.innerHTML = "Rp."+objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].total; // menampilkan harga menu
+
+                    // # Script Menampilkan Update Total Harga Pesanan Pelanggan
+                    objKurangMenu.el_ttl_harga.innerHTML = hargaTotal(dataHargaPesanan, totalHargaVal);
+
+                    objKurangMenu.el_input_ttl.value = hargaTotal(dataHargaPesanan, totalHargaVal);
+
+                    // console.log(dataHargaPesanan);
+                    
+                    // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
+                    arrPesanan.value = JSON.stringify(dataHargaPesanan);
+                }
+            }
+        }
+
+        function btnTambahFunc(objTambahMenu) {
+            objTambahMenu.el_btn_tambah.onclick = () => { 
+                objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].total += objTambahMenu.harga_satuan; // update total harga menu pesanan
+
+                objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].qty += 1; // update quantity menu pesanan
+
+                objTambahMenu.el_td_harga.innerHTML = "Rp."+objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].total;
+
+                objTambahMenu.el_td_qty.innerHTML = objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].qty;
+
+                // # Script Menampilkan Update Total Harga Pesanan Pelanggan
+                objTambahMenu.el_ttl_harga.innerHTML = hargaTotal(dataHargaPesanan, totalHargaVal);
+                    
+                objTambahMenu.el_input_ttl.value = hargaTotal(dataHargaPesanan, totalHargaVal);
+
+                // console.log(dataHargaPesanan);
+
+                arrPesanan.value = JSON.stringify(dataHargaPesanan); // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
+            }
+        }
+
+        // TODO: Selesaikan fungsi btnCancelFunc
+        function btnCancelFunc(objCancelMenu) {
+            btnCancel.onclick = () => {
+                // # Script Update Hitung & Menampilkan Total Harga Pesanan Pelanggan
+                let indexDaftarPesanan;
+            
+                dataHargaPesanan.forEach(item => {
+                    if (item.idMenu === dataMenu[i].value.split(',')[0]) indexDaftarPesanan = dataHargaPesanan.indexOf(item);
+                });
+            
+                console.log(indexDaftarPesanan);
+
+                dataHargaPesanan.splice(indexDaftarPesanan, 1);
+            
+                console.log(dataHargaPesanan);
+            
+                ttlHargaPesanan.innerHTML = hargaTotal(dataHargaPesanan, totalHargaVal);
+            
+                trElement.remove();
+            }
+        }
+
         for(let i = 0; i < selectMenu.length; i++) {
             selectMenu[i].onclick = () => {
-                let qtyMenu = 1;
-
                 // console.log({
                 //     dataMenu: dataMenu[i].value.split(','),
                 //     length: dataMenu[i].value.split(',').length
                 // });
+
+                let qtyMenu = 1;
                 
                 // # Script Tambah Table Data Pesanan Pelanggan
-                const trElement = viewPesanan.insertRow(0);
-                
-                const tdIdMenu = trElement.insertCell(0);
-                const tdNamaMenu = trElement.insertCell(1);
-                const tdQtyMenu = trElement.insertCell(2);
-                const tdHargaMenu = trElement.insertCell(3);
-                const tdActionMenu = trElement.insertCell(4);
-                const tdCancelPesanan = trElement.insertCell(5);
+                if (dataHargaPesanan.length >= 0) {
+                    if (dataHargaPesanan.filter(pesanan => pesanan.idMenu === dataMenu[i].value.split(',')[0]).length > 0) return;
 
-                tdIdMenu.innerHTML = `${dataMenu[i].value.split(',')[0]} <input type="hidden" name="id_menu" value="${dataMenu[i].value.split(',')[0]}">`;
-
-                tdNamaMenu.innerHTML = `${dataMenu[i].value.split(',')[1]} <input type="hidden" name="nama_menu" value="${dataMenu[i].value.split(',')[1]}">`;
-
-                tdQtyMenu.innerHTML = `${qtyMenu} <input type="hidden" min="1" name="qty_menu" value="${qtyMenu}">`;
-
-                tdHargaMenu.innerHTML = `Rp.${dataMenu[i].value.split(',')[2]} <input type="hidden" name="harga" value="${dataMenu[i].value.split(',')[2]}">`;
-
-                tdActionMenu.innerHTML = `
-                    <button type="button" id="btnKurang${i}">-</button>
-                    <button type="button" id="btnTambah${i}">+</button>
-                `;
-
-                tdCancelPesanan.innerHTML = `<button type="button" id="btnCancel${i}" class="btn-close" aria-label="close"></button>`;
-
-                // # Script Hitung & Menampilkan Total Harga Pesanan Pelanggan
-                tambahPesanan(dataHargaPesanan, { idMenu: dataMenu[i].value.split(',')[0], total: parseInt(dataMenu[i].value.split(',')[2]) });
-
-                ttlHargaPesanan.innerHTML = hargaTotal(dataHargaPesanan, totalHargaVal);
-
-                totalValInput.value = hargaTotal(dataHargaPesanan, totalHargaVal);
-
-                console.log(dataHargaPesanan);
-
-                // # Script Tambah & Kurang Quantity Menu
-                const btnKurang = document.getElementById('btnKurang'+i);
-                const btnTambah = document.getElementById('btnTambah'+i);
-
-                // console.log(btnKurang);
-                // console.log(btnTambah);
-
-                btnKurang.onclick = () => {
-                    qtyMenu -= 1;
-                
-                    // console.log(btnKurang+' from index menu '+i);
-                
-                    if (qtyMenu <= 0) {
-                        qtyMenu += 1;
-                    } else if (qtyMenu > 0) {
-                        let hargaSatuan = parseInt(dataMenu[i].value.split(',')[2]);
-
-                        tdQtyMenu.innerHTML = `${qtyMenu} <input type="hidden" min="1" name="qty_menu" value="${qtyMenu}">`;
-
-                        dataHargaPesanan.filter(dhp => dhp.idMenu === dataMenu[i].value.split(',')[0])[0].total -= hargaSatuan // update total harga menu pesanan
-                        
-                        tdHargaMenu.innerHTML = `Rp.${dataHargaPesanan.filter(dhp => dhp.idMenu === dataMenu[i].value.split(',')[0])[0].total} <input type="hidden" name="harga" value="${dataHargaPesanan.filter(dhp => dhp.idMenu === dataMenu[i].value.split(',')[0])[0].total}">`;
-
-                        // # Script Menampilkan Update Total Harga Pesanan Pelanggan
-                        ttlHargaPesanan.innerHTML = hargaTotal(dataHargaPesanan, totalHargaVal);
-
-                        totalValInput.value = hargaTotal(dataHargaPesanan, totalHargaVal);
-
-                        // console.log(dataHargaPesanan);
-                    }
-                }
-        
-                btnTambah.onclick = () => {
-                    let hargaSatuan = parseInt(dataMenu[i].value.split(',')[2]);
-                    qtyMenu += 1;
+                    const trElement = viewPesanan.insertRow(0);
                     
-                    tdQtyMenu.innerHTML = `${qtyMenu} <input type="hidden" min="1" name="qty_menu" value="${qtyMenu}">`;
+                    const tdIdMenu = trElement.insertCell(0);
+                    const tdNamaMenu = trElement.insertCell(1);
+                    const tdQtyMenu = trElement.insertCell(2);
+                    const tdHargaMenu = trElement.insertCell(3);
+                    const tdActionMenu = trElement.insertCell(4);
+                    const tdCancelPesanan = trElement.insertCell(5);
 
-                    dataHargaPesanan.filter(dhp => dhp.idMenu === dataMenu[i].value.split(',')[0])[0].total += hargaSatuan; // update total harga menu pesanan
+                    // Tambah Data Menu Kedalam List Pesanan
+                    tambahPesanan(dataHargaPesanan, { idMenu: dataMenu[i].value.split(',')[0], namaMenu: dataMenu[i].value.split(',')[1], qty: qtyMenu, total: parseInt(dataMenu[i].value.split(',')[2]) });
 
-                    tdHargaMenu.innerHTML = `Rp.${dataHargaPesanan.filter(dhp => dhp.idMenu === dataMenu[i].value.split(',')[0])[0].total} <input type="hidden" name="harga" value="${dataHargaPesanan.filter(dhp => dhp.idMenu === dataMenu[i].value.split(',')[0])[0].total}">`;
+                    // Menampilkan Data Menu Pada List Pesanan
+                    const valPesanan = dataHargaPesanan.filter(pesanan => pesanan.idMenu === dataMenu[i].value.split(',')[0]);
 
-                    // # Script Menampilkan Update Total Harga Pesanan Pelanggan
+                    tdIdMenu.innerHTML = valPesanan[0].idMenu;
+                    
+                    tdNamaMenu.innerHTML = valPesanan[0].namaMenu;
+
+                    tdQtyMenu.innerHTML = qtyMenu;
+
+                    tdHargaMenu.innerHTML = "Rp."+valPesanan[0].total;
+
+                    tdActionMenu.innerHTML = `
+                        <button type="button" id="btnKurang${i}">-</button>
+                        <button type="button" id="btnTambah${i}">+</button>
+                    `;
+
+                    tdCancelPesanan.innerHTML = `<button type="button" id="btnCancel${i}" class="btn-close" aria-label="close"></button>`;
+
+                    // # Script Hitung & Menampilkan Total Harga Pesanan Pelanggan
                     ttlHargaPesanan.innerHTML = hargaTotal(dataHargaPesanan, totalHargaVal);
-                    
+
                     totalValInput.value = hargaTotal(dataHargaPesanan, totalHargaVal);
 
                     // console.log(dataHargaPesanan);
-                }
 
-                // # Script Cancel Pesanan Menu
-                const btnCancel = document.getElementById('btnCancel'+i);
+                    arrPesanan.value = JSON.stringify(dataHargaPesanan); // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
 
-                btnCancel.onclick = () => {
-                    // # Script Update Hitung & Menampilkan Total Harga Pesanan Pelanggan
-                    let indexDaftarPesanan;
+                    // # Script Tambah, Kurang & Cancel Menu
+                    const btnKurang = document.getElementById('btnKurang'+i);
+                    const btnTambah = document.getElementById('btnTambah'+i);
+                    const btnCancel = document.getElementById('btnCancel'+i);
 
-                    dataHargaPesanan.forEach(item => {
-                        if (item.idMenu === dataMenu[i].value.split(',')[0]) indexDaftarPesanan = dataHargaPesanan.indexOf(item);
+                    btnKurangFunc({
+                        el_btn_kurang: btnKurang,
+                        qty: qtyMenu,
+                        data_harga: dataHargaPesanan,
+                        id_menu: dataMenu[i].value.split(',')[0],
+                        harga_satuan: parseInt(dataMenu[i].value.split(',')[2]),
+                        el_td_qty: tdQtyMenu,
+                        el_td_harga: tdHargaMenu,
+                        el_ttl_harga: ttlHargaPesanan,
+                        el_input_ttl: totalValInput
                     });
 
-                    console.log(indexDaftarPesanan);
-                        
-                    dataHargaPesanan.splice(indexDaftarPesanan, 1);
+                    btnTambahFunc({
+                        el_btn_tambah: btnTambah,
+                        qty: qtyMenu,
+                        data_harga: dataHargaPesanan,
+                        id_menu: dataMenu[i].value.split(',')[0],
+                        harga_satuan: parseInt(dataMenu[i].value.split(',')[2]),
+                        el_td_qty: tdQtyMenu,
+                        el_td_harga: tdHargaMenu,
+                        el_ttl_harga: ttlHargaPesanan,
+                        el_input_ttl: totalValInput
+                    });
 
-                    console.log(dataHargaPesanan);
-
-                    ttlHargaPesanan.innerHTML = hargaTotal(dataHargaPesanan, totalHargaVal);
-
-                    trElement.remove();
+                    // btnCancelFunc();
                 }
             }
         }
