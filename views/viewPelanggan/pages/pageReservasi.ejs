@@ -68,9 +68,9 @@
   
                     <% filteredReservasi.forEach(fReservasi => { %>
                       <div style="border-top: 1px solid black;">
-                        <!-- <h3>ID PELANGGAN: <%= fReservasi.id_pelanggan; %></h3>
-                        <p>EMAIL PELANGGAN: <%= fReservasi.email; %></p> -->
-                        <p class="tgl-reservasi"><%= fReservasi.untuk_tanggal; %></p>
+                        <p class="tgl-reservasi">
+                          <%= fReservasi.untuk_tanggal; %>
+                        </p>
                       </div>
                     <% }); %>
                   </details>

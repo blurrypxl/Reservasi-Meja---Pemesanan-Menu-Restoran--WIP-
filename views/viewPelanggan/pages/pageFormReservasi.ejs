@@ -22,41 +22,41 @@
             </div>
         <% } %>
 
-        <form class="form-container" action="/konfirmasi-pesanan" method="POST">
+        <form class="form-container" action="/transaksi-api" method="POST">
             <div class="card mb-3" style="width: 18rem;">
                 <div class="card-header" style="text-align: center;">
                   Informasi Reservasi
                 </div>
 
-                <input type="hidden" name="id_meja" value="<%= dataTglReservasi[2]; %>" readonly required>
+                <input type="hidden" name="id_meja" value="<%= dataTglReservasi[3]; %>" readonly required>
 
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">
                     <p>
                         Nama Pelanggan:
                     </p>
-                    <input class="w-100" type="text" name="nama" value="<%= dataTglReservasi[0]; %>" readonly required>
+                    <input class="w-100" type="text" name="nama" value="<%= dataTglReservasi[1]; %>" readonly required>
                   </li>
 
                   <li class="list-group-item">
                     <p>
                         Email:
                     </p>
-                    <input class="w-100" type="text" name="email" value="<%= dataTglReservasi[1]; %>" readonly required>
+                    <input class="w-100" type="text" name="email" value="<%= dataTglReservasi[2]; %>" readonly required>
                   </li>
 
                   <li class="list-group-item">
                     <p>
                         Nomor Meja:
                     </p>
-                    <input class="w-100" type="text" name="nomor_meja" value="<%= dataTglReservasi[3]; %>" readonly>
+                    <input class="w-100" type="text" name="nomor_meja" value="<%= dataTglReservasi[4]; %>" readonly>
                   </li>
 
                   <li class="list-group-item">
                     <p>
                         Tanggal Reservasi:
                     </p>
-                    <input class="w-100" type="text" name="untuk_tgl" value="<%= dataTglReservasi[4]; %>" readonly required>
+                    <input class="w-100" type="text" name="untuk_tgl" value="<%= dataTglReservasi[5]; %>" readonly required>
                   </li>
                 </ul>
             </div>

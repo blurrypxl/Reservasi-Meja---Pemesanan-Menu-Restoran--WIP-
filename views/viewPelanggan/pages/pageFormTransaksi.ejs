@@ -1,1 +1,117 @@
-<p>HALAMAN KIRIM BUKTI TRANSAKSI</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../partials/headPelanggan"); %>
+</head>
+
+<body>
+  <!-- Flash Messages -->
+  <% if (locals.messages) { %>
+    <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
+      <strong>
+        <%= messages.intro %>
+      </strong>
+
+      <%= messages.message %>
+
+        <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+    </div>
+  <% } %>
+
+  <main>
+    <div class="card mb-3" style="width: 18rem;">
+      <div class="card-header" style="text-align: center;">
+        Informasi Reservasi
+      </div>
+
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <p>
+            ID Reservasi:
+          </p>
+          <input class="w-100" type="text" name="id_reservasi" value="<%= dataReservasi[0].id; %>" readonly required>
+        </li>
+
+        <li class="list-group-item">
+          <p>
+            Nama Pelanggan:
+          </p>
+          <input class="w-100" type="text" name="nama" value="<%= dataReservasi[0].nama_pelanggan; %>" readonly required>
+        </li>
+
+        <li class="list-group-item">
+          <p>
+            Email:
+          </p>
+          <input class="w-100" type="text" name="email" value="<%= dataReservasi[0].email; %>" readonly required>
+        </li>
+
+        <li class="list-group-item">
+          <p>
+            Nomor Meja:
+          </p>
+          <input class="w-100" type="text" name="nomor_meja" value="<%= dataReservasi[0].nomor_meja; %>" readonly>
+        </li>
+
+        <li class="list-group-item">
+          <p>
+            Tanggal Reservasi:
+          </p>
+          <input class="w-100" type="text" name="untuk_tgl" value="<%= dataReservasi[0].untuk_tanggal; %>" readonly required>
+        </li>
+      </ul>
+    </div>
+
+    
+    <div class="card mb-3" style="width: 50%;">
+      <div class="card-header" style="text-align: center;">
+          List Pesanan
+      </div>
+    
+      <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID Pesanan</th>
+              <th scope="col">Nama Menu</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Harga</th>
+            </tr>
+          </thead>
+        
+          <tbody id="view-pesanan">
+              <!-- # List Pesanan Pelanggan -->
+              <% dataPesanan.forEach(dp => { %>
+                <tr>
+                  <td>
+                    <%= dp.id %>
+                  </td>
+                  <td>
+                    <%= dp.nama_menu%>
+                  </td>
+                  <td>
+                    <%= dp.qty %>
+                  </td>
+                  <td>
+                    <%= dp.total_harga %>
+                  </td>
+                </tr>
+              <% }); %> 
+          </tbody>
+      </table>
+    
+      <div>
+          <p>
+              Total: Rp.<span id="total-harga-pesanan">0</span>
+          </p>
+        
+          <input type="hidden" id="total-val-input" name="total_harga">
+      </div>
+    
+      <!-- <input type="text" name="arr_pesanan" id="arr-pesanan" readonly required> -->
+      <!-- <input type="hidden" name="total" id="total" readonly required> -->
+    </div>
+  </main>
+</body>
+
+</html>

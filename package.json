@@ -7,10 +7,10 @@
     "ejs": "^3.1.6",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
+    "generate-unique-id": "^2.0.1",
     "md5": "^2.3.0",
     "method-override": "^3.0.0",
     "mysql": "github:mysqljs/mysql",
-    "nanoid": "^4.0.0",
     "time-stamp": "^2.2.0",
     "uuid": "^8.3.2"
   },

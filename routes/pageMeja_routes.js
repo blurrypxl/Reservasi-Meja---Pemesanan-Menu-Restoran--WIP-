@@ -12,8 +12,8 @@ router.route("/products-meja")
   })
   .post(mejaServices.createMeja, toPageMeja);
 
-router.route("/products-meja/:id")
-  .put(mejaServices.updateMeja, toPageMeja)
-  .delete(mejaServices.deleteMeja, toPageMeja);
+// router.route("/products-meja/:id")
+//   .put(mejaServices.updateMeja, toPageMeja)
+//   .delete(mejaServices.deleteMeja, toPageMeja);
 
 module.exports = router;

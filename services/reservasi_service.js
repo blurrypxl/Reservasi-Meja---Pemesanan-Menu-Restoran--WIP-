@@ -1,8 +1,10 @@
 const db = require("../server");
+// const { v4: uuidv4 } = require('uuid');
+const gUniqId = require('generate-unique-id');
 const timestamp = require("time-stamp");
 
 function readReservasi(req, res, next) {
-  db.query(`SELECT reservasi.id_pelanggan, pelanggan.id_meja, reservasi.email, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}'`, (err, results) => {
+  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}'`, (err, results) => {
     if (err) res.json({ msg: err });
     
     const tglHariIni = new Date(timestamp("YYYY-MM-DD")).setHours(0,0,0,0);
@@ -17,9 +19,7 @@ function readReservasi(req, res, next) {
 
       if (new Date(results[i].untuk_tanggal).setHours(0,0,0,0) >= tglHariIni) {   
         filterReservasi.push({
-          id_pelanggan: results[i].id_pelanggan,
           id_meja: results[i].id_meja,
-          email: results[i].email,
           untuk_tanggal: results[i].untuk_tanggal
         });
       }
@@ -36,6 +36,7 @@ function readReservasi(req, res, next) {
 
 function validasiTanggalReservasi(req, res, next) {
   const { nama, email, id_meja, nomor_meja, untuk_tgl } = req.body;
+  const idPelanggan = "PLG-"+gUniqId({ length: 7 });
 
   // console.log(id_meja);
 
@@ -61,10 +62,11 @@ function validasiTanggalReservasi(req, res, next) {
     // console.log(filterReservasi);
 
     if (filterReservasi.length === 0) {
-      res.locals.validasiReservasi = [nama, email, id_meja, nomor_meja, untuk_tgl];
+      res.locals.validasiReservasi = [idPelanggan, nama, email, id_meja, nomor_meja, untuk_tgl];
 
       next();
-    } else if (filterReservasi.length > 0) {
+    }
+    else if (filterReservasi.length > 0) {
       res.locals.errMsgValidasi = 'Meja ini sudah direservasi oleh pelanggan lain. Silahkan pilih Nomor Meja yang berbeda atau pilih lain hari.';
 
       next();
