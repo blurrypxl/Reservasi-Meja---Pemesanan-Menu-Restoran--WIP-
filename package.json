@@ -10,9 +10,9 @@
     "generate-unique-id": "^2.0.1",
     "md5": "^2.3.0",
     "method-override": "^3.0.0",
+    "multer": "^1.4.5-lts.1",
     "mysql": "github:mysqljs/mysql",
-    "time-stamp": "^2.2.0",
-    "uuid": "^8.3.2"
+    "time-stamp": "^2.2.0"
   },
   "scripts": {
     "start": "node app.js"

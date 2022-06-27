@@ -19,57 +19,74 @@
     </div>
   <% } %>
 
-  <main>
-    <div class="card mb-3" style="width: 18rem;">
-      <div class="card-header" style="text-align: center;">
-        Informasi Reservasi
-      </div>
-
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          <p>
-            ID Reservasi:
-          </p>
-          <input class="w-100" type="text" name="id_reservasi" value="<%= dataReservasi[0].id; %>" readonly required>
-        </li>
-
-        <li class="list-group-item">
-          <p>
-            Nama Pelanggan:
-          </p>
-          <input class="w-100" type="text" name="nama" value="<%= dataReservasi[0].nama_pelanggan; %>" readonly required>
-        </li>
-
-        <li class="list-group-item">
-          <p>
-            Email:
-          </p>
-          <input class="w-100" type="text" name="email" value="<%= dataReservasi[0].email; %>" readonly required>
-        </li>
-
-        <li class="list-group-item">
-          <p>
-            Nomor Meja:
-          </p>
-          <input class="w-100" type="text" name="nomor_meja" value="<%= dataReservasi[0].nomor_meja; %>" readonly>
-        </li>
-
-        <li class="list-group-item">
-          <p>
-            Tanggal Reservasi:
-          </p>
-          <input class="w-100" type="text" name="untuk_tgl" value="<%= dataReservasi[0].untuk_tanggal; %>" readonly required>
-        </li>
-      </ul>
-    </div>
-
+  <main>    
+    <form class="form-container" action="/konfirmasi-transaksi/<%= dataReservasi[0].id_pelanggan; %>" method="POST" enctype="multipart/form-data">
+      <div class="card mb-3" style="width: 18rem;">
+        <div class="card-header" style="text-align: center;">
+          Informasi Reservasi
+        </div>
     
-    <div class="card mb-3" style="width: 50%;">
-      <div class="card-header" style="text-align: center;">
-          List Pesanan
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <p>
+              ID Reservasi:
+            </p>
+  
+            <p>
+              <%= dataReservasi[0].id; %>
+            </p>
+
+            <input type="hidden" name="idReservasi" value="<%= dataReservasi[0].id; %>" required readonly>
+          </li>
+    
+          <li class="list-group-item">
+            <p>
+              Nama Pelanggan:
+            </p>
+  
+            <p>
+              <%= dataReservasi[0].nama_pelanggan; %>
+            </p>
+          </li>
+    
+          <li class="list-group-item">
+            <p>
+              Email:
+            </p>
+  
+            <p>
+              <%= dataReservasi[0].email; %>
+            </p>
+          </li>
+    
+          <li class="list-group-item">
+            <p>
+              Nomor Meja:
+            </p>
+  
+            <p>
+              <%= dataReservasi[0].nomor_meja; %>
+            </p>
+          </li>
+    
+          <li class="list-group-item">
+            <p>
+              Tanggal Reservasi:
+            </p>
+  
+            <p>
+              <%= dataReservasi[0].untuk_tanggal; %>
+            </p>
+          </li>
+        </ul>
       </div>
     
-      <table class="table">
+      <div class="card mb-3" style="width: 50%;">
+        <div class="card-header" style="text-align: center;">
+            List Pesanan
+        </div>
+      
+        <table class="table">
           <thead>
             <tr>
               <th scope="col">ID Pesanan</th>
@@ -78,39 +95,52 @@
               <th scope="col">Harga</th>
             </tr>
           </thead>
-        
+          
           <tbody id="view-pesanan">
-              <!-- # List Pesanan Pelanggan -->
-              <% dataPesanan.forEach(dp => { %>
-                <tr>
-                  <td>
-                    <%= dp.id %>
-                  </td>
-                  <td>
-                    <%= dp.nama_menu%>
-                  </td>
-                  <td>
-                    <%= dp.qty %>
-                  </td>
-                  <td>
-                    <%= dp.total_harga %>
-                  </td>
-                </tr>
-              <% }); %> 
+            <!-- # List Pesanan Pelanggan -->
+            <% dataPesanan.forEach(dp => { %>
+              <tr>
+                <td>
+                  <%= dp.id %>
+                </td>
+  
+                <td>
+                  <%= dp.nama_menu%>
+                </td>
+  
+                <td>
+                  <%= dp.qty %>
+                </td>
+  
+                <td>
+                  <%= dp.total_harga %>
+                </td>
+              </tr>
+            <% }); %> 
           </tbody>
-      </table>
-    
-      <div>
+        </table>
+      
+        <div>
           <p>
-              Total: Rp.<span id="total-harga-pesanan">0</span>
+            Total: Rp.<%= totalBayar %>
           </p>
-        
-          <input type="hidden" id="total-val-input" name="total_harga">
+        </div>
       </div>
-    
-      <!-- <input type="text" name="arr_pesanan" id="arr-pesanan" readonly required> -->
-      <!-- <input type="hidden" name="total" id="total" readonly required> -->
-    </div>
+
+      <div class="card mb-3" style="width: 50%;">
+        <div class="card-header" style="text-align: center;">
+          Form Upload Bukti Transaksi
+        </div>
+
+        <div class="form-group">
+          <label for="bukti_transaksi">Upload Bukti Transaksi:</label>
+
+          <input type="file" name="bukti_transaksi" accept="image/*" class="form-control-file" id="bukti_transaksi">
+
+          <button type="submit" class="btn btn-success">KIRIM BUKTI</button>
+        </div>
+      </div>
+    </form>
   </main>
 </body>
 

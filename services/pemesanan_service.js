@@ -1,5 +1,4 @@
 const db = require('../server');
-// const { v4: uuidv4 } = require('uuid');
 const gUniqId = require('generate-unique-id');
 const timestamp = require('time-stamp');
 
