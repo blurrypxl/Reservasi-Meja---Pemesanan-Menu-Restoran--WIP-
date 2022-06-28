@@ -33,7 +33,7 @@ function checkAccount(req, res, next) {
 function logIn(req, res) {
   req.session.loggedIn = true;
   req.session.user = res.locals.roleUsr;
-  res.redirect('/admin');
+  res.redirect('/admin/dashboard');
 }
 
 function checkAuth(req, res, next) {

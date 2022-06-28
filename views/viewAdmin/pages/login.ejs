@@ -1,58 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <%- include("../partials/head.ejs"); %>
-  </head>
+<head>
+  <%- include("../partials/head.ejs"); %>
+</head>
 
-  <body>
-    <!-- <header>
+<body style="background-color: #DB090A;">
+  <!-- <header>
       <%- include("../partials/header.ejs"); %>
     </header> -->
 
-    <!-- Flash Messages -->
-    <% if (locals.messages) { %>
-      <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
-        <strong><%= messages.intro %></strong> <%= messages.message %>
+  <!-- Flash Messages -->
+  <% if (locals.messages) { %>
+    <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
+      <strong>
+        <%= messages.intro %>
+      </strong>
+      <%= messages.message %>
 
         <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
-      </div>
-    <% } %>
+    </div>
+  <% } %>
 
-    <main class="container-md" style="border: 1px solid black; height: 100vh;">
-      <!-- Login Form -->
-      <div class="card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="...">
+  <main class="container-md center-flex-column">
+    <img src="/images/moji-bg-red.png" style="width: 150px; height: 150px;" alt="logo-moji">
 
-        <div class="card-body">
-          <h5 class="card-title">Sign In</h5>
-          
-          <form action="/auth-account" method="post">
-            <div class="input-group flex-nowrap">
-              <span class="input-group-text" id="addon-wrapping">Email:</span>
+    <!-- Login Form -->
+    <div class="card d-flex flex-column justify-content-center" style="width: 30vw;">
+      <div class="card-body">
+        <h5 class="card-title">Sign In</h5>
 
-              <input type="email" name="email_login" class="form-control" placeholder="Email User" aria-label="Email User" aria-describedby="addon-wrapping" required>
-            </div>
+        <form action="/auth-account" method="POST">
+          <div class="input-group flex-nowrap my-3">
+            <span class="input-group-text" id="addon-wrapping">Email:</span>
 
-            <div class="input-group flex-nowrap">
-              <span class="input-group-text" id="addon-wrapping">Password:</span>
+            <input type="email" name="email_login" class="form-control" placeholder="Email User" aria-label="Email User" aria-describedby="addon-wrapping" required>
+          </div>
 
-              <input type="password" name="pass_login" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="addon-wrapping" required>
-            </div>
-  
-            <div class="form-group">
-              <button type="submit" class="btn btn-success submit-button w-100">Signin</button>
-            </div>
-          </form>
-        </div>
-      </div>
+          <div class="input-group flex-nowrap my-3">
+            <span class="input-group-text" id="addon-wrapping">Password:</span>
 
-      <div class="login-box">
-        
+            <input type="password" name="pass_login" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="addon-wrapping" required>
+          </div>
+
+          <div class="form-group flex-nowrap my-3">
+            <button type="submit" class="btn btn-success submit-button w-100">Sign-In</button>
+          </div>
         </form>
       </div>
-    </main>
+    </div>
+    </div>
+  </main>
 
-  </body>
+</body>
 
 </html>
