@@ -11,6 +11,16 @@ function readMenu(req, res, next) {
   });
 }
 
+function readTotalMenu(req, res, next) {
+  db.query(`SELECT COUNT(id) AS total FROM menu`, (err, results) => {
+    if (err) throw err;
+
+    res.locals.totalMenu = results;
+
+    next();
+  });
+}
+
 function createMenu(req, res, next) {
   const { id_user, nama_menu, jenis_menu, harga, gambar_menu, status } = req.body; // Destructing Assignment (DA)
   const createAt = timestamp('DD:mm:YYYY-MM-DD');
@@ -46,6 +56,7 @@ function deleteMenu(req, res, next) {
 
 module.exports = {
   readMenu,
+  readTotalMenu,
   createMenu,
   updateMenu,
   deleteMenu

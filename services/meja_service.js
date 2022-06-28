@@ -11,6 +11,19 @@ function readMeja(req, res, next) {
   });
 }
 
+function readTotalMeja(req, res, next) {
+  db.query(`SELECT COUNT(*) AS total FROM menu`, (err, results) => {
+    if (err) throw err;
+
+    res.locals.totalMeja = results;
+
+    // console.log(res.locals.totalMeja);
+    // console.log(results);
+
+    next();
+  });
+}
+
 function createMeja(req, res, next) {
   const { id_user, nomor_meja, max_person, gambar_meja } = req.body;
   const createAt = timestamp('HH:mm:YYYY-MM-DD');
@@ -46,6 +59,7 @@ function deleteMeja(req, res, next) {
 
 module.exports = {
   readMeja,
+  readTotalMeja,
   createMeja,
   updateMeja,
   deleteMeja

@@ -289,7 +289,7 @@ header {
 }
 
 .container-header {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   display: flex;
   justify-content: space-between;
   align-items: center;

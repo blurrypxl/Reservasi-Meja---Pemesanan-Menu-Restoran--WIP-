@@ -23,9 +23,61 @@
           <p><%= typeof user != "undefined" ? user : "" %></p>
         </div>
 
-        <div class="total-box">
-          <h2>Total Menu</h2>
-          <p></p>
+        <div class="d-flex flex-row bd-highlight mb-3">
+          <!-- Total Admin -->
+          <div class="card mx-2">
+            <div class="card-body">
+              <h5 class="card-title">Total Admin</h5>
+
+              <p class="card-text">
+                <%= totalAdmin[0].total; %>
+              </p>
+            </div>
+          </div>
+
+          <!-- Total Menu -->
+          <div class="card mx-2">
+            <div class="card-body">
+              <h5 class="card-title">Total Menu</h5>
+
+              <p class="card-text">
+                <%= totalMenu[0].total; %>
+              </p>
+            </div>
+          </div>
+
+          <!-- Total Meja -->
+          <div class="card mx-2">
+            <div class="card-body">
+              <h5 class="card-title">Total Meja</h5>
+
+              <p class="card-text">
+                <%= totalMeja[0].total; %>
+              </p>
+            </div>
+          </div>
+
+          <!-- Total Reservasi -->
+          <div class="card mx-2">
+            <div class="card-body">
+              <h5 class="card-title">Total Reservasi</h5>
+
+              <p class="card-text">
+
+              </p>
+            </div>
+          </div>
+
+          <!-- Total Transaksi -->
+          <div class="card mx-2">
+            <div class="card-body">
+              <h5 class="card-title">Total Transaksi</h5>
+
+              <p class="card-text">
+
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </main>
