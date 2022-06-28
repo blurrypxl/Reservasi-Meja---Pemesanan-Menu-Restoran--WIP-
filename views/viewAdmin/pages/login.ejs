@@ -6,31 +6,51 @@
   </head>
 
   <body>
-
-    <header>
+    <!-- <header>
       <%- include("../partials/header.ejs"); %>
-    </header>
+    </header> -->
 
-    <main class="main-content">
-      <div class="login-box">
-        <form action="/auth-account" method="post">
-          <div class="form-group">
-            <label for="email-login">Email:</label>
-            <input type="email" name="email_login" id="email-login" required>
-          </div>
+    <!-- Flash Messages -->
+    <% if (locals.messages) { %>
+      <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
+        <strong><%= messages.intro %></strong> <%= messages.message %>
+
+        <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+      </div>
+    <% } %>
+
+    <main class="container-md" style="border: 1px solid black; height: 100vh;">
+      <!-- Login Form -->
+      <div class="card" style="width: 18rem;">
+        <img src="..." class="card-img-top" alt="...">
+
+        <div class="card-body">
+          <h5 class="card-title">Sign In</h5>
           
-          <div class="form-group">
-            <label for="pass-login">Password:</label>
-            <input type="password" name="pass_login" id="pass-login" required>
-          </div>
+          <form action="/auth-account" method="post">
+            <div class="input-group flex-nowrap">
+              <span class="input-group-text" id="addon-wrapping">Email:</span>
 
-          <div class="form-group">
-            <button type="submit" class="submit-button">Log In</button>
-          </div>
-        </form>
+              <input type="email" name="email_login" class="form-control" placeholder="Email User" aria-label="Email User" aria-describedby="addon-wrapping" required>
+            </div>
+
+            <div class="input-group flex-nowrap">
+              <span class="input-group-text" id="addon-wrapping">Password:</span>
+
+              <input type="password" name="pass_login" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="addon-wrapping" required>
+            </div>
+  
+            <div class="form-group">
+              <button type="submit" class="btn btn-success submit-button w-100">Signin</button>
+            </div>
+          </form>
+        </div>
       </div>
 
-      <div class="image-login"></div>
+      <div class="login-box">
+        
+        </form>
+      </div>
     </main>
 
   </body>

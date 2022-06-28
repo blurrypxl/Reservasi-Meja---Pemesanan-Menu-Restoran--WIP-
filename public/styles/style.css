@@ -268,7 +268,7 @@ header {
   border-top-right-radius: 5px;
   padding: 0.5em;
   /* margin: 0 0.2em; */
-  width: fit-content;
+  /* width: fit-content; */
   text-transform: uppercase;
 }
 .page-routes a.active {

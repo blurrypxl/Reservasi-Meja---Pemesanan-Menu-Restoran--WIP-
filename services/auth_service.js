@@ -17,7 +17,14 @@ function checkAccount(req, res, next) {
         }
         else if (results.length === 0) {
           console.log("Unauthorized: Tidak dikenal");
-          res.redirect("/admin/login");
+          
+          req.session.messages = {
+            type: 'danger',
+            intro: 'Akun tidak dikenal!',
+            message: 'Username atau Password salah! Silahkan coba lagi.'
+          };
+  
+          res.redirect('/admin/login');
         }
       }
     }) : res.send("Username & Password Kosong!");
