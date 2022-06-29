@@ -30,11 +30,20 @@ function readPesananById(req, res, next) {
   });
 }
 
-function updateStatusTransaksi(req, res, next) {
+function readTotalTransaksi(req, res, next) {
+  db.query(`SELECT COUNT(id) AS total FROM transaksi`, (err, results) => {
+    if (err) throw err;
 
+    res.locals.totalTransaksi = results;
+
+    next();
+  });
 }
+
+function updateStatusTransaksi(req, res, next) {}
 
 module.exports = {
   readPesananById,
+  readTotalTransaksi,
   updateStatusTransaksi,
 };

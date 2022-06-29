@@ -34,6 +34,16 @@ function readReservasi(req, res, next) {
   });
 }
 
+function readTotalReservasi(req, res, next) {
+  db.query(`SELECT COUNT(id) AS total FROM reservasi`, (err, results) => {
+    if (err) throw err;
+
+    res.locals.totalReservasi = results;
+
+    next();
+  });
+}
+
 function validasiTanggalReservasi(req, res, next) {
   const { nama, email, id_meja, nomor_meja, untuk_tgl } = req.body;
   const idPelanggan = "PLG-"+gUniqId({ length: 7 });
@@ -80,5 +90,6 @@ function updateDateReservasi(req, res, next) {}
 
 module.exports = {
   readReservasi,
+  readTotalReservasi,
   validasiTanggalReservasi,
 };
