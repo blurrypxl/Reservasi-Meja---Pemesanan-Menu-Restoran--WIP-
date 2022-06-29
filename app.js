@@ -9,6 +9,7 @@ const reservasiRouter = require("./routes/reservasi_routes");
 const pemesananRouter = require("./routes/pemesanan_routes");
 const authService = require("./services/auth_service");
 const dashboardRouter = require("./routes/dashboard_routes");
+const usersRouter = require("./routes/admin_routes");
 
 const app = express();
 
@@ -43,6 +44,9 @@ app.get('/admin/login', (req, res) => {
 
 // # Dashboard Admin
 app.use(dashboardRouter);
+
+// # Data Admin
+app.use(usersRouter);
 
 // # Data Menu
 app.use(pageMenuRouter);

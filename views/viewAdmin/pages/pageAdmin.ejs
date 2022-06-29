@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../partials/head.ejs"); %>
+</head>
+
+<body>
+  <header>
+    <%- include("../partials/header.ejs"); %>
+  </header>
+
+  <main class="main-content">
+    <div class="nav-bar">
+      <div class="nav-content">
+        <%- include("../partials/navbar.ejs", {user: user}); %>
+      </div>
+    </div>
+
+    <div class="content-box">
+      <div class="container-header mt-3">
+        <h1>DATA USERS /</h1>
+        <p>
+          <%= typeof user !="undefined" ? user : "" %>
+        </p>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body between-center-flex-row">
+          Add Data Admin
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahUser">ADD</button>
+        </div>
+
+        <!-- Create modal -->
+        <div class="modal fade" id="tambahUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticTambahUser" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticTambahUser">Tambah Data User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                ...
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <% dataAdmin.forEach(user => { %> 
+        <details class="card mb-3">
+          <summary class="card-header start-flex-row">
+            <div>
+              <h4>
+                ID:
+                <span><%= user.id; %></span>
+              </h4>
+
+              <p>
+                Nama:
+                <span><%= user.nama; %></span>
+              </p>
+
+              <p>
+                Email:
+                <span><%= user.email; %></span>
+              </p>
+            </div>
+          </summary>
+
+          <div class="card-body">
+            <div class="card">
+              <div class="card-header">
+                <h5>
+                  Detail User
+                </h5>
+              </div>
+
+              <ul class="list-group list-group-flush">
+                <li id="role" class="list-group-item">
+                  <label for="role">Role:</label>
+                  <%= user.role; %>
+                </li>
+
+                <li id="alamat" class="list-group-item">
+                  <label for="alamat">Alamat:</label>
+                  <%= user.alamat; %>
+                </li>
+  
+                <li id="createAt" class="list-group-item">
+                  <label for="createAt">Create At:</label>
+                  <%= user.create_at; %>
+                </li>
+                
+                <li id="updateAt" class="list-group-item">
+                  <label for="updateAt">Update At:</label>
+                  <%= user.update_at; %>
+                </li>
+                
+                <li class="list-group-item">
+                  <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editAdmin<%= dataAdmin.id; %>">EDIT</button>
+  
+                  <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAdmin<%= dataAdmin.id; %>">DELETE</button>
+                </li>
+              </ul>
+
+              <!-- Update modal -->
+              <div class="modal fade" id="editAdmin<%= dataAdmin.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticEditAdmin<%= dataAdmin.id; %>" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticEditAdmin<%= dataAdmin.id; %>">Edit Data Admin</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      ...
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Understood</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Delete modal -->
+              <div class="modal fade" id="deleteAdmin<%= dataAdmin.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteAdmin<%= dataAdmin.id; %>" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticDeleteAdmin<%= dataAdmin.id; %>">Delete Data Admin</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      ...
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Understood</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      <% }); %> 
+    </div>
+  </main>
+
+  <footer>
+    <%- include("../partials/footer.ejs"); %>
+  </footer>
+
+  <script src="/styles/navDropDown.js"></script>
+</body>
+
+</html>

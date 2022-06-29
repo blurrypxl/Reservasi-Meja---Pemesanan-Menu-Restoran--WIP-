@@ -1,6 +1,15 @@
 const db = require('../server');
 
-function readAdmin(req, res, next) {}
+function readAdmin(req, res, next) {
+    db.query(`SELECT * FROM users WHERE role='admin'`, (err, results) => {
+        if (err) throw err;
+
+        res.locals.dataAdmin = results;
+        console.log(res.locals.dataAdmin);
+
+        next();
+    });
+}
 
 function readTotalAdmin(req, res, next) {
     db.query(`SELECT COUNT(id) AS total FROM users WHERE role='admin'`, (err, results) => {

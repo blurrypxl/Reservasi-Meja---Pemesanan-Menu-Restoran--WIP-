@@ -176,6 +176,20 @@ header {
   align-items: center;
   justify-content: center;
 }
+
+.start-flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: start;
+}
+
+.between-center-flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
 /* Edit - 22/06/2022 - End */
 
 .main-content {

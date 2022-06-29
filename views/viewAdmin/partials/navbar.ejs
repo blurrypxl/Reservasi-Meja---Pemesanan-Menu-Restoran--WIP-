@@ -1,11 +1,11 @@
 <ul>
   <li>
-    <a href="/dashboard">DASHBOARD</a>
+    <a href="/admin/dashboard">DASHBOARD</a>
   </li>
 
   <% if (user === "super-admin") { %>
     <li>
-      <a href="/users">DATA USERS</a>
+      <a href="/admin/users">DATA USERS</a>
     </li>
 
     <div class="list">
@@ -16,11 +16,11 @@
 
       <div class="content">
         <li>
-          <a href="">DATA MENU</a>
+          <a href="/admin/menu">DATA MENU</a>
         </li>
 
         <li>
-          <a href="">DATA MEJA</a>
+          <a href="/admin/meja">DATA MEJA</a>
         </li>
       </div>
     </div>
@@ -33,11 +33,11 @@
 
       <div class="content">
         <li>
-          <a href="">VALIDASI TRANSAKSI</a>
+          <a href="/admin/validasi-transaksi">VALIDASI TRANSAKSI</a>
         </li>
 
         <li>
-          <a href="">DATA TRANSAKSI</a>
+          <a href="/admin/transaksi">DATA TRANSAKSI</a>
         </li>
       </div>
     </div>
@@ -45,7 +45,7 @@
 
   <% if (user === "admin-kasir") { %>
     <li>
-      <a href="">KONFIRMASI RESERVASI</a>
+      <a href="/admin/konfirmasi-reservasi">KONFIRMASI RESERVASI</a>
     </li>
   <% } %>
 </ul>

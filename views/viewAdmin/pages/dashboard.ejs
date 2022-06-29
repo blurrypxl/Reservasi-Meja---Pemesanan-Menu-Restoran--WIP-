@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <%- include("../partials/head.ejs"); %>
-  </head>
+<head>
+  <%- include("../partials/head.ejs"); %>
+</head>
 
-  <body>
-    <header>
-      <%- include("../partials/header.ejs"); %>
-    </header>
+<body>
+  <header>
+    <%- include("../partials/header.ejs"); %>
+  </header>
 
-    <main class="main-content">
-      <div class="nav-bar">
-        <div class="nav-content">
-          <%- include("../partials/navbar.ejs", {user: user}); %>
-        </div>
+  <main class="main-content">
+    <div class="nav-bar">
+      <div class="nav-content">
+        <%- include("../partials/navbar.ejs", {user: user}); %>
       </div>
-      
-      <div class="content-box">
-        <div class="container-header">
-          <h1>DASHBOARD /</h1>
-          <p><%= typeof user != "undefined" ? user : "" %></p>
-        </div>
+    </div>
 
-        <div class="d-flex flex-row bd-highlight mb-3">
-          <!-- Total Admin -->
+    <div class="content-box mt-3">
+      <div class="container-header">
+        <h1>DASHBOARD /</h1>
+        <p>
+          <%= typeof user !="undefined" ? user : "" %>
+        </p>
+      </div>
+
+      <div class="d-flex flex-row bd-highlight mb-3">
+        <!-- Total Admin - Super Admin -->
+        <% if (user==="super-admin" ) { %>
           <div class="card mx-2">
             <div class="card-body">
               <h5 class="card-title">Total Admin</h5>
@@ -34,60 +37,61 @@
               </p>
             </div>
           </div>
+        <% } %>
 
-          <!-- Total Menu -->
-          <div class="card mx-2">
-            <div class="card-body">
-              <h5 class="card-title">Total Menu</h5>
+        <!-- Total Menu -->
+        <div class="card mx-2">
+          <div class="card-body">
+            <h5 class="card-title">Total Menu</h5>
 
-              <p class="card-text">
-                <%= totalMenu[0].total; %>
-              </p>
-            </div>
+            <p class="card-text">
+              <%= totalMenu[0].total; %>
+            </p>
           </div>
+        </div>
 
-          <!-- Total Meja -->
-          <div class="card mx-2">
-            <div class="card-body">
-              <h5 class="card-title">Total Meja</h5>
+        <!-- Total Meja -->
+        <div class="card mx-2">
+          <div class="card-body">
+            <h5 class="card-title">Total Meja</h5>
 
-              <p class="card-text">
-                <%= totalMeja[0].total; %>
-              </p>
-            </div>
+            <p class="card-text">
+              <%= totalMeja[0].total; %>
+            </p>
           </div>
+        </div>
 
-          <!-- Total Reservasi -->
-          <div class="card mx-2">
-            <div class="card-body">
-              <h5 class="card-title">Total Reservasi</h5>
+        <!-- Total Reservasi -->
+        <div class="card mx-2">
+          <div class="card-body">
+            <h5 class="card-title">Total Reservasi</h5>
 
-              <p class="card-text">
-                <%= totalReservasi[0].total; %>
-              </p>
-            </div>
+            <p class="card-text">
+              <%= totalReservasi[0].total; %>
+            </p>
           </div>
+        </div>
 
-          <!-- Total Transaksi -->
-          <div class="card mx-2">
-            <div class="card-body">
-              <h5 class="card-title">Total Transaksi</h5>
+        <!-- Total Transaksi -->
+        <div class="card mx-2">
+          <div class="card-body">
+            <h5 class="card-title">Total Transaksi</h5>
 
-              <p class="card-text">
-                <%= totalTransaksi[0].total; %>
-              </p>
-            </div>
+            <p class="card-text">
+              <%= totalTransaksi[0].total; %>
+            </p>
           </div>
         </div>
       </div>
-    </main>
-    
-    <footer>
-      <%- include("../partials/footer.ejs"); %>
-    </footer>
+    </div>
+  </main>
 
-    <script src="/styles/funcModals.js"></script>
-    <script src="/styles/navDropDown.js"></script>
-  </body>
+  <footer>
+    <%- include("../partials/footer.ejs"); %>
+  </footer>
+
+  <script src="/styles/funcModals.js"></script>
+  <script src="/styles/navDropDown.js"></script>
+</body>
 
 </html>
