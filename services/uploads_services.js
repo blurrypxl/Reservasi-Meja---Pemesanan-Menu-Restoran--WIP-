@@ -3,7 +3,15 @@ const db = require('../server');
 const gUniqId = require('generate-unique-id');
 const timestamp = require('time-stamp');
 const path = require('path');
-// const fs = require('fs');
+const fs = require('fs');
+
+function removeImageFromDisk(path) {
+  fs.unlink(path, err => {
+    if (err) throw err;
+
+    return;
+  });
+}
 
 // Uploads Bukti Transaksi - START
 const buktiTransaksiConf = multer.diskStorage({
@@ -72,6 +80,7 @@ const SaveGambarMenuToStorage = multer({ storage: gambarMenuConf }).single('gamb
 // Uploads Gambar Meja - END
 
 module.exports = {
+  removeImageFromDisk,
   saveBuktiToStorage,
   createBuktiTransaksi,
   SaveGambarMenuToStorage,

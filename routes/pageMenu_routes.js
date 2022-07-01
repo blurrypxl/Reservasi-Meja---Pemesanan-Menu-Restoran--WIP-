@@ -14,7 +14,7 @@ router.route("/admin/menu")
 .post(userChecker.checkAuth, uploads.SaveGambarMenuToStorage, menuServices.createMenu, toPageMenu);
 
 router.route("/admin/menu/:id")
-.put(userChecker.checkAuth, menuServices.updateMenu, toPageMenu)
+.put(userChecker.checkAuth, uploads.SaveGambarMenuToStorage, menuServices.updateMenu, toPageMenu)
 .delete(userChecker.checkAuth, menuServices.deleteMenu, toPageMenu);
 
 module.exports = router;

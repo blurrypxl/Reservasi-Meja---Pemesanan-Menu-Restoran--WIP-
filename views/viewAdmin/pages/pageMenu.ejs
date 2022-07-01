@@ -58,34 +58,44 @@
                     <div class="mb-3">
                       <label for="gambar_menu" class="form-label">Gambar Menu</label>
                     
-                      <input type="file" accept="image/*" class="form-control" id="gambar_menu" name="gambar_menu">
+                      <input type="file" accept="image/*" class="form-control" id="gambar_menu" name="gambar_menu" required>
                     </div>
                   
                     <div class="mb-3">
                       <label for="nama_menu" class="form-label">Nama Menu</label>
                     
-                      <input type="text" class="form-control" id="nama_menu" placeholder="nama menu" name="nama_menu">
+                      <input type="text" class="form-control" id="nama_menu" placeholder="nama menu" name="nama_menu" required>
                     </div>
                   
                     <div class="mb-3">
                       <label for="jenis_menu" class="form-label">Jenis Menu</label>
-                    
-                      <input type="text" class="form-control" id="jenis_menu" placeholder="jenis menu" name="jenis_menu">
+
+                      <select class="form-select form-select-md" aria-label=".form-select-md" name="jenis_menu" required>
+                        <option selected value="">Tambah jenis menu</option>
+                        <option value="Makanan">Makanan</option>
+                        <option value="Minuman">Minuman</option>
+                      </select>
                     </div>
                   
                     <div class="mb-3">
                       <label for="harga_menu" class="form-label">Harga Menu</label>
                     
-                      <input type="text" class="form-control" id="harga_menu" placeholder="harga menu" name="harga"></input>
+                      <input type="number" class="form-control" min="5000" id="harga_menu" placeholder="harga menu" name="harga" required>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="qty" class="form-label">Quantity</label>
+                            
+                      <input type="number" min="0" class="form-control" id="qty" name="qty" value="1" required>
                     </div>
                   
                     <div class="mb-3">
-                      <label for="status_akun" class="form-label">Status Akun</label>
+                      <label for="status_akun" class="form-label">Status Menu</label>
   
                       <select class="form-select form-select-md" aria-label=".form-select-md" name="status" required>
-                        <option selected value="">Update status akun</option>
+                        <option selected value="">Tambah status menu</option>
                         <option value="aktif">Aktif</option>
-                        <option value="non-aktif ">Non-Aktif</option>
+                        <option value="non-aktif">Non-Aktif</option>
                       </select>
                     </div>
                   
@@ -132,92 +142,109 @@
                 </div>
 
                 <ul class="list-group list-group-flush">
-                  <li id="role" class="list-group-item">
-                    <label for="role">Role:</label>
-                    <%= user.role; %>
+                  <li id="jenis" class="list-group-item">
+                    <label for="jenis">Jenis Menu:</label>
+                    <%= menu.jenis_menu; %>
                   </li>
 
-                  <li id="alamat" class="list-group-item">
-                    <label for="alamat">Alamat:</label>
-                    <%= user.alamat; %>
+                  <li id="harga" class="list-group-item">
+                    <label for="harga">Harga:</label>
+                    <%= menu.harga; %>
+                  </li>
+
+                  <li id="qty" class="list-group-item">
+                    <label for="qty">Quantity:</label>
+                    <%= menu.qty; %>
                   </li>
                 
                   <li id="createAt" class="list-group-item">
                     <label for="createAt">Create At:</label>
-                    <%= user.create_at; %>
+                    <%= menu.create_at; %>
                   </li>
 
                   <li id="updateAt" class="list-group-item">
                     <label for="updateAt">Update At:</label>
-                    <%= user.update_at; %>
+                    <%= menu.update_at; %>
                   </li>
 
                   <li class="list-group-item">
-                    <button class="btn btn-warning"   data-bs-toggle="modal"  data-bs-target="#editAdmin<%= user.id;   %>">EDIT</button>
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editAdmin<%= menu.id;   %>">EDIT</button>
                   
-                    <button class="btn btn-danger"  data-bs-toggle="modal"   data-bs-target="#deleteAdmin<%= user.id;  %>">HAPUS</button>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAdmin<%= menu.id;  %>">HAPUS</button>
                   </li>
                 </ul>
 
                 <!-- Update modal -->
-                <div class="modal fade" id="editAdmin<%= user.id;   %>" data-bs-backdrop="static"   data-bs-keyboard="false" tabindex="-1"  aria-labelledby="staticEditAdmin<%= user.id; %>"   aria-hidden="true">
+                <div class="modal fade" id="editAdmin<%= menu.id; %>" data-bs-backdrop="static"   data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticEditAdmin<%= menu.id; %>" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title"   id="staticEditAdmin<%= user.id; %>">Edit  Data Admin</h5>
-                        <button type="button" class="btn-close"   data-bs-dismiss="modal"   aria-label="Close"></button>
+                        <h5 class="modal-title" id="staticEditAdmin<%= menu.id; %>">Edit Data Menu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
 
                       <div class="modal-body">
-                        <form action="/admin/users/<%= user.id; %>? _method=PUT" method="POST">
+                        <form action="/admin/menu/<%= menu.id; %>?_method=PUT" method="POST" enctype="multipart/form-data">
                           <div class="mb-3">
-                            <label for="nama_lengkap"   class="form-label">Nama Lengkap</label>
-                          
-                            <input type="text"  class="form-control" id="nama_lengkap"   placeholder="nama lengkap user"   name="nama" value="<%= user.nama; %>"   required>
-                          </div>
-                        
-                          <div class="mb-3">
-                            <label for="alamat_email"   class="form-label">Alamat Email</label>
-                          
-                            <input type="email"   class="form-control" id="alamat_email"  placeholder="name@example.com"   name="email" value="<%= user.email;   %>" required>
-                          </div>
-                        
-                          <div class="mb-3">
-                            <label for="alamat_rumah"   class="form-label">Alamat Rumah</label>
-                          
-                            <input type="text"  class="form-control" id="alamat_rumah"   rows="3" name="alamat" value="<%= user. alamat; %>" required>
-                          </div>
-                        
-                          <div class="mb-3">
-                            <label for="password"   class="form-label">Password</label>
-
-                            <input type="password"  class="form-control" id="password"   name="password" value="<%= user.  password; %>" required>
+                            <label for="gambar_menu" class="form-label">Gambar Menu</label>
+                    
+                            <input type="file" accept="image/*" class="form-control" id="gambar_menu" name="gambar_menu" required>
                           </div>
 
                           <div class="mb-3">
-                            <label for="status_akun" class="form-label">Status Akun</label>
+                            <label for="nama_menu" class="form-label">Nama Menu</label>
+                          
+                            <input type="text" class="form-control" id="nama_menu" placeholder="nama menu" name="nama" value="<%= menu.nama_menu; %>" required>
+                          </div>
+                        
+                          <div class="mb-3">
+                            <label for="jenis_menu" class="form-label">Jenis Menu</label>
+                          
+                            <input type="text" class="form-control mb-2" id="jenis_menu" value="<%= menu.jenis_menu; %>" readonly required>
 
-                            <input type="text"  class="form-control mb-2" id="status_menu" value="<%= user.  status; %>" required>
+                            <select class="form-select form-select-md" aria-label=".form-select-md" name="jenis_menu" required>
+                              <option selected value="">Update jenis menu</option>
+                              <option value="Makanan">Makanan</option>
+                              <option value="Minuman">Minuman</option>
+                            </select>
+                          </div>
+                        
+                          <div class="mb-3">
+                            <label for="harga" class="form-label">Harga</label>
+
+                            <input type="number" class="form-control" min="5000" id="harga" name="harga" value="<%= menu.harga; %>" required>
+                          </div>
+
+                          <div class="mb-3">
+                            <label for="qty" class="form-label">Quantity</label>
+                            
+                            <input type="number" min="0" class="form-control" id="qty" name="qty" value="<%= menu.qty; %>" required>
+                          </div>
+
+                          <div class="mb-3">
+                            <label for="status" class="form-label">Status Menu</label>
+
+                            <input type="text" class="form-control mb-2" id="status" value="<%= menu.status; %>" readonly required>
         
                             <select class="form-select form-select-md" aria-label=".form-select-md" name="status">
-                              <option selected value="">Update status akun</option>
+                              <option selected value="">Update status menu</option>
                               <option value="aktif">Aktif</option>
-                              <option value="non-aktif ">Non-Aktif</option>
+                              <option value="non-aktif">Non-Aktif</option>
                             </select>
                           </div>
 
                           <div class="mb-3">
-                            <label for="updateAt"   class="form-label">Update At</label>
+                            <label for="updateAt" class="form-label">Update At</label>
 
                             <p>
-                              <%= user.update_at; %> 
+                              <%= menu.update_at; %> 
                             </p>
                           </div>
                         
                           <div class="modal-footer">
-                            <button type="button" class="btn  btn-secondary"   data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                           
-                            <button type="submit" class="btn  btn-primary">UPDATE</button>
+                            <button type="submit" class="btn btn-primary">UPDATE</button>
                           </div>
                         </form>
                       </div>
@@ -226,26 +253,26 @@
                 </div>
 
                 <!-- Delete modal -->
-                <div class="modal fade" id="deleteAdmin<%= user.  id; %>" data-bs-backdrop="static"   data-bs-keyboard="false" tabindex="-1"  aria-labelledby="staticDeleteAdmin<%= user.id; %>"   aria-hidden="true">
+                <div class="modal fade" id="deleteAdmin<%= menu.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteAdmin<%= menu.id; %>"   aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title"   id="staticDeleteAdmin<%= user.id;  %>">Delete Data Admin?</h5>
-                        <button type="button" class="btn-close"   data-bs-dismiss="modal"   aria-label="Close"></button>
+                        <h5 class="modal-title" id="staticDeleteAdmin<%= menu.id; %>">Delete Data Menu?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
 
                       <div class="modal-body">
-                        <form action="/admin/users/<%= user.id; %>? _method=DELETE" method="POST">
+                        <form action="/admin/menu/<%= menu.id; %>?_method=DELETE" method="POST">
                           <div class="mb-3">
                             <p>
-                              Apa anda yakin ingin menghapus data   admin <b><%= user.id; %> : <%= user.  nama; %></b>???
+                              Apa anda yakin ingin menghapus data admin <b><%= menu.id; %> : <%= menu.nama_menu; %></b>???
                             </p>
                           </div>
                         
                           <div class="modal-footer">
-                            <button type="button" class="btn  btn-secondary"   data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                           
-                            <button type="submit" class="btn  btn-danger">DELETE</button>
+                            <button type="submit" class="btn btn-danger">DELETE</button>
                           </div>
                         </form>
                       </div>
