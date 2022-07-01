@@ -1,5 +1,3 @@
-// TODO: Membuat Fungsi Upload Bukti
-
 const multer = require('multer');
 const db = require('../server');
 const gUniqId = require('generate-unique-id');
@@ -7,6 +5,7 @@ const timestamp = require('time-stamp');
 const path = require('path');
 // const fs = require('fs');
 
+// Uploads Bukti Transaksi - START
 const buktiTransaksiConf = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, './public/uploads/bukti-transaksi');
@@ -52,8 +51,28 @@ function createBuktiTransaksi(req, res, next) {
 function updateBuktiTransaksi(req, res, next) {}
 
 function deleteBuktiTransaksi(req, res, next) {}
+// Uploads Bukti Transaksi - END
+
+// Uploads Gambar Menu - START
+const gambarMenuConf = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './public/uploads/menu');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = timestamp('YYYY-MM-DD') + "-" + Math.round(Math.random() * 1E9);
+
+    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const SaveGambarMenuToStorage = multer({ storage: gambarMenuConf }).single('gambar_menu');
+// Uploads Gambar Menu - END
+
+// Uploads Gambar Meja - START
+// Uploads Gambar Meja - END
 
 module.exports = {
   saveBuktiToStorage,
   createBuktiTransaksi,
+  SaveGambarMenuToStorage,
 };

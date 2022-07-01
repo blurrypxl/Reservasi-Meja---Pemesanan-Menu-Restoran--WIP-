@@ -1,19 +1,20 @@
 const router = require("express").Router();
 const menuServices = require("../services/menu_service");
-// const userChecker = require('../services/auth_service');
+const userChecker = require('../services/auth_service');
+const uploads = require('../services/uploads_services');
 
 function toPageMenu(req, res) {
-  res.status(200).redirect("/products-menu");
+  res.redirect("/admin/menu");
 }
 
-router.route("/products-menu")
-.get(menuServices.readMenu, (req, res) => {
-  res.status(200).render("pages/pageMenu", { user: req.session.user, menu: res.locals.dataMenu });
+router.route("/admin/menu")
+.get(userChecker.checkAuth, menuServices.readMenu, (req, res) => {
+  res.render("viewAdmin/pages/pageMenu", { user: req.session.user, dataMenu: res.locals.dataMenu });
 })
-.post(menuServices.createMenu, toPageMenu);
+.post(userChecker.checkAuth, uploads.SaveGambarMenuToStorage, menuServices.createMenu, toPageMenu);
 
-router.route("/products-menu/:id")
-.put(menuServices.updateMenu, toPageMenu)
-.delete(menuServices.deleteMenu, toPageMenu);
+router.route("/admin/menu/:id")
+.put(userChecker.checkAuth, menuServices.updateMenu, toPageMenu)
+.delete(userChecker.checkAuth, menuServices.deleteMenu, toPageMenu);
 
 module.exports = router;

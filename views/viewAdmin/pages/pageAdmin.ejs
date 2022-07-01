@@ -25,10 +25,22 @@
         </p>
       </div>
 
-      <div class="card mb-3">
+      <!-- Flash Messages -->
+      <% if (locals.messages) { %>
+        <div style="text-align: center" class="alert alert-<%=  messages.type %>" role="alert">
+          <strong>
+            <%= messages.intro %>
+          </strong>
+          <%= messages.message %>
+        
+          <button class="btn-close" data-bs-dismiss="alert"   aria-label="close"></button>
+        </div>
+      <% } %>
+
+      <div class="card mb-4">
         <div class="card-body between-center-flex-row">
-          Add Data Admin
-          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahUser">ADD</button>
+          Tambah Data Admin
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahUser">TAMBAH</button>
         </div>
 
         <!-- Create modal -->
@@ -39,12 +51,49 @@
                 <h5 class="modal-title" id="staticTambahUser">Tambah Data User</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
+              
               <div class="modal-body">
-                ...
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Understood</button>
+                <form action="/admin/users" method="POST">
+                  <div class="mb-3">
+                    <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
+
+                    <input type="text" class="form-control" id="nama_lengkap" placeholder="nama lengkap user" name="nama">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="alamat_email" class="form-label">Alamat Email</label>
+
+                    <input type="email" class="form-control" id="alamat_email" placeholder="name@example.com" name="email">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="alamat_rumah" class="form-label">Alamat Rumah</label>
+
+                    <input type="text" class="form-control" id="alamat_rumah" rows="3" name="alamat"></input>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+
+                    <input type="password" class="form-control" id="password" name="password"></input>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="status_akun" class="form-label">Status Akun</label>
+
+                    <select class="form-select form-select-md" aria-label=".form-select-md" name="status" required>
+                      <option selected value="">Update status akun</option>
+                      <option value="aktif">Aktif</option>
+                      <option value="non-aktif ">Non-Aktif</option>
+                    </select>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    
+                    <button type="submit" class="btn btn-primary">CREATE</button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -52,12 +101,11 @@
       </div>
 
       <% dataAdmin.forEach(user => { %> 
-        <details class="card mb-3">
+        <details class="card mb-4">
           <summary class="card-header start-flex-row">
             <div>
-              <h4>
-                ID:
-                <span><%= user.id; %></span>
+              <h4 class="mb-3">
+                <%= user.id; %>
               </h4>
 
               <p>
@@ -68,6 +116,11 @@
               <p>
                 Email:
                 <span><%= user.email; %></span>
+              </p>
+
+              <p>
+                Status:
+                <span><%= user.status; %></span>
               </p>
             </div>
           </summary>
@@ -102,45 +155,101 @@
                 </li>
                 
                 <li class="list-group-item">
-                  <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editAdmin<%= dataAdmin.id; %>">EDIT</button>
+                  <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editAdmin<%= user.id; %>">EDIT</button>
   
-                  <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAdmin<%= dataAdmin.id; %>">DELETE</button>
+                  <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAdmin<%= user.id; %>">HAPUS</button>
                 </li>
               </ul>
 
               <!-- Update modal -->
-              <div class="modal fade" id="editAdmin<%= dataAdmin.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticEditAdmin<%= dataAdmin.id; %>" aria-hidden="true">
+              <div class="modal fade" id="editAdmin<%= user.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticEditAdmin<%= user.id; %>" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="staticEditAdmin<%= dataAdmin.id; %>">Edit Data Admin</h5>
+                      <h5 class="modal-title" id="staticEditAdmin<%= user.id; %>">Edit Data Admin</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
                     <div class="modal-body">
-                      ...
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Understood</button>
+                      <form action="/admin/users/<%= user.id; %>?_method=PUT" method="POST">
+                        <div class="mb-3">
+                          <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
+      
+                          <input type="text" class="form-control" id="nama_lengkap" placeholder="nama lengkap user" name="nama" value="<%= user.nama; %>" required>
+                        </div>
+      
+                        <div class="mb-3">
+                          <label for="alamat_email" class="form-label">Alamat Email</label>
+      
+                          <input type="email" class="form-control" id="alamat_email" placeholder="name@example.com" name="email" value="<%= user.email; %>" required>
+                        </div>
+      
+                        <div class="mb-3">
+                          <label for="alamat_rumah" class="form-label">Alamat Rumah</label>
+      
+                          <input type="text" class="form-control" id="alamat_rumah" rows="3" name="alamat" value="<%= user.alamat; %>" required>
+                        </div>
+      
+                        <div class="mb-3">
+                          <label for="password" class="form-label">Password</label>
+
+                          <input type="password" class="form-control" id="password" name="password" value="<%= user.password; %>" required>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="status_akun" class="form-label">Status Akun</label>
+
+                          <input type="text" class="form-control mb-2" id="status_akun" value="<%= user.status; %>" readonly required>
+
+                          <select class="form-select form-select-md" aria-label=".form-select-md" name="status">
+                            <option selected value="">Update status akun</option>
+                            <option value="aktif">Aktif</option>
+                            <option value="non-aktif ">Non-Aktif</option>
+                          </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="updateAt" class="form-label">Update At</label>
+
+                          <p>
+                            <%= user.update_at; %> 
+                          </p>
+                        </div>
+      
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+                          <button type="submit" class="btn btn-primary">UPDATE</button>
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
               </div>
 
               <!-- Delete modal -->
-              <div class="modal fade" id="deleteAdmin<%= dataAdmin.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteAdmin<%= dataAdmin.id; %>" aria-hidden="true">
+              <div class="modal fade" id="deleteAdmin<%= user.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteAdmin<%= user.id; %>" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="staticDeleteAdmin<%= dataAdmin.id; %>">Delete Data Admin</h5>
+                      <h5 class="modal-title" id="staticDeleteAdmin<%= user.id; %>">Delete Data Admin?</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
                     <div class="modal-body">
-                      ...
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Understood</button>
+                      <form action="/admin/users/<%= user.id; %>?_method=DELETE" method="POST">
+                        <div class="mb-3">
+                          <p>
+                            Apa anda yakin ingin menghapus data admin <b><%= user.id; %> : <%= user.nama; %></b>???
+                          </p>
+                        </div>
+      
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+                          <button type="submit" class="btn btn-danger">DELETE</button>
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
