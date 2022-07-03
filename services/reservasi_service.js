@@ -72,7 +72,7 @@ function validasiTanggalReservasi(req, res, next) {
     // console.log(filterReservasi);
 
     if (filterReservasi.length === 0) {
-      res.locals.validasiReservasi = [idPelanggan, nama, email, id_meja, nomor_meja, untuk_tgl];
+      req.session.validasiReservasi = [idPelanggan, nama, email, id_meja, nomor_meja, untuk_tgl];
 
       next();
     }

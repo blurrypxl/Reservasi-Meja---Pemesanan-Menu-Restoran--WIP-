@@ -6,28 +6,31 @@ const userChecker = require('../services/auth_service');
 
 // Route ini digunakan untuk keperluan pelanggan
 router.route('/reservasi')
-    .get(reservasiServices.readReservasi, mejaServices.readMeja, (req, res) => {
-        res.render('viewPelanggan/pages/pageReservasi', { dataReservasi: res.locals.allReservasi, dataMeja: res.locals.dataMeja });
-    });
+  .get(reservasiServices.readReservasi, mejaServices.readMeja, (req, res) => {
+    res.render('viewPelanggan/pages/pageReservasi', { dataReservasi: res.locals.allReservasi, dataMeja: res.locals.dataMeja });
+  });
 
 router.route('/pemesanan')
-    .post(reservasiServices.validasiTanggalReservasi, menuServices.readMenu, (req, res) => {
-        if (res.locals.errMsgValidasi === undefined) {
-            res.render('viewPelanggan/pages/pageFormReservasi', { dataTglReservasi: res.locals.validasiReservasi, dataMenu: res.locals.dataMenu });
-        } else if (res.locals.errMsgValidasi !== undefined) {
-            // Object untuk Flash Messages
-            req.session.messages = {
-                type: 'danger',
-                intro: 'Tanggal Reservasi Tidak Valid.',
-                message: res.locals.errMsgValidasi
-            }
+  .get(menuServices.readMenu, (req, res) => {
+    res.render('viewPelanggan/pages/pageFormReservasi', { dataTglReservasi: req.session.validasiReservasi, dataMenu: res.locals.dataMenu });
+  })
+  .post(reservasiServices.validasiTanggalReservasi, (req, res) => {
+    if (res.locals.errMsgValidasi === undefined) {
+      res.redirect('/pemesanan');
+    } else if (res.locals.errMsgValidasi !== undefined) {
+      // Object untuk Flash Messages
+      req.session.messages = {
+        type: 'danger',
+        intro: 'Tanggal Reservasi Tidak Valid.',
+        message: res.locals.errMsgValidasi
+      }
 
-            res.redirect('/reservasi');
-        }
-    });
+      res.redirect('/reservasi');
+    }
+  });
 
 // Route ini digunakan untuk keperluan admin/super-admin
 router.route('/admin/reservasi')
-    .get(userChecker.checkAuth, reservasiServices.readReservasi);
+  .get(userChecker.checkAuth, reservasiServices.readReservasi);
 
 module.exports = router;

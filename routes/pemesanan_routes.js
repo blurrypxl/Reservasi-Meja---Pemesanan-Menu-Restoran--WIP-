@@ -5,7 +5,12 @@ const uploads = require('../services/uploads_services');
 
 router.route('/transaksi-api')
   .post(pemesananServices.createReservasiDanPesanan, (req, res) => {
-    res.redirect('/konfirmasi-transaksi/' + res.locals.id);
+    if (req.session.messages) {
+      res.redirect('/pemesanan');
+    }
+    else if (!req.session.messages) {
+      res.redirect('/konfirmasi-transaksi/' + res.locals.id);
+    }
   });
 
 router.route('/konfirmasi-transaksi/:id')

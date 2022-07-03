@@ -27,7 +27,9 @@ app.use(session({
 // # Flash Messages Middleware
 app.use((req, res, next) => {
   res.locals.messages = req.session.messages;
+
   delete req.session.messages;
+  
   next();
 });
 
