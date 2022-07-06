@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <%- include("../partials/headPelanggan.ejs"); %>
   </head>
@@ -8,8 +9,6 @@
     <!-- <header></header> -->
 
     <main>
-      <!-- <div class="main-content"></div> -->
-
       <!-- Flash Messages -->
       <% if (locals.messages) { %>
         <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
@@ -18,17 +17,51 @@
           <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
         </div>
       <% } %>
+
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5>
+            Ubah Tanggal Reservasi
+          </h5>
+        </div>
+
+        <div class="card-body">
+          <form action="/api/update-reservasi" method="POST">
+            <div class="mb-3">
+              <label for="id_reservasi" class="form-label">ID RESERVASI</label>
+
+              <input type="text" id="id_reservasi" class="form-control" name="id_reservasi" placeholder="Masukan id reservasi" required>
+            </div>
+
+            <div class="mb-3">
+              <button class="btn btn-success">
+                VALIDASI
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
       
       <% dataMeja.forEach(meja => { %>
-        <div class="content-card" style="border: 1px solid black;">
-          <h2>
-            Id Meja: <%= meja.id; %>
-          </h2>
-          <p>
-            Nomor Meja: <%= meja.nomor_meja; %>
-          </p>
-          <div class="button-box">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#form-reservasi-box<%= meja.id %>">RESERVASI</button>
+        <div class="card">
+          <div class="card-header">
+            <h5>
+              ID Meja: <%= meja.id; %>
+            </h5>
+          </div>
+
+          <div class="card-body">
+            <div class="mb-3">
+              <p>
+                Nomor Meja: <%= meja.nomor_meja; %>
+              </p>
+            </div>
+
+            <div class="mb-3">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#form-reservasi-box<%= meja.id %>">
+                RESERVASI
+              </button>
+            </div>
           </div>
         </div>
 
@@ -115,4 +148,5 @@
       });
     </script>
   </body>
+
 </html>

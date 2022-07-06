@@ -50,13 +50,14 @@ function createReservasiDanPesanan(req, res, next) {
         });
       });
 
-      // Menyimpan Data Pesanan
       for (let i = 0; i < reqMenu.length; i++) {
+        // Update data qty menu
         db.query(`UPDATE menu SET qty='${resMenu[i].qtyMenu -= reqMenu[i].qty}' WHERE id='${reqMenu[i].idMenu}'`, err => {
           if (err) return db.rollback(() => { throw err; });
 
           console.log('Update Quantity Berhasil');
 
+          // Menyimpan Data Pesanan
           db.query(`INSERT INTO pesanan (id, id_pelanggan, id_menu, qty, total_harga, create_at) VALUES ('${"PSN-" + gUniqId({ length: 7 })}', '${idPelanggan}', '${reqMenu[i].idMenu}', '${reqMenu[i].qty}', '${reqMenu[i].total}', '${timestamp("HH:mm:YYYY-MM-DD")}')`, err => {
             if (err) return db.rollback(() => { throw err }); //Jika terjadi Error, Maka akan menarik kembali perubahan yang terjadi
 
@@ -87,6 +88,41 @@ function createReservasiDanPesanan(req, res, next) {
   });
 }
 
+function readPesananById(req, res, next) {
+  const idReservasi = req.params.id;
+
+  db.beginTransaction(err => {
+    if (err) throw err;
+
+    db.query(`SELECT id_pelanggan FROM reservasi WHERE id='${idReservasi}'`, (err, dataPelanggan) => {
+      if (err) return db.rollback(() => { throw err; });
+
+      // console.log(dataPelanggan);
+  
+      db.query(`SELECT pesanan.id_pelanggan, pesanan.id AS id_pesanan, menu.id AS id_menu, menu.nama_menu, pesanan.qty, pesanan.total_harga FROM pesanan JOIN menu ON pesanan.id_menu=menu.id`, (err, dataPesanan) => {
+        if (err) return db.rollback(() => { throw err; });
+        
+        // Mendapatkan total harga dari pesananan pelanggan
+        let ttl = 0;
+
+        for (let i = 0; i < dataPesanan.length; i++) {
+          if (dataPesanan[i].id_pelanggan === dataPelanggan[0].id_pelanggan) ttl += parseInt(dataPesanan[i].total_harga);
+        }
+    
+        res.locals.dataPesanan = dataPesanan.filter(dp => dp.id_pelanggan === dataPelanggan[0].id_pelanggan);
+
+        res.locals.ttlHargaPesanan = ttl;
+    
+        // console.log(res.locals.dataPesanan);
+        console.log(res.locals.ttlHargaPesanan);
+    
+        next();
+      });
+    });
+  });
+}
+
 module.exports = {
   createReservasiDanPesanan,
+  readPesananById,
 };

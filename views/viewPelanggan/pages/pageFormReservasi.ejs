@@ -2,332 +2,334 @@
 <html lang="en">
 
 <head>
-    <%- include("../partials/headPelanggan"); %> 
+  <%- include("../partials/headPelanggan"); %>
 </head>
 
 <body>
-    <main>
-        <!-- <header></header> -->
+  <main>
+    <!-- <header></header> -->
 
-        <!-- Flash Messages -->
-        <% if (locals.messages) { %>
-            <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
-                <strong>
-                    <%= messages.intro %>
-                </strong>
-                
-                <%= messages.message %>
+    <!-- Flash Messages -->
+    <% if (locals.messages) { %>
+      <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
+        <strong>
+          <%= messages.intro %>
+        </strong>
 
-                <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+        <%= messages.message %>
+
+          <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+      </div>
+    <% } %>
+
+    <form class="form-container" action="/api/transaksi" method="POST">
+      <div class="card mb-3" style="width: 18rem;">
+        <div class="card-header" style="text-align: center;">
+          Informasi Reservasi
+        </div>
+
+        <input type="hidden" name="id_meja" value="<%= dataTglReservasi[3]; %>" readonly required>
+
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <p>
+              Nama Pelanggan:
+            </p>
+            
+            <input class="w-100" type="text" name="nama" value="<%= dataTglReservasi[1]; %>" readonly required>
+          </li>
+
+          <li class="list-group-item">
+            <p>
+              Email:
+            </p>
+            <input class="w-100" type="text" name="email" value="<%= dataTglReservasi[2]; %>" readonly required>
+          </li>
+
+          <li class="list-group-item">
+            <p>
+              Nomor Meja:
+            </p>
+            <input class="w-100" type="text" name="nomor_meja" value="<%= dataTglReservasi[4]; %>" readonly>
+          </li>
+
+          <li class="list-group-item">
+            <p>
+              Tanggal Reservasi:
+            </p>
+            <input class="w-100" type="text" name="untuk_tgl" value="<%= dataTglReservasi[5]; %>" readonly required>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card mb-3" style="width: 18rem;">
+        <div class="card-header" style="text-align: center;">
+          Pilih Pesanan Menu
+        </div>
+
+        <% dataMenu.forEach(menu=> { %>
+          <div class="card" style="width: 18rem;">
+            <input type="hidden" class="data-menu" value="<%= [menu.id, menu.nama_menu, menu.harga] %>" readonly
+              required>
+
+            <img class="card-img-top" alt="gambar <%= menu.nama_menu %>">
+
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= menu.nama_menu %>
+              </h5>
+
+              <p class="card-text">
+                <%= menu.jenis_menu %>
+              </p>
+
+              <p class="card-text">
+                Rp.<%= menu.harga %>
+              </p>
+
+              <p class="card-text">
+                <%= menu.status %>
+              </p>
+
+              <button type="button" class="btn btn-primary select-menu">
+                Pilih Menu
+              </button>
             </div>
-        <% } %>
+          </div>
+        <% }); %>
+      </div>
 
-        <form class="form-container" action="/transaksi-api" method="POST">
-            <div class="card mb-3" style="width: 18rem;">
-                <div class="card-header" style="text-align: center;">
-                  Informasi Reservasi
-                </div>
+      <div class="card mb-3" style="width: 50%;">
+        <div class="card-header" style="text-align: center;">
+          Data Pesanan
+        </div>
 
-                <input type="hidden" name="id_meja" value="<%= dataTglReservasi[3]; %>" readonly required>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID Menu</th>
+              <th scope="col">Nama Menu</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Harga</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
 
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">
-                    <p>
-                        Nama Pelanggan:
-                    </p>
-                    <input class="w-100" type="text" name="nama" value="<%= dataTglReservasi[1]; %>" readonly required>
-                  </li>
+          <tbody id="view-pesanan">
+            <!-- # List Pesanan Pelanggan -->
+          </tbody>
+        </table>
 
-                  <li class="list-group-item">
-                    <p>
-                        Email:
-                    </p>
-                    <input class="w-100" type="text" name="email" value="<%= dataTglReservasi[2]; %>" readonly required>
-                  </li>
+        <div>
+          <p>
+            Total: Rp.<span id="total-harga-pesanan">0</span>
+          </p>
 
-                  <li class="list-group-item">
-                    <p>
-                        Nomor Meja:
-                    </p>
-                    <input class="w-100" type="text" name="nomor_meja" value="<%= dataTglReservasi[4]; %>" readonly>
-                  </li>
+          <input type="hidden" id="total-val-input" name="total_harga">
+        </div>
 
-                  <li class="list-group-item">
-                    <p>
-                        Tanggal Reservasi:
-                    </p>
-                    <input class="w-100" type="text" name="untuk_tgl" value="<%= dataTglReservasi[5]; %>" readonly required>
-                  </li>
-                </ul>
-            </div>
+        <input type="text" name="arr_pesanan" id="arr-pesanan" readonly required>
+        <!-- <input type="hidden" name="total" id="total" readonly required> -->
+      </div>
 
-            <div class="card mb-3" style="width: 18rem;">
-                <div class="card-header" style="text-align: center;">
-                    Pilih Pesanan Menu
-                </div>
+      <button type="submit" class="btn btn-success">KONFIRMASI RESERVASI & PESANAN</button>
+    </form>
+  </main>
 
-                <% dataMenu.forEach(menu => { %>
-                    <div class="card" style="width: 18rem;">
-                        <input type="hidden" class="data-menu" value="<%= [menu.id, menu.nama_menu, menu.harga] %>" readonly required>
+  <script>
+    // # Script Pilih & Tampilkan Pesanan
+    const selectMenu = document.querySelectorAll('.select-menu');
+    const viewPesanan = document.getElementById('view-pesanan');
+    const dataMenu = document.querySelectorAll('.data-menu');
+    const totalValInput = document.getElementById('total-val-input');
+    const ttlHargaPesanan = document.getElementById('total-harga-pesanan');
+    const arrPesanan = document.getElementById('arr-pesanan');
 
-                        <img class="card-img-top" alt="gambar <%= menu.nama_menu %>">
+    const dataHargaPesanan = [];
+    let totalHargaVal = 0;
 
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <%= menu.nama_menu %>
-                            </h5>
+    function hargaTotal(dataPesananArr, totalPesanan) {
+      if (dataPesananArr.length === 0) return totalPesanan;
 
-                            <p class="card-text">
-                                <%= menu.jenis_menu %>
-                            </p>
+      if (dataPesananArr.length === 1) return totalPesanan += parseInt(dataPesananArr[0].total);
 
-                            <p class="card-text">
-                                Rp.<%= menu.harga %>
-                            </p>
+      for (let iPesanan = 0; iPesanan < dataPesananArr.length; iPesanan++) {
+        totalPesanan += parseInt(dataPesananArr[iPesanan].total);
+      }
 
-                            <p class="card-text">
-                                <%= menu.status %>
-                            </p>
+      return totalPesanan;
+    }
 
-                            <button type="button" class="btn btn-primary select-menu">
-                                Pilih Menu
-                            </button>
-                        </div>
-                    </div>
-                <% }); %> 
-            </div>
+    function tambahPesanan(dataPesananArr, objPesanan) {
+      return dataPesananArr.push(objPesanan);
+    }
 
-            <div class="card mb-3" style="width: 50%;">
-                <div class="card-header" style="text-align: center;">
-                    Data Pesanan
-                </div>
+    function btnKurangFunc(objKurangMenu) {
+      objKurangMenu.el_btn_kurang.onclick = () => {
+        objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty -= 1;
 
-                <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">ID Menu</th>
-                        <th scope="col">Nama Menu</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Harga</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-
-                    <tbody id="view-pesanan">
-                        <!-- # List Pesanan Pelanggan -->
-                    </tbody>
-                </table>
-
-                <div>
-                    <p>
-                        Total: Rp.<span id="total-harga-pesanan">0</span>
-                    </p>
-
-                    <input type="hidden" id="total-val-input" name="total_harga">
-                </div>
-
-                <input type="text" name="arr_pesanan" id="arr-pesanan" readonly required>
-                <!-- <input type="hidden" name="total" id="total" readonly required> -->
-            </div>
-
-            <button type="submit" class="btn btn-success">KONFIRMASI RESERVASI & PESANAN</button>
-        </form>
-    </main>
-
-    <script>
-        // # Script Pilih & Tampilkan Pesanan
-        const selectMenu = document.querySelectorAll('.select-menu');
-        const viewPesanan = document.getElementById('view-pesanan');
-        const dataMenu = document.querySelectorAll('.data-menu');
-        const totalValInput = document.getElementById('total-val-input');
-        const ttlHargaPesanan = document.getElementById('total-harga-pesanan');
-        const arrPesanan = document.getElementById('arr-pesanan');
-
-        const dataHargaPesanan = [];
-        let totalHargaVal = 0;
-
-        function hargaTotal(dataPesananArr, totalPesanan) {
-            if (dataPesananArr.length === 0) return totalPesanan;
-
-            if (dataPesananArr.length === 1) return totalPesanan += parseInt(dataPesananArr[0].total);
-
-            for (let iPesanan = 0; iPesanan < dataPesananArr.length; iPesanan++) {
-                totalPesanan += parseInt(dataPesananArr[iPesanan].total);
-            }
-
-            return totalPesanan;
+        if (objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty <= 0) {
+          objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty += 1;
         }
+        else if (objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty > 0) {
+          objKurangMenu.el_td_qty.innerHTML = objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty; // menampilkan quantity menu
 
-        function tambahPesanan(dataPesananArr, objPesanan) {
-            return dataPesananArr.push(objPesanan);
+          objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].total -= objKurangMenu.harga_satuan; // update total harga menu pesanan
+
+          objKurangMenu.el_td_harga.innerHTML = "Rp." + objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].total; // menampilkan harga menu
+
+          // # Script Menampilkan Update Total Harga Pesanan Pelanggan
+          objKurangMenu.el_ttl_harga.innerHTML = hargaTotal(objKurangMenu.data_harga, objKurangMenu.ttl_val);
+
+          objKurangMenu.el_input_ttl.value = hargaTotal(objKurangMenu.data_harga, objKurangMenu.ttl_val);
+
+          // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
+          objKurangMenu.el_arr_pesanan.value = JSON.stringify(objKurangMenu.data_harga);
         }
+      }
+    }
 
-        function btnKurangFunc(objKurangMenu) {
-            objKurangMenu.el_btn_kurang.onclick = () => {
-                objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty -= 1;
-                
-                if (objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty <= 0) {
-                    objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty += 1;
-                }
-                else if (objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty > 0) {
-                    objKurangMenu.el_td_qty.innerHTML = objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].qty; // menampilkan quantity menu
+    function btnTambahFunc(objTambahMenu) {
+      objTambahMenu.el_btn_tambah.onclick = () => {
+        objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].total += objTambahMenu.harga_satuan; // update total harga menu pesanan
 
-                    objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].total -= objKurangMenu.harga_satuan; // update total harga menu pesanan
-                    
-                    objKurangMenu.el_td_harga.innerHTML = "Rp."+objKurangMenu.data_harga.filter(dh => dh.idMenu === objKurangMenu.id_menu)[0].total; // menampilkan harga menu
+        objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].qty += 1; // update quantity menu pesanan
 
-                    // # Script Menampilkan Update Total Harga Pesanan Pelanggan
-                    objKurangMenu.el_ttl_harga.innerHTML = hargaTotal(objKurangMenu.data_harga, objKurangMenu.ttl_val);
+        objTambahMenu.el_td_harga.innerHTML = "Rp." + objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].total;
 
-                    objKurangMenu.el_input_ttl.value = hargaTotal(objKurangMenu.data_harga, objKurangMenu.ttl_val);
-                    
-                    // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
-                    objKurangMenu.el_arr_pesanan.value = JSON.stringify(objKurangMenu.data_harga);
-                }
-            }
-        }
+        objTambahMenu.el_td_qty.innerHTML = objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].qty;
 
-        function btnTambahFunc(objTambahMenu) {
-            objTambahMenu.el_btn_tambah.onclick = () => { 
-                objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].total += objTambahMenu.harga_satuan; // update total harga menu pesanan
+        // # Script Menampilkan Update Total Harga Pesanan Pelanggan
+        objTambahMenu.el_ttl_harga.innerHTML = hargaTotal(objTambahMenu.data_harga, objTambahMenu.ttl_val);
 
-                objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].qty += 1; // update quantity menu pesanan
+        objTambahMenu.el_input_ttl.value = hargaTotal(objTambahMenu.data_harga, objTambahMenu.ttl_val);
 
-                objTambahMenu.el_td_harga.innerHTML = "Rp."+objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].total;
+        // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
+        objTambahMenu.el_arr_pesanan.value = JSON.stringify(objTambahMenu.data_harga);
+      }
+    }
 
-                objTambahMenu.el_td_qty.innerHTML = objTambahMenu.data_harga.filter(dh => dh.idMenu === objTambahMenu.id_menu)[0].qty;
+    function btnCancelFunc(objCancelMenu) {
+      objCancelMenu.el_btn_cancel.onclick = () => {
+        let indexDaftarPesanan;
 
-                // # Script Menampilkan Update Total Harga Pesanan Pelanggan
-                objTambahMenu.el_ttl_harga.innerHTML = hargaTotal(objTambahMenu.data_harga, objTambahMenu.ttl_val);
-                    
-                objTambahMenu.el_input_ttl.value = hargaTotal(objTambahMenu.data_harga, objTambahMenu.ttl_val);
+        objCancelMenu.data_harga.forEach(dh => {
+          if (dh.idMenu === objCancelMenu.id_menu) indexDaftarPesanan = objCancelMenu.data_harga.indexOf(dh);
+        });
 
-                // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
-                objTambahMenu.el_arr_pesanan.value = JSON.stringify(objTambahMenu.data_harga);
-            }
-        }
+        // console.log(indexDaftarPesanan);
 
-        function btnCancelFunc(objCancelMenu) {
-            objCancelMenu.el_btn_cancel.onclick = () => {
-                let indexDaftarPesanan;
-            
-                objCancelMenu.data_harga.forEach(dh => {
-                    if (dh.idMenu === objCancelMenu.id_menu) indexDaftarPesanan = objCancelMenu.data_harga.indexOf(dh);
-                });
-            
-                // console.log(indexDaftarPesanan);
+        objCancelMenu.data_harga.splice(indexDaftarPesanan, 1);
 
-                objCancelMenu.data_harga.splice(indexDaftarPesanan, 1);
-            
-                // console.log(objCancelMenu.data_harga);
-            
-                objCancelMenu.el_ttl_harga.innerHTML = hargaTotal(objCancelMenu.data_harga, objCancelMenu.ttl_val);
-            
-                objCancelMenu.el_tr.remove();
+        // console.log(objCancelMenu.data_harga);
 
-                // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
-                objCancelMenu.el_arr_pesanan.value = JSON.stringify(objCancelMenu.data_harga);
-            }
-        }
+        objCancelMenu.el_ttl_harga.innerHTML = hargaTotal(objCancelMenu.data_harga, objCancelMenu.ttl_val);
 
-        for(let i = 0; i < selectMenu.length; i++) {
-            selectMenu[i].onclick = () => {
-                // console.log({
-                //     dataMenu: dataMenu[i].value.split(','),
-                //     length: dataMenu[i].value.split(',').length
-                // });
+        objCancelMenu.el_tr.remove();
 
-                let qtyMenu = 1;
-                
-                // # Script Tambah Table Data Pesanan Pelanggan
-                if (dataHargaPesanan.length >= 0) {
-                    if (dataHargaPesanan.filter(pesanan => pesanan.idMenu === dataMenu[i].value.split(',')[0]).length > 0) return;
+        // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
+        objCancelMenu.el_arr_pesanan.value = JSON.stringify(objCancelMenu.data_harga);
+      }
+    }
 
-                    const trElement = viewPesanan.insertRow(0);
-                    
-                    const tdIdMenu = trElement.insertCell(0);
-                    const tdNamaMenu = trElement.insertCell(1);
-                    const tdQtyMenu = trElement.insertCell(2);
-                    const tdHargaMenu = trElement.insertCell(3);
-                    const tdActionMenu = trElement.insertCell(4);
-                    const tdCancelPesanan = trElement.insertCell(5);
+    for (let i = 0; i < selectMenu.length; i++) {
+      selectMenu[i].onclick = () => {
+        // console.log({
+        //     dataMenu: dataMenu[i].value.split(','),
+        //     length: dataMenu[i].value.split(',').length
+        // });
 
-                    // Tambah Data Menu Kedalam List Pesanan
-                    tambahPesanan(dataHargaPesanan, { idMenu: dataMenu[i].value.split(',')[0], namaMenu: dataMenu[i].value.split(',')[1], qty: qtyMenu, total: parseInt(dataMenu[i].value.split(',')[2]) });
+        let qtyMenu = 1;
 
-                    // Menampilkan Data Menu Pada List Pesanan
-                    const valPesanan = dataHargaPesanan.filter(pesanan => pesanan.idMenu === dataMenu[i].value.split(',')[0]);
+        // # Script Tambah Table Data Pesanan Pelanggan
+        if (dataHargaPesanan.length >= 0) {
+          if (dataHargaPesanan.filter(pesanan => pesanan.idMenu === dataMenu[i].value.split(',')[0]).length > 0) return;
 
-                    tdIdMenu.innerHTML = valPesanan[0].idMenu;
-                    
-                    tdNamaMenu.innerHTML = valPesanan[0].namaMenu;
+          const trElement = viewPesanan.insertRow(0);
 
-                    tdQtyMenu.innerHTML = qtyMenu;
+          const tdIdMenu = trElement.insertCell(0);
+          const tdNamaMenu = trElement.insertCell(1);
+          const tdQtyMenu = trElement.insertCell(2);
+          const tdHargaMenu = trElement.insertCell(3);
+          const tdActionMenu = trElement.insertCell(4);
+          const tdCancelPesanan = trElement.insertCell(5);
 
-                    tdHargaMenu.innerHTML = "Rp."+valPesanan[0].total;
+          // Tambah Data Menu Kedalam List Pesanan
+          tambahPesanan(dataHargaPesanan, { idMenu: dataMenu[i].value.split(',')[0], namaMenu: dataMenu[i].value.split(',')[1], qty: qtyMenu, total: parseInt(dataMenu[i].value.split(',')[2]) });
 
-                    tdActionMenu.innerHTML = `
+          // Menampilkan Data Menu Pada List Pesanan
+          const valPesanan = dataHargaPesanan.filter(pesanan => pesanan.idMenu === dataMenu[i].value.split(',')[0]);
+
+          tdIdMenu.innerHTML = valPesanan[0].idMenu;
+
+          tdNamaMenu.innerHTML = valPesanan[0].namaMenu;
+
+          tdQtyMenu.innerHTML = qtyMenu;
+
+          tdHargaMenu.innerHTML = "Rp." + valPesanan[0].total;
+
+          tdActionMenu.innerHTML = `
                         <button type="button" id="btnKurang${i}">-</button>
                         <button type="button" id="btnTambah${i}">+</button>
                     `;
 
-                    tdCancelPesanan.innerHTML = `<button type="button" id="btnCancel${i}" class="btn-close" aria-label="close"></button>`;
+          tdCancelPesanan.innerHTML = `<button type="button" id="btnCancel${i}" class="btn-close" aria-label="close"></button>`;
 
-                    // # Script Hitung & Menampilkan Total Harga Pesanan Pelanggan
-                    ttlHargaPesanan.innerHTML = hargaTotal(dataHargaPesanan, totalHargaVal);
+          // # Script Hitung & Menampilkan Total Harga Pesanan Pelanggan
+          ttlHargaPesanan.innerHTML = hargaTotal(dataHargaPesanan, totalHargaVal);
 
-                    totalValInput.value = hargaTotal(dataHargaPesanan, totalHargaVal);
+          totalValInput.value = hargaTotal(dataHargaPesanan, totalHargaVal);
 
-                    // console.log(dataHargaPesanan);
+          // console.log(dataHargaPesanan);
 
-                    arrPesanan.value = JSON.stringify(dataHargaPesanan); // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
+          arrPesanan.value = JSON.stringify(dataHargaPesanan); // Memasukan value dataHargaPesanan kedalam element input arr-pesanan
 
-                    // # Script Tambah, Kurang & Cancel Menu
-                    const btnKurang = document.getElementById('btnKurang'+i);
-                    const btnTambah = document.getElementById('btnTambah'+i);
-                    const btnCancel = document.getElementById('btnCancel'+i);
+          // # Script Tambah, Kurang & Cancel Menu
+          const btnKurang = document.getElementById('btnKurang' + i);
+          const btnTambah = document.getElementById('btnTambah' + i);
+          const btnCancel = document.getElementById('btnCancel' + i);
 
-                    btnKurangFunc({
-                        el_btn_kurang: btnKurang,
-                        qty: qtyMenu,
-                        data_harga: dataHargaPesanan,
-                        id_menu: dataMenu[i].value.split(',')[0],
-                        harga_satuan: parseInt(dataMenu[i].value.split(',')[2]),
-                        el_td_qty: tdQtyMenu,
-                        el_td_harga: tdHargaMenu,
-                        el_ttl_harga: ttlHargaPesanan,
-                        el_input_ttl: totalValInput,
-                        ttl_val: totalHargaVal,
-                        el_arr_pesanan: arrPesanan
-                    });
+          btnKurangFunc({
+            el_btn_kurang: btnKurang,
+            qty: qtyMenu,
+            data_harga: dataHargaPesanan,
+            id_menu: dataMenu[i].value.split(',')[0],
+            harga_satuan: parseInt(dataMenu[i].value.split(',')[2]),
+            el_td_qty: tdQtyMenu,
+            el_td_harga: tdHargaMenu,
+            el_ttl_harga: ttlHargaPesanan,
+            el_input_ttl: totalValInput,
+            ttl_val: totalHargaVal,
+            el_arr_pesanan: arrPesanan
+          });
 
-                    btnTambahFunc({
-                        el_btn_tambah: btnTambah,
-                        qty: qtyMenu,
-                        data_harga: dataHargaPesanan,
-                        id_menu: dataMenu[i].value.split(',')[0],
-                        harga_satuan: parseInt(dataMenu[i].value.split(',')[2]),
-                        el_td_qty: tdQtyMenu,
-                        el_td_harga: tdHargaMenu,
-                        el_ttl_harga: ttlHargaPesanan,
-                        el_input_ttl: totalValInput,
-                        ttl_val: totalHargaVal,
-                        el_arr_pesanan: arrPesanan
-                    });
+          btnTambahFunc({
+            el_btn_tambah: btnTambah,
+            qty: qtyMenu,
+            data_harga: dataHargaPesanan,
+            id_menu: dataMenu[i].value.split(',')[0],
+            harga_satuan: parseInt(dataMenu[i].value.split(',')[2]),
+            el_td_qty: tdQtyMenu,
+            el_td_harga: tdHargaMenu,
+            el_ttl_harga: ttlHargaPesanan,
+            el_input_ttl: totalValInput,
+            ttl_val: totalHargaVal,
+            el_arr_pesanan: arrPesanan
+          });
 
-                    btnCancelFunc({
-                        el_btn_cancel: btnCancel,
-                        data_harga: dataHargaPesanan,
-                        id_menu: dataMenu[i].value.split(',')[0],
-                        el_tr: trElement,
-                        el_ttl_harga: ttlHargaPesanan,
-                        ttl_val: totalHargaVal,
-                        el_arr_pesanan: arrPesanan
-                    });
-                }
-            }
+          btnCancelFunc({
+            el_btn_cancel: btnCancel,
+            data_harga: dataHargaPesanan,
+            id_menu: dataMenu[i].value.split(',')[0],
+            el_tr: trElement,
+            el_ttl_harga: ttlHargaPesanan,
+            ttl_val: totalHargaVal,
+            el_arr_pesanan: arrPesanan
+          });
         }
-    </script>
+      }
+    }
+  </script>
 </body>
 
 </html>

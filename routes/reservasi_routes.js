@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const reservasiServices = require('../services/reservasi_service');
+const pemesananServices = require('../services/pemesanan_service');
 const menuServices = require('../services/menu_service');
 const mejaServices = require('../services/meja_service');
 const userChecker = require('../services/auth_service');
@@ -8,6 +9,33 @@ const userChecker = require('../services/auth_service');
 router.route('/reservasi')
   .get(reservasiServices.readReservasi, mejaServices.readMeja, (req, res) => {
     res.render('viewPelanggan/pages/pageReservasi', { dataReservasi: res.locals.allReservasi, dataMeja: res.locals.dataMeja });
+  });
+
+router.route('/api/update-reservasi')
+  .post(reservasiServices.checkStatusReservasi, (req, res) => {
+    // console.log(req.session.messages);
+
+    if (req.session.messages) {
+      res.redirect('/reservasi');
+    }
+    else if (!req.session.messages) {
+      res.redirect('/reservasi/' + res.locals.idReservasi);
+    }
+  });
+
+router.route('/reservasi/:id')
+  .get(menuServices.readMenu, reservasiServices.readReservasiById, pemesananServices.readPesananById, (req, res) => {
+    res.render('viewPelanggan/pages/pageUpdateReservasi', { dataReservasi: res.locals.dataReservasi, dataPesanan: res.locals.dataPesanan, ttlHargaPesanan: res.locals.ttlHargaPesanan }); // TODO: Testing Status Reservasi (ON-GOING)
+  })
+  .put(reservasiServices.updateDateReservasi, (req, res) => {
+    // console.log(req.session.messages);
+
+    if (req.session.messages.type === 'warning') {      
+      res.redirect('/reservasi/' + res.locals.idReservasi);
+    }
+    else if (req.session.messages.type === 'success') {
+      res.redirect('/reservasi');
+    }
   });
 
 router.route('/pemesanan')

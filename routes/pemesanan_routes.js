@@ -3,7 +3,7 @@ const pemesananServices = require('../services/pemesanan_service');
 const transaksiServices = require('../services/transaksi_service');
 const uploads = require('../services/uploads_services');
 
-router.route('/transaksi-api')
+router.route('/api/transaksi')
   .post(pemesananServices.createReservasiDanPesanan, (req, res) => {
     if (req.session.messages) {
       res.redirect('/pemesanan');
@@ -18,7 +18,6 @@ router.route('/konfirmasi-transaksi/:id')
     res.render('viewPelanggan/pages/pageFormTransaksi', { dataPesanan: res.locals.dataPesanan, dataReservasi: res.locals.dataReservasi, totalBayar: res.locals.total });
   })
   .post(uploads.saveBuktiToStorage, uploads.createBuktiTransaksi, (req, res) => {
-    // res.redirect('/konfirmasi-transaksi/' + req.params.id);
     res.redirect('/reservasi');
   });
 
