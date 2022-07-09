@@ -3,17 +3,16 @@ const mejaServices = require("../services/meja_service");
 const userChecker = require('../services/auth_service');
 
 function toPageMeja(req, res) {
-  res.status(200).redirect("/products-meja");
+  res.redirect("/admin/meja");
 }
 
-router.route("/products-meja")
+router.route("/admin/meja")
   .get(userChecker.checkAuth, mejaServices.readMeja, (req, res) => {
-    res.status(200).render("pages/pageMeja", { meja: res.locals.dataMeja });
+    res.render("viewAdmin/pages/pageMeja", { user: req.session.user, dataMeja: res.locals.dataMeja });
   })
-  .post(userChecker.checkAuth, mejaServices.createMeja, toPageMeja);
+  .post(userChecker.checkAuth, mejaServices.createMeja, toPageMeja)
 
-// router.route("/products-meja/:id")
-//   .put(mejaServices.updateMeja, toPageMeja)
-//   .delete(mejaServices.deleteMeja, toPageMeja);
+router.route('/admin/meja/:id')
+  .put(userChecker.checkAuth, mejaServices.updateMeja, toPageMeja);
 
 module.exports = router;

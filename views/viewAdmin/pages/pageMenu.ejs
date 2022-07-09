@@ -27,14 +27,14 @@
 
         <!-- Flash Messages -->
         <% if (locals.messages) { %>
-          <div style="text-align: center" class="alert alert-<%=  messages.type %>" role="alert">
+          <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
             <strong>
               <%= messages.intro %>
             </strong>
 
             <%= messages.message %>
           
-            <button class="btn-close" data-bs-dismiss="alert"   aria-label="close"></button>
+            <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
           </div>
         <% } %>
 
@@ -111,7 +111,7 @@
           </div>
         </div>
 
-        <% dataMenu.forEach(menu => { %> 
+        <% dataMenu.forEach(menu => { %>
           <details class="card mb-4">
             <summary class="card-header start-flex-row">
               <img src="/uploads/menu/<%= menu.gambar_menu; %>" alt="gambar <%= menu.nama_menu; %>" class="me-3" style="width: 100px; height: 100px;">
@@ -168,9 +168,9 @@
                   </li>
 
                   <li class="list-group-item">
-                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editAdmin<%= menu.id;   %>">EDIT</button>
+                    <button class="btn btn-warning mb-3" data-bs-toggle="modal" data-bs-target="#editAdmin<%= menu.id; %>">UPDATE MENU</button>
                   
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAdmin<%= menu.id;  %>">HAPUS</button>
+                    <!-- <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAdmin<%= menu.id; %>">HAPUS</button> -->
                   </li>
                 </ul>
 
@@ -182,6 +182,8 @@
                         <h5 class="modal-title" id="staticEditAdmin<%= menu.id; %>">Edit Data Menu</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
+
+                      <img src="/uploads/menu/<%= menu.gambar_menu; %>" alt="gambar <%= menu.nama_menu; %>" class="card-img-top" style="height: 50vh;">
 
                       <div class="modal-body">
                         <form action="/admin/menu/<%= menu.id; %>?_method=PUT" method="POST" enctype="multipart/form-data">
@@ -253,7 +255,7 @@
                 </div>
 
                 <!-- Delete modal -->
-                <div class="modal fade" id="deleteAdmin<%= menu.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteAdmin<%= menu.id; %>"   aria-hidden="true">
+                <!-- <div class="modal fade" id="deleteAdmin<%= menu.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteAdmin<%= menu.id; %>"   aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -278,17 +280,13 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </details>
         <% }); %> 
       </div>
     </main>
-    
-    <footer>
-      <%- include("../partials/footer.ejs"); %>
-    </footer>
 
     <script src="/styles/funcModals.js"></script>
   </body>

@@ -8,13 +8,13 @@ function toPageMenu(req, res) {
 }
 
 router.route("/admin/menu")
-.get(userChecker.checkAuth, menuServices.readMenu, (req, res) => {
-  res.render("viewAdmin/pages/pageMenu", { user: req.session.user, dataMenu: res.locals.dataMenu });
-})
-.post(userChecker.checkAuth, uploads.SaveGambarMenuToStorage, menuServices.createMenu, toPageMenu);
+  .get(userChecker.checkAuth, menuServices.readMenu, (req, res) => {
+    res.render("viewAdmin/pages/pageMenu", { user: req.session.user, dataMenu: res.locals.dataMenu });
+  })
+  .post(userChecker.checkAuth, uploads.SaveGambarMenuToStorage, menuServices.createMenu, toPageMenu);
 
 router.route("/admin/menu/:id")
-.put(userChecker.checkAuth, uploads.SaveGambarMenuToStorage, menuServices.updateMenu, toPageMenu)
-.delete(userChecker.checkAuth, menuServices.deleteMenu, toPageMenu);
+  .put(userChecker.checkAuth, uploads.SaveGambarMenuToStorage, menuServices.updateMenu, toPageMenu)
+  .delete(userChecker.checkAuth, menuServices.deleteMenu, toPageMenu);
 
 module.exports = router;

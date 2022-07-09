@@ -3,7 +3,7 @@ const methodOverride = require("method-override");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 
-const pageMenuRouter = require("./routes/pageMenu_routes");
+const menuRouter = require("./routes/pageMenu_routes");
 const mejaRouter = require("./routes/pageMeja_routes");
 const reservasiRouter = require("./routes/reservasi_routes");
 const pemesananRouter = require("./routes/pemesanan_routes");
@@ -41,7 +41,7 @@ app.set("view engine", "ejs");
 
 // # View Login File
 app.get('/admin/login', (req, res) => {
-  res.status(200).render("viewAdmin/pages/login");
+  res.render("viewAdmin/pages/login");
 });
 
 // # Dashboard Admin
@@ -51,7 +51,7 @@ app.use(dashboardRouter);
 app.use(usersRouter);
 
 // # Data Menu
-app.use(pageMenuRouter);
+app.use(menuRouter);
 
 // # Data Meja
 app.use(mejaRouter);

@@ -14,7 +14,7 @@ function readMenu(req, res, next) {
 }
 
 function readTotalMenu(req, res, next) {
-  db.query(`SELECT COUNT(id) AS total FROM menu WHERE status='tersedia'`, (err, results) => {
+  db.query(`SELECT COUNT(id) AS total FROM menu`, (err, results) => {
     if (err) throw err;
 
     res.locals.totalMenu = results;

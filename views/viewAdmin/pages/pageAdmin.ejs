@@ -155,9 +155,9 @@
                 </li>
                 
                 <li class="list-group-item">
-                  <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editAdmin<%= user.id; %>">EDIT</button>
+                  <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editAdmin<%= user.id; %>">UPDATE ADMIN</button>
   
-                  <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAdmin<%= user.id; %>">HAPUS</button>
+                  <!-- <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAdmin<%= user.id; %>">HAPUS</button> -->
                 </li>
               </ul>
 
@@ -228,7 +228,7 @@
               </div>
 
               <!-- Delete modal -->
-              <div class="modal fade" id="deleteAdmin<%= user.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteAdmin<%= user.id; %>" aria-hidden="true">
+              <!-- <div class="modal fade" id="deleteAdmin<%= user.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteAdmin<%= user.id; %>" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -253,17 +253,13 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </details>
       <% }); %> 
     </div>
   </main>
-
-  <footer>
-    <%- include("../partials/footer.ejs"); %>
-  </footer>
 
   <script src="/styles/navDropDown.js"></script>
 </body>
