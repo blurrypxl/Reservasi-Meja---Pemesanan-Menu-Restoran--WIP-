@@ -10,14 +10,11 @@ router.route('/admin/validasi-transaksi')
 
 router.route('/admin/validasi-transaksi/:id')
   .put(userChecker.checkAuth, reservasiServices.updateStatusReservasi, (req, res) => {
-    
+    res.redirect('/admin/validasi-transaksi');
   });
 
 router.route('/admin/download/bukti-transaksi/:id')
   .post(userChecker.checkAuth, uploadServices.downloadBuktiTransaksi, (req, res) => {
-    // console.log(res.locals.fileName);
-
-    // res.download(res.locals.fileName);
     res.redirect('/admin/download/bukti-transaksi/' + res.locals.idBukti);
   })
   .get(userChecker.checkAuth, (req, res) => {

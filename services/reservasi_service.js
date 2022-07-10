@@ -99,7 +99,33 @@ function validasiTanggalReservasi(req, res, next) {
 }
 
 function updateStatusReservasi(req, res, next) {
+  const idTransfer = req.params.id;
+  const statusReservasi = req.body.status;
+  const reqStatus = statusReservasi === 'valid' ? 'Menunggu Pelanggan Datang' : 'Menunggu Validasi Ulang';
 
+  db.beginTransaction(err => {
+    if (err) throw err;
+
+    db.query(`SELECT id_reservasi FROM bukti_transfer WHERE id='${idTransfer}'`, (err, idReservasi) => {
+      if (err) return db.rollback(() => { throw err; });
+
+      console.log(idReservasi[0].id_reservasi);
+
+      db.query(`UPDATE reservasi SET status_reservasi='${reqStatus}' WHERE id='${idReservasi[0].id_reservasi}'`, err => {
+        if (err) return db.rollback(() => { throw err; });
+
+        db.commit(err => {
+          if (err) return db.rollback(() => { throw err; });
+
+          res.locals.status = reqStatus;
+
+          console.log(res.locals.status);
+
+          next();
+        });
+      });
+    });
+  });
 }
 
 function checkStatusReservasi(req, res, next) {

@@ -28,7 +28,7 @@ const buktiTransaksiConf = multer.diskStorage({
 const saveBuktiToStorage = multer({ storage: buktiTransaksiConf }).single('bukti_transaksi');
 
 function readBuktiTransaksi(req, res, next) {
-  db.query(`SELECT bukti_transfer.id AS id_transfer, reservasi.id AS id_reservasi, pelanggan.nama_pelanggan, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi, bukti_transfer.bukti FROM bukti_transfer JOIN reservasi ON reservasi.id = bukti_transfer.id_reservasi JOIN pelanggan ON pelanggan.id = reservasi.id_pelanggan WHERE reservasi.status_reservasi = 'Menunggu Validasi' ORDER BY bukti_transfer.update_at ASC`, (err, detailReservasi) => {
+  db.query(`SELECT bukti_transfer.id AS id_transfer, reservasi.id AS id_reservasi, pelanggan.nama_pelanggan, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi, bukti_transfer.bukti FROM bukti_transfer JOIN reservasi ON reservasi.id = bukti_transfer.id_reservasi JOIN pelanggan ON pelanggan.id = reservasi.id_pelanggan WHERE reservasi.status_reservasi = 'Menunggu Validasi' OR status_reservasi = 'Menunggu Validasi Ulang' ORDER BY bukti_transfer.update_at ASC`, (err, detailReservasi) => {
     if (err) throw err;
 
     res.locals.detailReservasi = detailReservasi;
