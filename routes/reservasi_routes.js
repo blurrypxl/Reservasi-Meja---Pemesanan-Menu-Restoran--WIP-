@@ -25,7 +25,7 @@ router.route('/api/update-reservasi')
 
 router.route('/reservasi/:id')
   .get(menuServices.readMenu, reservasiServices.readReservasiById, pemesananServices.readPesananById, (req, res) => {
-    res.render('viewPelanggan/pages/pageUpdateReservasi', { dataReservasi: res.locals.dataReservasi, dataPesanan: res.locals.dataPesanan, ttlHargaPesanan: res.locals.ttlHargaPesanan }); // TODO: Testing Status Reservasi (ON-GOING)
+    res.render('viewPelanggan/pages/pageUpdateReservasi', { dataReservasi: res.locals.dataReservasi, dataPesanan: res.locals.dataPesanan, ttlHargaPesanan: res.locals.ttlHargaPesanan });
   })
   .put(reservasiServices.updateDateReservasi, (req, res) => {
     // console.log(req.session.messages);

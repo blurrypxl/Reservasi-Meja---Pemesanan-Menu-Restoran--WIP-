@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <%- include("../partials/head.ejs"); %>
+  </head>
+
+  <body>
+    <header>
+      <%- include("../partials/header.ejs"); %>
+    </header>
+
+    <main class="main-content">
+      <div class="nav-bar">
+        <div class="nav-content">
+          <%- include("../partials/navbar.ejs", {user: user}); %>
+        </div>
+      </div>
+
+      <div class="content-box">  
+        <div class="container-header mt-3">
+          <h1>DATA VALIDASI TRANSAKSI /</h1>
+
+          <p>
+            <%= typeof user !="undefined" ? user : "" %>
+          </p>
+        </div>
+
+        <!-- Flash Messages -->
+        <% if (locals.messages) { %>
+          <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
+            <strong>
+              <%= messages.intro %>
+            </strong>
+
+            <%= messages.message %>
+          
+            <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+          </div>
+        <% } %>
+
+        <!-- <div class="card mb-4">
+          <div class="card-body between-center-flex-row">
+            Tambah Data Meja
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahMeja">TAMBAH</button>
+          </div>
+
+          <div class="modal fade" id="tambahMeja" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticTambahMeja" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticTambahMeja">Tambah Data Meja</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body">
+                  <form action="/admin/meja" method="POST">
+                    <div class="mb-3">
+                      <label for="nomor_meja" class="form-label">Nomor Meja:</label>
+
+                      <input type="number" class="form-control" min="1" name="nomor_meja" id="nomor_meja" required>
+                    </div>
+      
+                    <div class="mb-3">
+                      <label for="max" class="form-label">Max Person:</label>
+
+                      <input type="number" class="form-control" min="2" name="max_person" id="max" required>
+                    </div>
+      
+                    <div class="mb-3">
+                      <label for="status_akun" class="form-label">Status Meja</label>
+      
+                      <select class="form-select form-select-md" aria-label=".form-select-md" name="status" required>
+                        <option selected value="">Tambah status meja</option>
+                        <option value="aktif">Aktif</option>
+                        <option value="non-aktif">Non-Aktif</option>
+                      </select>
+                    </div>
+        
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                      <button type="submit" class="btn btn-success">CREATE MEJA</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+        <% detailReservasi.forEach(reservasi => { %> 
+          <details class="card mb-4">
+            <summary class="card-header start-flex-row">  
+              <div>
+                <h4 class="mb-3">
+                  <%= reservasi.id_transfer; %>
+                </h4>
+  
+                <p>
+                  Nama Pelanggan:
+                  <span><%= reservasi.nama_pelanggan; %></span>
+                </p>
+  
+                <p>
+                  Tanggal Reservasi:
+                  <span><%= reservasi.untuk_tanggal; %></span>
+                </p>
+  
+                <p>
+                  Status Reservasi:
+                  <span><%= reservasi.status_reservasi; %></span>
+                </p>
+              </div>
+            </summary>
+  
+            <div class="card-body">
+              <div class="card">
+                <div class="card-header">
+                  <h5>
+                    Detail Reservasi
+                  </h5>
+                </div>
+  
+                <ul class="list-group list-group-flush">
+                  <li id="id_reservasi" class="list-group-item">
+                    <label for="id_reservasi">ID Reservasi:</label>
+                    <%= reservasi.id_reservasi; %>
+                  </li>
+    
+                  <li id="email" class="list-group-item">
+                    <label for="email">Email Pelanggan:</label>
+                    <%= reservasi.email; %>
+                  </li>
+                  
+                  <li id="updateAt" class="list-group-item">
+                    <label for="updateAt">Update At:</label>
+                    <%= reservasi.update_at; %>
+                  </li>
+                  
+                  <li class="list-group-item">
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#downloadBukti<%= reservasi.id_transfer; %>">DOWNLOAD BUKTI</button>
+
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editStatus<%=reservasi.id_transfer; %>">VALIDASI</button>
+                  </li>
+                </ul>
+  
+                <!-- Download bukti modal -->
+                <div class="modal fade" id="downloadBukti<%= reservasi.id_transfer; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDownloadBukti<%= reservasi.id_transfer; %>" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="staticDownloadBukti<%= reservasi.id_transfer %>">Preview</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+
+                      <img src="/uploads/bukti-transaksi/<%= reservasi.bukti; %>" alt="gambar <%= reservasi.id_reservasi; %>" class="card-img-top" style="height: 50vh;">
+  
+                      <div class="modal-body">
+                        <form action="/admin/download/bukti-transaksi/<%= reservasi.id_transfer; %>" method="POST">
+                          <input type="hidden" class="form-control" id="bukti" name="bukti" value="<%= reservasi.bukti; %>" readonly required>
+
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            
+                            <button type="submit" class="btn btn-success">DOWNLOAD</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Update status reservasi modal -->
+                <div class="modal fade" id="editStatus<%= reservasi.id_transfer; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticEditStatus<%= reservasi.id_transfer; %>" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="staticEditStatus<%= reservasi.id_transfer %>">Validasi Transaksi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+  
+                      <div class="modal-body">
+                        <form action="/admin/validasi-transaksi/<%= reservasi.id_transfer; %>?_method=PUT" method="POST">
+                          <input type="hidden" class="form-control" id="bukti" name="bukti" value="<%= reservasi.bukti; %>" readonly required>
+
+                          <div class="mb-3">
+                            <label for="status" class="form-label">Status Reservasi</label>
+            
+                            <select class="form-select form-select-md" aria-label=".form-select-md" id="status" name="status" required>
+                              <option selected value="">Update bukti transfer</option>
+                              <option value="valid">Valid</option>
+                              
+                              <option value="tidak-valid">Tidak Valid</option>
+                            </select>
+                          </div>
+
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                            <button type="submit" class="btn btn-success">Validasi</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+        <% }); %>
+      </div>
+    </main>
+
+    <script src="/styles/funcModals.js"></script>
+  </body>
+
+</html>

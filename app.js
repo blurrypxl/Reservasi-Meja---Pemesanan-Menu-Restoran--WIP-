@@ -10,6 +10,7 @@ const pemesananRouter = require("./routes/pemesanan_routes");
 const authService = require("./services/auth_service");
 const dashboardRouter = require("./routes/dashboard_routes");
 const usersRouter = require("./routes/admin_routes");
+const transaksiRouter = require('./routes/transaksi_routes');
 
 const app = express();
 
@@ -61,6 +62,9 @@ app.use(reservasiRouter);
 
 // # Pemesanan
 app.use(pemesananRouter);
+
+// # Transaksi
+app.use(transaksiRouter);
 
 // # 404 Not Found Handler
 app.use((req, res, next) => {

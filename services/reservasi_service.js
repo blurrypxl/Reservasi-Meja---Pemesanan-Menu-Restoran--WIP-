@@ -98,7 +98,9 @@ function validasiTanggalReservasi(req, res, next) {
   });
 }
 
-function updateStatusReservasi(req, res, next) { }
+function updateStatusReservasi(req, res, next) {
+
+}
 
 function checkStatusReservasi(req, res, next) {
   const idReservasi = req.body.id_reservasi;
@@ -179,5 +181,6 @@ module.exports = {
   readTotalReservasi,
   validasiTanggalReservasi,
   checkStatusReservasi,
+  updateStatusReservasi,
   updateDateReservasi,
 };

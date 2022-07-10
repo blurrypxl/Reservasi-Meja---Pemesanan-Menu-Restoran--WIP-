@@ -9,7 +9,7 @@ const userChecker = require("../services/auth_service");
 // Read data menu & data meja
 router.route("/admin/dashboard")
   .get(userChecker.checkAuth, menuServices.readMenu, mejaServices.readTotalMeja, menuServices.readTotalMenu, adminServices.readTotalAdmin, reservasiServices.readTotalReservasi, transaksiServices.readTotalTransaksi, (req, res) => {
-    res.status(200).render("viewAdmin/pages/dashboard", {
+    res.render("viewAdmin/pages/dashboard", {
       user: req.session.user,
       totalMeja: res.locals.totalMeja,
       totalMenu: res.locals.totalMenu,
