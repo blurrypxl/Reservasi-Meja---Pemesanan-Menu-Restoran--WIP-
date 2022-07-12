@@ -49,7 +49,17 @@ function logIn(req, res) {
   req.session.user = res.locals.roleUsr;
   req.session.idUsr = res.locals.idUsr;
   req.session.statusUsr = res.locals.statusUsr;
+
   res.redirect('/admin/dashboard');
+}
+
+function logOut(req, res) {
+  delete req.session.loggedIn;
+  delete req.session.user;
+  delete req.session.idUser;
+  delete req.session.statusUsr;
+
+  res.redirect('/admin/login');
 }
 
 function checkAuth(req, res, next) {
@@ -66,5 +76,6 @@ function checkAuth(req, res, next) {
 module.exports = {
   checkAccount,
   logIn,
+  logOut,
   checkAuth
 };

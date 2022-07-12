@@ -3,7 +3,7 @@ const gUniqId = require('generate-unique-id');
 const timestamp = require("time-stamp");
 
 function readReservasi(req, res, next) {
-  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}'`, (err, results) => {
+  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}' OR reservasi.status_reservasi = '${"Menunggu Validasi"}' OR reservasi.status_reservasi = '${"Menunggu Validasi Ulang"}'`, (err, results) => {
     if (err) res.json({ msg: err });
 
     const tglHariIni = new Date(timestamp("YYYY-MM-DD")).setHours(0, 0, 0, 0);
@@ -33,6 +33,18 @@ function readReservasi(req, res, next) {
   });
 }
 
+function readDetailReservasi(req, res, next) {
+  db.query(`SELECT bukti_transfer.id AS id_transfer, bukti_transfer.bukti, pelanggan.id AS id_pelanggan, pelanggan.nama_pelanggan, meja.nomor_meja, reservasi.id AS id_reservasi, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi FROM bukti_transfer JOIN reservasi ON reservasi.id=bukti_transfer.id_reservasi JOIN pelanggan ON pelanggan.id=reservasi.id_pelanggan JOIN meja ON meja.id=pelanggan.id_meja`, (err, dataReservasi) => {
+    if (err) throw err;
+
+    // console.log(dataReservasi);
+
+    res.locals.dataReservasi = dataReservasi;
+
+    next();
+  });
+}
+
 function readTotalReservasi(req, res, next) {
   db.query(`SELECT COUNT(id) AS total FROM reservasi`, (err, results) => {
     if (err) throw err;
@@ -46,13 +58,13 @@ function readTotalReservasi(req, res, next) {
 function readReservasiById(req, res, next) {
   const idReservasi = req.params.id;
 
-  db.query(`SELECT reservasi.id AS id_reservasi, reservasi.id_pelanggan, pelanggan.nama_pelanggan, meja.id AS id_meja, meja.nomor_meja, reservasi.email, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan=pelanggan.id JOIN meja ON pelanggan.id_meja=meja.id WHERE reservasi.id='${idReservasi}' AND (reservasi.status_reservasi='Menunggu Pembayaran' OR reservasi.status_reservasi='Menunggu Kedatangan Tamu')`, (err, dataReservasi) => {
+  db.query(`SELECT reservasi.id AS id_reservasi, reservasi.id_pelanggan, pelanggan.nama_pelanggan, meja.id AS id_meja, meja.nomor_meja, reservasi.email, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan=pelanggan.id JOIN meja ON pelanggan.id_meja=meja.id WHERE reservasi.id='${idReservasi}' AND (reservasi.status_reservasi='Menunggu Pembayaran' OR reservasi.status_reservasi='Menunggu Kedatangan Tamu' OR reservasi.status_reservasi='Menunggu Validasi Ulang')`, (err, dataReservasi) => {
     if (err) throw err;
 
     res.locals.dataReservasi = dataReservasi;
     res.locals.idPelanggan = dataReservasi.map(idP => idP.id_pelanggan); //get id pelanggan
 
-    // console.log(res.locals.idPelanggan);
+    console.log(res.locals.dataReservasi);
 
     next();
   });
@@ -62,12 +74,10 @@ function validasiTanggalReservasi(req, res, next) {
   const { nama, email, id_meja, nomor_meja, untuk_tgl } = req.body;
   const idPelanggan = "PLG-" + gUniqId({ length: 7 });
 
-  // console.log(id_meja);
-
-  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE pelanggan.id_meja = '${id_meja}' AND (reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}')`, (err, results) => {
+  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE pelanggan.id_meja = '${id_meja}' AND (reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}' OR reservasi.status_reservasi='Menunggu Validasi Ulang')`, (err, results) => {
     if (err) throw err; // Tampilkan Error
 
-    // console.log(results);
+    console.log(results);
 
     const tglHariIni = new Date(timestamp("YYYY-MM-DD")).setHours(0, 0, 0, 0);
 
@@ -82,8 +92,8 @@ function validasiTanggalReservasi(req, res, next) {
       }
     }
 
-    // console.log('panjang isi filter reservasi = '+filterReservasi.length);
-    // console.log(filterReservasi);
+    console.log('panjang isi filter reservasi = '+filterReservasi.length);
+    console.log(filterReservasi);
 
     if (filterReservasi.length === 0) {
       req.session.validasiReservasi = [idPelanggan, nama, email, id_meja, nomor_meja, untuk_tgl];
@@ -101,25 +111,26 @@ function validasiTanggalReservasi(req, res, next) {
 function updateStatusReservasi(req, res, next) {
   const idTransfer = req.params.id;
   const statusReservasi = req.body.status;
-  const reqStatus = statusReservasi === 'valid' ? 'Menunggu Pelanggan Datang' : 'Menunggu Validasi Ulang';
+  const reqStatus = statusReservasi === 'valid' ? 'Menunggu Kedatangan Tamu' : 'Menunggu Validasi Ulang';
 
   db.beginTransaction(err => {
     if (err) throw err;
 
-    db.query(`SELECT id_reservasi FROM bukti_transfer WHERE id='${idTransfer}'`, (err, idReservasi) => {
+    db.query(`SELECT bukti_transfer.id_reservasi, reservasi.email FROM bukti_transfer JOIN reservasi ON bukti_transfer.id_reservasi = reservasi.id WHERE bukti_transfer.id='${idTransfer}'`, (err, dataReservasi) => {
       if (err) return db.rollback(() => { throw err; });
 
-      console.log(idReservasi[0].id_reservasi);
+      // console.log(dataReservasi);
 
-      db.query(`UPDATE reservasi SET status_reservasi='${reqStatus}' WHERE id='${idReservasi[0].id_reservasi}'`, err => {
+      db.query(`UPDATE reservasi SET status_reservasi='${reqStatus}' update_at='${timestamp('HH:mm:YYYY-MM-DD')}' WHERE id='${dataReservasi[0].id_reservasi}'`, err => {
         if (err) return db.rollback(() => { throw err; });
 
         db.commit(err => {
           if (err) return db.rollback(() => { throw err; });
 
-          res.locals.status = reqStatus;
+          res.locals.validator = statusReservasi;
+          res.locals.email = dataReservasi[0].email;
 
-          console.log(res.locals.status);
+          console.log(res.locals.validator, res.locals.email);
 
           next();
         });
@@ -131,7 +142,7 @@ function updateStatusReservasi(req, res, next) {
 function checkStatusReservasi(req, res, next) {
   const idReservasi = req.body.id_reservasi;
 
-  db.query(`SELECT * FROM reservasi WHERE id='${idReservasi}' AND (status_reservasi='Menunggu Pembayaran' OR status_reservasi='Menunggu Kedatangan Tamu')`, (err, dataReservasi) => {
+  db.query(`SELECT * FROM reservasi WHERE id='${idReservasi}' AND status_reservasi='Menunggu Pembayaran' OR status_reservasi='Menunggu Kedatangan Tamu' OR status_reservasi='Menunggu Validasi Ulang'`, (err, dataReservasi) => {
     if (err) throw err;
 
     // console.log(dataReservasi);
@@ -156,6 +167,8 @@ function checkStatusReservasi(req, res, next) {
 function updateDateReservasi(req, res, next) {
   const { id_reservasi, id_meja, untuk_tgl } = req.body;
 
+  // console.log(untuk_tgl);
+
   db.beginTransaction(err => {
     if (err) throw err;
 
@@ -165,10 +178,14 @@ function updateDateReservasi(req, res, next) {
       res.locals.idReservasi = id_reservasi;
 
       for (let i = 0; i < dataReservasi.length; i++) {
+        reqData = {
+          tgl: untuk_tgl === '' ? dataReservasi[i].untuk_tanggal : untuk_tgl
+        }
+
         if (id_reservasi === dataReservasi[i].id_reservasi) {
           // Memvalidasi tanggal reservasi
           for (let x = 0; x < dataReservasi.length; x++) {
-            if (untuk_tgl === dataReservasi[x].untuk_tanggal) {
+            if (reqData.tgl === dataReservasi[x].untuk_tanggal) {
               req.session.messages = {
                 type: 'warning',
                 intro: 'Tanggal Tidak Valid.',
@@ -180,7 +197,7 @@ function updateDateReservasi(req, res, next) {
           }
 
           // Update data tanggal reservasi
-          db.query(`UPDATE reservasi SET untuk_tanggal='${untuk_tgl}' WHERE id='${id_reservasi}'`, err => {
+          db.query(`UPDATE reservasi SET untuk_tanggal='${reqData.tgl}', update_at='${timestamp('HH:mm:YYYY-MM-DD')}' WHERE id='${id_reservasi}'`, err => {
             if (err) return db.rollback(() => { throw err; });
 
             db.commit(err => {
@@ -203,6 +220,7 @@ function updateDateReservasi(req, res, next) {
 
 module.exports = {
   readReservasi,
+  readDetailReservasi,
   readReservasiById,
   readTotalReservasi,
   validasiTanggalReservasi,

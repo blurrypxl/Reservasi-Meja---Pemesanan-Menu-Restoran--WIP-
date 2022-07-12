@@ -14,10 +14,13 @@ router.route('/api/transaksi')
   });
 
 router.route('/konfirmasi-transaksi/:id')
-  .get(transaksiServices.readPesananById, (req, res) => {
+  .get(transaksiServices.readNotaPembayaran, (req, res) => {
     res.render('viewPelanggan/pages/pageFormTransaksi', { dataPesanan: res.locals.dataPesanan, dataReservasi: res.locals.dataReservasi, totalBayar: res.locals.total });
   })
-  .post(uploads.saveBuktiToStorage, uploads.createBuktiTransaksi, (req, res) => {
+  .post(uploads.saveBuktiToStorage, transaksiServices.createBuktiTransaksi, (req, res) => {
+    res.redirect('/reservasi');
+  })
+  .put(transaksiServices.updateBuktiTransaksi, (req, res) => {
     res.redirect('/reservasi');
   });
 

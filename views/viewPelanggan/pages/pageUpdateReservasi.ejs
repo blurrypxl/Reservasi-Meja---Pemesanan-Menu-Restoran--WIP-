@@ -27,7 +27,7 @@
         Informasi Reservasi
       </div>
 
-      <form class="form-container" action="/reservasi/<%= dataReservasi[0].id_reservasi %>?_method=PUT" method="POST">
+      <form class="form-container" action="/reservasi/<%= dataReservasi[0].id_reservasi; %>?_method=PUT" method="POST">
         <input type="hidden" name="id_meja" value="<%= dataReservasi[0].id_meja; %>" readonly required>
 
         <input type="hidden" name="id_reservasi" value="<%= dataReservasi[0].id_reservasi; %>" readonly required>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <%- include("../partials/head.ejs"); %>
+  </head>
+
+  <body>
+    <header>
+      <%- include("../partials/header.ejs", {user: user}); %>
+    </header>
+
+    <main class="main-content">
+      <div class="nav-bar">
+        <div class="nav-content">
+          <%- include("../partials/navbar.ejs", {user: user}); %>
+        </div>
+      </div>
+
+      <div class="content-box">
+        <div class="container-header mt-3">
+          <h1>DATA MENU /</h1>
+          <p>
+            <%= typeof user !="undefined" ? user : "" %>
+          </p>
+        </div>
+
+        <!-- Flash Messages -->
+        <% if (locals.messages) { %>
+          <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
+            <strong>
+              <%= messages.intro %>
+            </strong>
+
+            <%= messages.message %>
+          
+            <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+          </div>
+        <% } %>
+
+        <div class="card mb-4">
+          <div class="card-body between-center-flex-row">
+            Tambah Data Menu
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahMenu">TAMBAH</button>
+          </div>
+        
+          <!-- Create modal -->
+          <div class="modal fade" id="tambahMenu" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticTambahMenu" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticTambahMenu">Tambah Data Menu</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body">
+                  <form action="/admin/menu" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                      <label for="gambar_menu" class="form-label">Gambar Menu</label>
+                    
+                      <input type="file" accept="image/*" class="form-control" id="gambar_menu" name="gambar_menu" required>
+                    </div>
+                  
+                    <div class="mb-3">
+                      <label for="nama_menu" class="form-label">Nama Menu</label>
+                    
+                      <input type="text" class="form-control" id="nama_menu" placeholder="nama menu" name="nama_menu" required>
+                    </div>
+                  
+                    <div class="mb-3">
+                      <label for="jenis_menu" class="form-label">Jenis Menu</label>
+
+                      <select class="form-select form-select-md" aria-label=".form-select-md" name="jenis_menu" required>
+                        <option selected value="">Tambah jenis menu</option>
+                        <option value="Makanan">Makanan</option>
+                        <option value="Minuman">Minuman</option>
+                      </select>
+                    </div>
+                  
+                    <div class="mb-3">
+                      <label for="harga_menu" class="form-label">Harga Menu</label>
+                    
+                      <input type="number" class="form-control" min="5000" id="harga_menu" placeholder="harga menu" name="harga" required>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="qty" class="form-label">Quantity</label>
+                            
+                      <input type="number" min="0" class="form-control" id="qty" name="qty" value="1" required>
+                    </div>
+                  
+                    <div class="mb-3">
+                      <label for="status_akun" class="form-label">Status Menu</label>
+  
+                      <select class="form-select form-select-md" aria-label=".form-select-md" name="status" required>
+                        <option selected value="">Tambah status menu</option>
+                        <option value="aktif">Aktif</option>
+                        <option value="non-aktif">Non-Aktif</option>
+                      </select>
+                    </div>
+                  
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    
+                      <button type="submit" class="btn btn-primary">CREATE</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <% dataMenu.forEach(menu => { %>
+          <details class="card mb-4">
+            <summary class="card-header start-flex-row">
+              <img src="/uploads/menu/<%= menu.gambar_menu; %>" alt="gambar <%= menu.nama_menu; %>" class="me-3" style="width: 100px; height: 100px;">
+
+              <div>
+                <h4 class="mb-3">
+                  <%= menu.id; %>
+                </h4>
+
+                <p>
+                  Nama Menu:
+                  <span><%= menu.nama_menu; %></span>
+                </p>
+
+                <p>
+                  Status:
+                  <span><%= menu.status; %></span>
+                </p>
+              </div>
+            </summary>
+
+            <div class="card-body">
+              <div class="card">
+                <div class="card-header">
+                  <h5>
+                    Detail Menu
+                  </h5>
+                </div>
+
+                <ul class="list-group list-group-flush">
+                  <li id="jenis" class="list-group-item">
+                    <label for="jenis">Jenis Menu:</label>
+                    <%= menu.jenis_menu; %>
+                  </li>
+
+                  <li id="harga" class="list-group-item">
+                    <label for="harga">Harga:</label>
+                    <%= menu.harga; %>
+                  </li>
+
+                  <li id="qty" class="list-group-item">
+                    <label for="qty">Quantity:</label>
+                    <%= menu.qty; %>
+                  </li>
+                
+                  <li id="createAt" class="list-group-item">
+                    <label for="createAt">Create At:</label>
+                    <%= menu.create_at; %>
+                  </li>
+
+                  <li id="updateAt" class="list-group-item">
+                    <label for="updateAt">Update At:</label>
+                    <%= menu.update_at; %>
+                  </li>
+
+                  <li class="list-group-item">
+                    <button class="btn btn-warning mb-3" data-bs-toggle="modal" data-bs-target="#editAdmin<%= menu.id; %>">UPDATE MENU</button>
+                  
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAdmin<%= menu.id; %>">HAPUS</button>
+                  </li>
+                </ul>
+
+                <!-- Update modal -->
+                <div class="modal fade" id="editAdmin<%= menu.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticEditAdmin<%= menu.id; %>" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="staticEditAdmin<%= menu.id; %>">Edit Data Menu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+
+                      <img src="/uploads/menu/<%= menu.gambar_menu; %>" alt="gambar <%= menu.nama_menu; %>" class="card-img-top" style="height: 50vh;">
+
+                      <div class="modal-body">
+                        <form action="/admin/menu/<%= menu.id; %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                          <div class="mb-3">
+                            <label for="gambar_menu" class="form-label">Gambar Menu</label>
+                    
+                            <input type="file" accept="image/*" class="form-control" id="gambar_menu" name="gambar_menu">
+                          </div>
+
+                          <div class="mb-3">
+                            <label for="nama_menu" class="form-label">Nama Menu</label>
+                          
+                            <input type="text" class="form-control" id="nama_menu" placeholder="nama menu" name="nama" value="<%= menu.nama_menu; %>" required>
+                          </div>
+                        
+                          <div class="mb-3">
+                            <label for="jenis_menu" class="form-label">Jenis Menu</label>
+                          
+                            <input type="text" class="form-control mb-2" id="jenis_menu" value="<%= menu.jenis_menu; %>" readonly required>
+
+                            <select class="form-select form-select-md" aria-label=".form-select-md" name="jenis_menu">
+                              <option selected value="">Update jenis menu</option>
+                              <option value="Makanan">Makanan</option>
+                              <option value="Minuman">Minuman</option>
+                            </select>
+                          </div>
+                        
+                          <div class="mb-3">
+                            <label for="harga" class="form-label">Harga</label>
+
+                            <input type="number" class="form-control" min="5000" id="harga" name="harga" value="<%= menu.harga; %>" required>
+                          </div>
+
+                          <div class="mb-3">
+                            <label for="qty" class="form-label">Quantity</label>
+                            
+                            <input type="number" min="0" class="form-control" id="qty" name="qty" value="<%= menu.qty; %>" required>
+                          </div>
+
+                          <div class="mb-3">
+                            <label for="status" class="form-label">Status Menu</label>
+
+                            <input type="text" class="form-control mb-2" id="status" value="<%= menu.status; %>" readonly required>
+        
+                            <select class="form-select form-select-md" aria-label=".form-select-md" name="status">
+                              <option selected value="">Update status menu</option>
+                              <option value="aktif">Aktif</option>
+                              <option value="non-aktif">Non-Aktif</option>
+                            </select>
+                          </div>
+
+                          <div class="mb-3">
+                            <label for="updateAt" class="form-label">Update At</label>
+
+                            <p>
+                              <%= menu.update_at; %> 
+                            </p>
+                          </div>
+                        
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          
+                            <button type="submit" class="btn btn-primary">UPDATE</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Delete modal -->
+                <!-- <div class="modal fade" id="deleteAdmin<%= menu.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteAdmin<%= menu.id; %>"   aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="staticDeleteAdmin<%= menu.id; %>">Delete Data Menu?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+
+                      <div class="modal-body">
+                        <form action="/admin/menu/<%= menu.id; %>?_method=DELETE" method="POST">
+                          <div class="mb-3">
+                            <p>
+                              Apa anda yakin ingin menghapus data admin <b><%= menu.id; %> : <%= menu.nama_menu; %></b>???
+                            </p>
+                          </div>
+                        
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          
+                            <button type="submit" class="btn btn-danger">DELETE</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </details>
+        <% }); %> 
+      </div>
+    </main>
+
+    <script src="/styles/funcModals.js"></script>
+  </body>
+
+</html>

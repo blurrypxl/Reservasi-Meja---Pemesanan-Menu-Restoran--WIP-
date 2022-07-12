@@ -24,7 +24,7 @@ router.route('/api/update-reservasi')
   });
 
 router.route('/reservasi/:id')
-  .get(menuServices.readMenu, reservasiServices.readReservasiById, pemesananServices.readPesananById, (req, res) => {
+  .get(reservasiServices.readReservasiById, pemesananServices.readPesananById, (req, res) => {
     res.render('viewPelanggan/pages/pageUpdateReservasi', { dataReservasi: res.locals.dataReservasi, dataPesanan: res.locals.dataPesanan, ttlHargaPesanan: res.locals.ttlHargaPesanan });
   })
   .put(reservasiServices.updateDateReservasi, (req, res) => {
@@ -57,8 +57,10 @@ router.route('/pemesanan')
     }
   });
 
-// Route ini digunakan untuk keperluan admin/super-admin
+// Route ini digunakan untuk keperluan admin & super-admin
 router.route('/admin/reservasi')
-  .get(userChecker.checkAuth, reservasiServices.readReservasi);
+  .get(userChecker.checkAuth, reservasiServices.readDetailReservasi, pemesananServices.readPesanan, (req, res) => {
+    res.render('viewAdmin/pages/pageReservasiAdmin', { dataReservasi: res.locals.dataReservasi, dataPesanan: res.locals.dataPesanan });
+  });
 
 module.exports = router;

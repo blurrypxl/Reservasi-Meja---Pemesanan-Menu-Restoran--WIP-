@@ -2,6 +2,7 @@ const express = require("express");
 const methodOverride = require("method-override");
 const session = require("express-session");
 const bodyParser = require("body-parser");
+require('dotenv').config();
 
 const menuRouter = require("./routes/pageMenu_routes");
 const mejaRouter = require("./routes/pageMeja_routes");
@@ -36,6 +37,8 @@ app.use((req, res, next) => {
 
 // # Authentication Admin
 app.post("/auth-account", authService.checkAccount, authService.logIn);
+
+app.post("/admin/logout", authService.logOut);
 
 // # Set view engine
 app.set("view engine", "ejs");
@@ -85,6 +88,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log(`Server running at port 3000`);
+app.listen(process.env.SERVER_PORT, () => {
+  console.log(`Server running at port ${process.env.SERVER_PORT}`);
 });

@@ -1,51 +1,65 @@
-<ul>
-  <li>
-    <a href="/admin/dashboard">DASHBOARD</a>
-  </li>
-
-  <% if (user === "super-admin") { %>
+<div style="display: flex; flex-direction: column; justify-content: space-between; height: 80vh;">
+  <ul>
     <li>
-      <a href="/admin/users">DATA USERS</a>
+      <a href="/admin/dashboard">DASHBOARD</a>
     </li>
-
-    <div class="list">
-      <div class="menu-parent">
-        <p>PENGELOLAAN RESERVASI</p>
-        <img class="arrow" src="../images/icon-arrow-down.svg" alt="">
+  
+    <% if (user === "super-admin") { %>
+      <li>
+        <a href="/admin/users">DATA USERS</a>
+      </li>
+  
+      <div class="list">
+        <div class="menu-parent">
+          <p>PENGELOLAAN RESERVASI</p>
+          <img class="arrow" src="../images/icon-arrow-down.svg" alt="">
+        </div>
+  
+        <div class="content">
+          <li>
+            <a href="/admin/menu">DATA MENU</a>
+          </li>
+  
+          <li>
+            <a href="/admin/meja">DATA MEJA</a>
+          </li>
+  
+          <li>
+            <a href="/admin/reservasi">DATA RESERVASI</a>
+          </li>
+        </div>
       </div>
-
-      <div class="content">
-        <li>
-          <a href="/admin/menu">DATA MENU</a>
-        </li>
-
-        <li>
-          <a href="/admin/meja">DATA MEJA</a>
-        </li>
+  
+      <div class="list">
+        <div class="menu-parent">
+          <p>PENGELOLAAN TRANSAKSI</p>
+          <img class="arrow" src="../images/icon-arrow-down.svg" alt="">
+        </div>
+  
+        <div class="content">
+          <li>
+            <a href="/admin/validasi-transaksi">VALIDASI TRANSAKSI</a>
+          </li>
+  
+          <li>
+            <a href="/admin/transaksi">DATA TRANSAKSI</a>
+          </li>
+        </div>
       </div>
-    </div>
-
-    <div class="list">
-      <div class="menu-parent">
-        <p>PENGELOLAAN TRANSAKSI</p>
-        <img class="arrow" src="../images/icon-arrow-down.svg" alt="">
-      </div>
-
-      <div class="content">
-        <li>
-          <a href="/admin/validasi-transaksi">VALIDASI TRANSAKSI</a>
-        </li>
-
-        <li>
-          <a href="/admin/transaksi">DATA TRANSAKSI</a>
-        </li>
-      </div>
-    </div>
-  <% } %>
-
-  <% if (user === "admin") { %>
-    <li>
-      <a href="/admin/konfirmasi-reservasi">KONFIRMASI RESERVASI</a>
-    </li>
-  <% } %>
-</ul>
+    <% } %>
+  
+    <% if (user === "admin") { %>
+      <li>
+        <a href="/admin/konfirmasi-reservasi">KONFIRMASI RESERVASI</a>
+      </li>
+  
+      <li>
+        <a href="/admin/reservasi">DATA RESERVASI</a>
+      </li>
+    <% } %>
+  </ul>
+  
+  <form class="w-100" action="/admin/logout" method="POST">
+    <button class="btn btn-danger w-100" type="submit">LOG OUT</button>
+  </form>
+</div>

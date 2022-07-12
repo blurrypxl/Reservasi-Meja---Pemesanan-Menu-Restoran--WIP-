@@ -88,6 +88,18 @@ function createReservasiDanPesanan(req, res, next) {
   });
 }
 
+function readPesanan(req, res, next) {
+  db.query(`SELECT pesanan.id AS id_pesanan, pesanan.id_pelanggan, menu.nama_menu, menu.harga, pesanan.qty, pesanan.total_harga FROM pesanan JOIN menu ON menu.id=pesanan.id_menu`, (err, dataPesanan) => {
+    if (err) throw err;
+
+    // console.log(dataPesanan);
+
+    res.locals.dataPesanan = dataPesanan;
+
+    next();
+  });
+}
+
 function readPesananById(req, res, next) {
   const idReservasi = req.params.id;
 
@@ -124,5 +136,6 @@ function readPesananById(req, res, next) {
 
 module.exports = {
   createReservasiDanPesanan,
+  readPesanan,
   readPesananById,
 };
