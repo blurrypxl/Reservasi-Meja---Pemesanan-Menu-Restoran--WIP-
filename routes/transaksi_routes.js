@@ -14,7 +14,6 @@ router.route('/admin/validasi-transaksi')
     res.render('viewAdmin/pages/pageValidasiTransaksi', { user: req.session.user, dataDetailReservasi: res.locals.detailReservasi });
   });
 
-// TODO: Testing route ini lebih lanjut!
 router.route('/admin/validasi-transaksi/:id')
   .put(userChecker.checkAuth, reservasiServices.updateStatusReservasi, reservasiServices.readDetailReservasi, (req, res, next) => {
     let reqSubject;

@@ -89,7 +89,7 @@
                   </li>
                   
                   <li class="list-group-item">   
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteReservasi<%= reservasi.id; %>">HAPUS</button>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteReservasi<%= reservasi.id; %>">DELETE?</button>
                   </li>
                 </ul>
   
@@ -102,9 +102,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       
-                      <!-- TODO: Edit halaman untuk menyesuaikan data Reservasi Admin -->
                       <div class="modal-body">
-                        <form action="/admin/reservasi<%= reservasi.id; %>?_method=DELETE" method="POST">
+                        <form action="/admin/reservasi/<%= reservasi.id_reservasi; %>?_method=DELETE" method="POST">
                           <div class="card text-dark w-100">
                             <div class="card-header mb-3"><b>Anda yakin ingin menghapus data reservasi <%= reservasi.nama_pelanggan; %> - <%= reservasi.id_reservasi; %>?</b></div>
                             <div class="card-body">

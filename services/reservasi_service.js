@@ -72,12 +72,13 @@ function readReservasiById(req, res, next) {
 
 function validasiTanggalReservasi(req, res, next) {
   const { nama, email, id_meja, nomor_meja, untuk_tgl } = req.body;
+  const tglReservasi = untuk_tgl === '' || untuk_tgl === undefined ? timestamp('YYYY-MM-DD') : untuk_tgl;
   const idPelanggan = "PLG-" + gUniqId({ length: 7 });
 
-  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE pelanggan.id_meja = '${id_meja}' AND (reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}' OR reservasi.status_reservasi='Menunggu Validasi Ulang')`, (err, results) => {
+  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE pelanggan.id_meja = '${id_meja}' AND (reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}' OR reservasi.status_reservasi='Menunggu Validasi Ulang' OR reservasi.status_reservasi='Menunggu Validasi')`, (err, results) => {
     if (err) throw err; // Tampilkan Error
 
-    console.log(results);
+    // console.log(results);
 
     const tglHariIni = new Date(timestamp("YYYY-MM-DD")).setHours(0, 0, 0, 0);
 
@@ -86,17 +87,17 @@ function validasiTanggalReservasi(req, res, next) {
 
     for (let i = 0; i < results.length; i++) {
       if (new Date(results[i].untuk_tanggal).setHours(0, 0, 0, 0) >= tglHariIni) {
-        if (results[i].untuk_tanggal === untuk_tgl) {
+        if (results[i].untuk_tanggal === tglReservasi) {
           filterReservasi.push(results[i].untuk_tanggal);
         }
       }
     }
 
-    console.log('panjang isi filter reservasi = '+filterReservasi.length);
-    console.log(filterReservasi);
+    // console.log('panjang isi filter reservasi = '+ filterReservasi.length);
+    // console.log(filterReservasi);
 
     if (filterReservasi.length === 0) {
-      req.session.validasiReservasi = [idPelanggan, nama, email, id_meja, nomor_meja, untuk_tgl];
+      req.session.validasiReservasi = [idPelanggan, nama, email, id_meja, nomor_meja, tglReservasi];
 
       return next();
     }
@@ -130,7 +131,7 @@ function updateStatusReservasi(req, res, next) {
           res.locals.validator = statusReservasi;
           res.locals.email = dataReservasi[0].email;
 
-          console.log(res.locals.validator, res.locals.email);
+          // console.log(res.locals.validator, res.locals.email);
 
           next();
         });
@@ -147,7 +148,7 @@ function checkStatusReservasi(req, res, next) {
   db.query(`SELECT * FROM reservasi WHERE id='${idReservasi}' AND (status_reservasi='Menunggu Pembayaran' OR status_reservasi='Menunggu Kedatangan Tamu' OR status_reservasi='Menunggu Validasi' OR status_reservasi='Menunggu Validasi Ulang')`, (err, dataReservasi) => {
     if (err) throw err;
 
-    console.log(dataReservasi);
+    // console.log(dataReservasi);
 
     if (dataReservasi.length === 0) {
       req.session.messages = {
@@ -220,32 +221,86 @@ function updateDateReservasi(req, res, next) {
   });
 }
 
-// function validasiStatusReservasi(req, res, next) {
-//   const idReservasi = req.params.id;
+function validasiUpdateReservasi(req, res, next) {
+  const idPelanggan = req.params.id;
 
-//   db.query(`SELECT status_reservasi FROM reservasi WHERE id='${idReservasi}'`, (err, dataStatus) => {
-//     if (err) throw err;
+  db.query(`SELECT * FROM reservasi WHERE id_pelanggan='${idPelanggan}' AND (status_reservasi='Selesai' OR status_reservasi='Menunggu Kedatangan Tamu')`, (err, dataValidasi) => {
+    if (err) throw err;
 
-//     if (dataStatus[0].status_reservasi === 'Menunggu Kedatangan Tamu' || dataStatus[0].status_reservasi === 'Selesai') {
-//       req.session.messages = {
-//         type: 'danger',
-//         intro: 'Reservasi Sudah Selesai!',
-//         message: 'Pastikan data reservasi yang anda masukan belum di validasi kasir.'
-//       }
+    if (dataValidasi.length !== 0) {
+      req.session.messages = {
+        type: 'danger',
+        intro: 'Data Reservasi Sudah Valid atau Sudah Tidak Berlaku!',
+        message: ''
+      }
 
-//       return next();
-//     }
+      return next();
+    }
 
-//     return next();
-//   });
-// }
+    return next();
+  });
+}
 
 function deleteReservasi(req, res, next) {
   const idReservasi = req.params.id;
 
   db.beginTransaction(err => {
     if (err) throw err;
-    // TODO: Buat query untuk menghapus data reservasi dan kawan-kawannya.
+
+    // Mendapatkan id bukti transfer berdasarkan id reservasi
+    db.query(`SELECT id AS id_bukti FROM bukti_transfer WHERE id_reservasi='${idReservasi}'`, (err, dataBukti) => {
+      if (err) return db.rollback(() => { throw err; });
+
+      // Menghapus data transaksi berdasarkan id bukti transfer
+      db.query(`DELETE FROM transaksi WHERE id_bukti='${dataBukti[0].id_bukti}'`, err => {
+        if (err) return db.rollback(() => { throw err; });
+
+        db.commit(err => {
+          if (err) return db.rollback(() => { throw err; });
+
+          // Menghapus data bukti transfer berdasarkan id reservasi
+          db.query(`DELETE FROM bukti_transfer WHERE id_reservasi='${idReservasi}'`, err => {
+            if (err) return db.rollback(() => { throw err; });
+  
+            db.commit(err => {
+              if (err) return db.rollback(() => { throw err; });
+              
+              // Mendapatkan id pelanggan dari tabel reservasi berdasarkan id reservasi
+              db.query(`SELECT id_pelanggan FROM reservasi WHERE id='${idReservasi}'`, (err, dataReservasi) => {
+                if (err) return db.rollback(() => { throw err; });
+
+                const idPelanggan = dataReservasi[0].id_pelanggan;
+                
+                // Menghapus data pesanan berdasarkan id pelanggan
+                db.query(`DELETE FROM pesanan WHERE id_pelanggan='${idPelanggan}'`, err => {
+                  if (err) return db.rollback(() => { throw err; });
+    
+                  db.commit(err => {
+                    if (err) return db.rollback(() => { throw err; });
+                    
+                    // Menghapus data reservasi berdasarkan id reservasi
+                    db.query(`DELETE FROM reservasi WHERE id='${idReservasi}'`, err => {
+                      if (err) return db.rollback(() => { throw err; });
+                      
+                      db.commit(err => {
+                        if (err) return db.rollback(() => { throw err; });
+
+                        // Menghapus data pelanggan berdasarkan id pelanggan
+                        db.query(`DELETE FROM pelanggan WHERE id='${idPelanggan}'`, err => {
+                          if (err) return db.rollback(() => { throw err; });
+
+                          next();
+                        });
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
   });
 }
 
@@ -258,4 +313,6 @@ module.exports = {
   checkStatusReservasi,
   updateStatusReservasi,
   updateDateReservasi,
+  validasiUpdateReservasi,
+  deleteReservasi,
 };

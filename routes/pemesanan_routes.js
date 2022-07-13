@@ -23,7 +23,7 @@ router.route('/konfirmasi-transaksi/:id')
   });
 
 router.route('/update-bukti-transaksi/:id')
-  .get(reservasiServices.checkStatusReservasi, transaksiServices.readNotaPembayaran, (req, res) => {
+  .get(reservasiServices.validasiUpdateReservasi, transaksiServices.readNotaPembayaran, (req, res) => {
     if (req.session.messages) {
       res.redirect('/reservasi');
     }
@@ -31,7 +31,7 @@ router.route('/update-bukti-transaksi/:id')
       res.render('viewPelanggan/pages/pageUpdateFormTransaksi', { dataPesanan: res.locals.dataPesanan, dataReservasi: res.locals.dataReservasi, totalBayar: res.locals.total });
     }
   })
-  .put(reservasiServices.checkStatusReservasi, uploads.saveBuktiToStorage, transaksiServices.updateBuktiTransaksi, (req, res) => {
+  .put(uploads.saveBuktiToStorage, transaksiServices.updateBuktiTransaksi, (req, res) => {
     res.redirect('/reservasi');
   });
 

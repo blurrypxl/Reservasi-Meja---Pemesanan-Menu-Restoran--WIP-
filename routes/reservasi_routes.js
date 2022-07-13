@@ -64,4 +64,9 @@ router.route('/admin/reservasi')
     res.render('viewAdmin/pages/pageReservasiAdmin', { user: req.session.user, dataReservasi: res.locals.dataReservasi, dataPesanan: res.locals.dataPesanan });
   });
 
+router.route('/admin/reservasi/:id')
+  .delete(reservasiServices.deleteReservasi, (req, res) => {
+    res.redirect('/admin/reservasi');
+  });
+
 module.exports = router;
