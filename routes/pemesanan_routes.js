@@ -22,10 +22,14 @@ router.route('/konfirmasi-transaksi/:id')
     res.redirect('/reservasi');
   });
 
-// TODO: TESTING VALIDASI halaman form update bukti transfer
 router.route('/update-bukti-transaksi/:id')
   .get(reservasiServices.checkStatusReservasi, transaksiServices.readNotaPembayaran, (req, res) => {
-    res.render('viewPelanggan/pages/pageUpdateFormTransaksi', { dataPesanan: res.locals.dataPesanan, dataReservasi: res.locals.dataReservasi, totalBayar: res.locals.total });
+    if (req.session.messages) {
+      res.redirect('/reservasi');
+    }
+    else if (!req.session.messages) {
+      res.render('viewPelanggan/pages/pageUpdateFormTransaksi', { dataPesanan: res.locals.dataPesanan, dataReservasi: res.locals.dataReservasi, totalBayar: res.locals.total });
+    }
   })
   .put(reservasiServices.checkStatusReservasi, uploads.saveBuktiToStorage, transaksiServices.updateBuktiTransaksi, (req, res) => {
     res.redirect('/reservasi');

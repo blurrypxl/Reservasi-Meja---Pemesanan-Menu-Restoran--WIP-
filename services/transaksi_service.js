@@ -175,8 +175,8 @@ function createTransaksi(req, res, next) {
             total += parseInt(dataPesanan[i].total_harga);
           }
 
-          console.log(dataPesanan);
-          console.log(total);
+          // console.log(dataPesanan);
+          // console.log(total);
 
           // Menyimpan data transaksi kedalam database
           db.query(`INSERT INTO transaksi (id, id_user, id_bukti, metode_pembayaran, total_transaksi, status_transaksi, create_at, update_at) VALUES ('${idTransaksi}', '${idAdmin}', '${idBukti}', 'transfer', '${total}', 'valid', '${timestamp('HH:mm:YYYY-MM-DD')}', '${timestamp('HH:mm:YYYY-MM-DD')}')`, err => {

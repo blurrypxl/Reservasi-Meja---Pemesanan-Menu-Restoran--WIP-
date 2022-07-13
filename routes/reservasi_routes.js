@@ -45,7 +45,8 @@ router.route('/pemesanan')
   .post(reservasiServices.validasiTanggalReservasi, (req, res) => {
     if (res.locals.errMsgValidasi === undefined) {
       res.redirect('/pemesanan');
-    } else if (res.locals.errMsgValidasi !== undefined) {
+    }
+    else if (res.locals.errMsgValidasi !== undefined) {
       // Object untuk Flash Messages
       req.session.messages = {
         type: 'danger',

@@ -103,6 +103,8 @@ function readPesanan(req, res, next) {
 function readPesananById(req, res, next) {
   const idReservasi = req.params.id;
 
+  // console.log(idReservasi);
+
   db.beginTransaction(err => {
     if (err) throw err;
 

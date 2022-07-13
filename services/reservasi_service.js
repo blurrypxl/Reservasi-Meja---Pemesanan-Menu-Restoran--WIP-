@@ -58,13 +58,13 @@ function readTotalReservasi(req, res, next) {
 function readReservasiById(req, res, next) {
   const idReservasi = req.params.id;
 
-  db.query(`SELECT reservasi.id AS id_reservasi, reservasi.id_pelanggan, pelanggan.nama_pelanggan, meja.id AS id_meja, meja.nomor_meja, reservasi.email, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan=pelanggan.id JOIN meja ON pelanggan.id_meja=meja.id WHERE reservasi.id='${idReservasi}' AND (reservasi.status_reservasi='Menunggu Pembayaran' OR reservasi.status_reservasi='Menunggu Kedatangan Tamu' OR reservasi.status_reservasi='Menunggu Validasi Ulang')`, (err, dataReservasi) => {
+  db.query(`SELECT reservasi.id AS id_reservasi, reservasi.id_pelanggan, pelanggan.nama_pelanggan, meja.id AS id_meja, meja.nomor_meja, reservasi.email, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan=pelanggan.id JOIN meja ON pelanggan.id_meja=meja.id WHERE reservasi.id='${idReservasi}' AND (reservasi.status_reservasi='Menunggu Pembayaran' OR reservasi.status_reservasi='Menunggu Kedatangan Tamu' OR reservasi.status_reservasi='Menunggu Validasi' OR reservasi.status_reservasi='Menunggu Validasi Ulang')`, (err, dataReservasi) => {
     if (err) throw err;
 
     res.locals.dataReservasi = dataReservasi;
     res.locals.idPelanggan = dataReservasi.map(idP => idP.id_pelanggan); //get id pelanggan
 
-    console.log(res.locals.dataReservasi);
+    // console.log(res.locals.dataReservasi);
 
     next();
   });
@@ -140,12 +140,14 @@ function updateStatusReservasi(req, res, next) {
 }
 
 function checkStatusReservasi(req, res, next) {
-  const idReservasi = req.body.id_reservasi;
+  const idReservasi = req.body.id_reservasi === '' || req.body.id_reservasi === undefined ? req.params.id : req.body.id_reservasi;
 
-  db.query(`SELECT * FROM reservasi WHERE id='${idReservasi}' AND status_reservasi='Menunggu Pembayaran' OR status_reservasi='Menunggu Kedatangan Tamu' OR status_reservasi='Menunggu Validasi Ulang'`, (err, dataReservasi) => {
+  console.log(idReservasi);
+
+  db.query(`SELECT * FROM reservasi WHERE id='${idReservasi}' AND (status_reservasi='Menunggu Pembayaran' OR status_reservasi='Menunggu Kedatangan Tamu' OR status_reservasi='Menunggu Validasi' OR status_reservasi='Menunggu Validasi Ulang')`, (err, dataReservasi) => {
     if (err) throw err;
 
-    // console.log(dataReservasi);
+    console.log(dataReservasi);
 
     if (dataReservasi.length === 0) {
       req.session.messages = {
