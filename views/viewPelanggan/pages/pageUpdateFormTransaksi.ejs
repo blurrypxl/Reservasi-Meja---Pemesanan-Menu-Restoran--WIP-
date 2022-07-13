@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../partials/headPelanggan"); %>
+</head>
+
+<body>
+  <!-- Flash Messages -->
+  <% if (locals.messages) { %>
+    <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
+      <strong>
+        <%= messages.intro %>
+      </strong>
+
+      <%= messages.message %>
+
+      <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+    </div>
+  <% } %>
+
+  <main>    
+    <form class="form-container" action="/update-bukti-transaksi/<%= dataReservasi[0].id; %>?_method=PUT" method="POST" enctype="multipart/form-data">
+      <div class="card mb-3" style="width: 18rem;">
+        <div class="card-header" style="text-align: center;">
+          Informasi Reservasi
+        </div>
+    
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <p>
+              ID Reservasi:
+            </p>
+  
+            <p>
+              <%= dataReservasi[0].id; %>
+            </p>
+
+            <input type="hidden" name="idReservasi" value="<%= dataReservasi[0].id; %>" required readonly>
+          </li>
+    
+          <li class="list-group-item">
+            <p>
+              Nama Pelanggan:
+            </p>
+  
+            <p>
+              <%= dataReservasi[0].nama_pelanggan; %>
+            </p>
+          </li>
+    
+          <li class="list-group-item">
+            <p>
+              Email:
+            </p>
+  
+            <p>
+              <%= dataReservasi[0].email; %>
+            </p>
+          </li>
+    
+          <li class="list-group-item">
+            <p>
+              Nomor Meja:
+            </p>
+  
+            <p>
+              <%= dataReservasi[0].nomor_meja; %>
+            </p>
+          </li>
+    
+          <li class="list-group-item">
+            <p>
+              Tanggal Reservasi:
+            </p>
+  
+            <p>
+              <%= dataReservasi[0].untuk_tanggal; %>
+            </p>
+          </li>
+        </ul>
+      </div>
+    
+      <div class="card mb-3" style="width: 50%;">
+        <div class="card-header" style="text-align: center;">
+          List Pesanan
+        </div>
+      
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID Pesanan</th>
+              <th scope="col">Nama Menu</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Harga</th>
+            </tr>
+          </thead>
+          
+          <tbody id="view-pesanan">
+            <!-- # List Pesanan Pelanggan -->
+            <% dataPesanan.forEach(dp => { %>
+              <tr>
+                <td>
+                  <%= dp.id %>
+                </td>
+  
+                <td>
+                  <%= dp.nama_menu%>
+                </td>
+  
+                <td>
+                  <%= dp.qty %>
+                </td>
+  
+                <td>
+                  <%= dp.total_harga %>
+                </td>
+              </tr>
+            <% }); %> 
+          </tbody>
+        </table>
+      
+        <div>
+          <p>
+            Total: Rp.<%= totalBayar %>
+          </p>
+        </div>
+      </div>
+
+      <div class="card mb-3" style="width: 50%;">
+        <div class="card-header" style="text-align: center;">
+          Form Update Upload Bukti Transaksi
+        </div>
+
+        <div class="form-group">
+          <label for="bukti_transaksi">Upload Bukti Transaksi:</label>
+
+          <input type="file" name="bukti_transaksi" accept="image/*" class="form-control-file" id="bukti_transaksi" required>
+
+          <button type="submit" class="btn btn-success">KIRIM BUKTI</button>
+        </div>
+      </div>
+    </form>
+  </main>
+</body>
+
+</html>

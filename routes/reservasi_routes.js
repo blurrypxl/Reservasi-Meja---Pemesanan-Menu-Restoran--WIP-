@@ -60,7 +60,7 @@ router.route('/pemesanan')
 // Route ini digunakan untuk keperluan admin & super-admin
 router.route('/admin/reservasi')
   .get(userChecker.checkAuth, reservasiServices.readDetailReservasi, pemesananServices.readPesanan, (req, res) => {
-    res.render('viewAdmin/pages/pageReservasiAdmin', { dataReservasi: res.locals.dataReservasi, dataPesanan: res.locals.dataPesanan });
+    res.render('viewAdmin/pages/pageReservasiAdmin', { user: req.session.user, dataReservasi: res.locals.dataReservasi, dataPesanan: res.locals.dataPesanan });
   });
 
 module.exports = router;

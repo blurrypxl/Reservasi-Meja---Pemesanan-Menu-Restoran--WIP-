@@ -1,7 +1,7 @@
 const db = require('../server');
 const gUniqId = require('generate-unique-id');
 const timestamp = require('time-stamp');
-const path = require('path');
+const uploadsServices = require('../services/uploads_services');
 
 function readNotaPembayaran(req, res, next) {
   const idPelanggan = req.params.id;
@@ -82,7 +82,7 @@ function createBuktiTransaksi(req, res, next) {
 
           console.log('Upload Success!');
   
-          db.query(`UPDATE reservasi SET status_reservasi='Menunggu Validasi' update_at='${timestamp('HH:mm:YYYY-MM-DD')}' WHERE id='${idReservasi}'`, err => {
+          db.query(`UPDATE reservasi SET status_reservasi='Menunggu Validasi', update_at='${timestamp('HH:mm:YYYY-MM-DD')}' WHERE id='${idReservasi}'`, err => {
             if (err) return db.rollback(() => { throw err; });
   
             db.commit(err => {
@@ -116,7 +116,85 @@ function downloadBuktiTransaksi(req, res, next) {
   });
 }
 
-function updateBuktiTransaksi(req, res, next) {}
+function updateBuktiTransaksi(req, res, next) {
+  const idReservasi = req.params.id;
+  
+  db.beginTransaction(err => {
+    if (err) throw err;
+
+    db.query(`SELECT bukti FROM bukti_transfer WHERE id_reservasi='${idReservasi}'`, (err, dataBukti) => {
+      if (err) return db.rollback(() => { throw err; });
+
+      console.log(dataBukti);
+
+      const reqBukti = req.file === undefined ? dataBukti[0].bukti : req.file.filename;
+      
+      if (req.file !== undefined) uploadsServices.removeImageFromDisk(req.file.destination + '/' + dataBukti[0].bukti); // Hapus Gambar dari Folder Images pada disk penyimpanan
+      
+      db.query(`UPDATE bukti_transfer SET bukti='${reqBukti}', update_at='${timestamp('HH:mm:YYYY-MM-DD')}' WHERE id_reservasi='${idReservasi}'`, err => {
+        if (err) return db.rollback(() => { throw err; });
+
+        db.commit(err => {
+          if (err) return db.rollback(() => { throw err; });
+
+          next();
+        });
+      });
+    });
+  });
+}
+
+function createTransaksi(req, res, next) {
+  const idAdmin = req.session.idUsr;
+  const idBukti = req.params.id;
+  const idTransaksi = 'TRS-' + gUniqId({ length: 7 });
+
+  console.log('ID Bukti Transfer: '+idBukti);
+
+  db.beginTransaction(err => {
+    if (err) throw err;
+
+    // Mendapatkan ID Reservasi berdasarkan ID Bukti Transfer
+    db.query(`SELECT id_reservasi FROM bukti_transfer WHERE id='${idBukti}'`, (err, idReservasi) => {
+      if (err) return db.rollback(() => { throw err; });
+
+      console.log('ID Reservasi: '+idReservasi[0].id_reservasi);
+
+      // Mendapatkan ID Pelanggan berdasarkan ID Reservasi
+      db.query(`SELECT id_pelanggan FROM reservasi WHERE id='${idReservasi[0].id_reservasi}'`, (err, idPelanggan) => {
+        if (err) return db.rollback(() => { throw err; });
+
+        console.log('ID Pelanggan: '+idPelanggan[0].id_pelanggan);
+
+        // Mendapatkan Total Pesanan berdasarkan ID Pelanggan
+        db.query(`SELECT total_harga FROM pesanan WHERE id_pelanggan='${idPelanggan[0].id_pelanggan}'`, (err, dataPesanan) => {
+          if (err) return db.rollback(() => { throw err; });
+
+          let total = 0;
+          for (let i = 0; i < dataPesanan.length; i++) {
+            total += parseInt(dataPesanan[i].total_harga);
+          }
+
+          console.log(dataPesanan);
+          console.log(total);
+
+          // Menyimpan data transaksi kedalam database
+          db.query(`INSERT INTO transaksi (id, id_user, id_bukti, metode_pembayaran, total_transaksi, status_transaksi, create_at, update_at) VALUES ('${idTransaksi}', '${idAdmin}', '${idBukti}', 'transfer', '${total}', 'valid', '${timestamp('HH:mm:YYYY-MM-DD')}', '${timestamp('HH:mm:YYYY-MM-DD')}')`, err => {
+            if (err) return db.rollback(() => { throw err; });
+
+            db.commit(err => {
+              if (err) return db.rollback(() => { throw err; });
+
+              console.log('Data Transaksi berhasil dibuat');
+
+              next();
+            });
+          });
+        });
+      });
+    });
+  });
+}
 
 module.exports = {
   readNotaPembayaran,
@@ -124,5 +202,6 @@ module.exports = {
   downloadBuktiTransaksi,
   createBuktiTransaksi,
   readBuktiTransaksi,
-  updateBuktiTransaksi
+  updateBuktiTransaksi,
+  createTransaksi
 };

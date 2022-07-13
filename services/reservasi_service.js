@@ -34,7 +34,7 @@ function readReservasi(req, res, next) {
 }
 
 function readDetailReservasi(req, res, next) {
-  db.query(`SELECT bukti_transfer.id AS id_transfer, bukti_transfer.bukti, pelanggan.id AS id_pelanggan, pelanggan.nama_pelanggan, meja.nomor_meja, reservasi.id AS id_reservasi, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi FROM bukti_transfer JOIN reservasi ON reservasi.id=bukti_transfer.id_reservasi JOIN pelanggan ON pelanggan.id=reservasi.id_pelanggan JOIN meja ON meja.id=pelanggan.id_meja`, (err, dataReservasi) => {
+  db.query(`SELECT bukti_transfer.id AS id_transfer, bukti_transfer.bukti, pelanggan.id AS id_pelanggan, pelanggan.nama_pelanggan, meja.nomor_meja, reservasi.id AS id_reservasi, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi, reservasi.create_at, reservasi.update_at FROM bukti_transfer JOIN reservasi ON reservasi.id=bukti_transfer.id_reservasi JOIN pelanggan ON pelanggan.id=reservasi.id_pelanggan JOIN meja ON meja.id=pelanggan.id_meja`, (err, dataReservasi) => {
     if (err) throw err;
 
     // console.log(dataReservasi);
@@ -121,7 +121,7 @@ function updateStatusReservasi(req, res, next) {
 
       // console.log(dataReservasi);
 
-      db.query(`UPDATE reservasi SET status_reservasi='${reqStatus}' update_at='${timestamp('HH:mm:YYYY-MM-DD')}' WHERE id='${dataReservasi[0].id_reservasi}'`, err => {
+      db.query(`UPDATE reservasi SET status_reservasi='${reqStatus}', update_at='${timestamp('HH:mm:YYYY-MM-DD')}' WHERE id='${dataReservasi[0].id_reservasi}'`, err => {
         if (err) return db.rollback(() => { throw err; });
 
         db.commit(err => {
@@ -215,6 +215,35 @@ function updateDateReservasi(req, res, next) {
         }
       }
     });
+  });
+}
+
+// function validasiStatusReservasi(req, res, next) {
+//   const idReservasi = req.params.id;
+
+//   db.query(`SELECT status_reservasi FROM reservasi WHERE id='${idReservasi}'`, (err, dataStatus) => {
+//     if (err) throw err;
+
+//     if (dataStatus[0].status_reservasi === 'Menunggu Kedatangan Tamu' || dataStatus[0].status_reservasi === 'Selesai') {
+//       req.session.messages = {
+//         type: 'danger',
+//         intro: 'Reservasi Sudah Selesai!',
+//         message: 'Pastikan data reservasi yang anda masukan belum di validasi kasir.'
+//       }
+
+//       return next();
+//     }
+
+//     return next();
+//   });
+// }
+
+function deleteReservasi(req, res, next) {
+  const idReservasi = req.params.id;
+
+  db.beginTransaction(err => {
+    if (err) throw err;
+    // TODO: Buat query untuk menghapus data reservasi dan kawan-kawannya.
   });
 }
 
