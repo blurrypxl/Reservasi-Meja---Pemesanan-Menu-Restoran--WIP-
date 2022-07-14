@@ -1,61 +1,52 @@
 // const pdfkit = require('pdfkit');
 const pdf = require('html-pdf');
-const fs = require('fs');
 const ejs = require('ejs');
-const timestamp = require('time-stamp');
-const path = require('path');
-
-const doc = new pdfkit();
-
-// Konfigurasi Dokumen
-const filePath = 'docs/Testing.pdf';
-doc.fontSize(12);
-doc.addPage({ size: 'A4' });
 
 function createPdfTransaksi(req, res, next) {
-  const dataTransaksi = res.locals.dataTransaksi;
-  const dataPesanan = res.locals.dataPesanan;
-  let data = { user: req.session.user, dataPesanan: dataPesanan, dataTransaksi: dataTransaksi };
+  const data = {
+    user: req.session.user,
+    dataPesanan: res.locals.dataPesanan,
+    dataTransaksi: res.locals.dataTransaksi
+  };
 
-  ejs.renderFile(path.join(__dirname, '../views/viewAdmin/pages/pageTransaksi.ejs'), data, (err, dataRender) => {
+  ejs.renderFile('views/templatePdf/pagePdfTransaksi.ejs', data, (err, str) => {
     if (err) throw err;
 
-    // doc.pipe(fs.createWriteStream(path.join(__dirname, '../docs/' + dataRender)));
+    pdf.create(str, { format: 'A4' }).toStream((err, pdfStream) => {
+      if (err) throw err;
 
-    doc.file(Buffer.from(dataRender), { name: 'TransaksiDocs.pdf'});
+      pdfStream.on('end', () => {
+        return res.end();
+      });
 
-    doc.end();
-
-    // res.locals.downloadPDF = filePath;
-
-    console.log('SUKSES');
-
-    next();
+      pdfStream.pipe(res);
+    });
   });
 }
 
-// function createPdfTransaksi(req, res, next) {
-//   const data = {
-//     user: req.session.user,
-//     dataPesanan: res.locals.dataPesanan,
-//     dataTransaksi: res.locals.dataTransaksi
-//   };
+function createPdfReservasi(req, res, next) {
+  const data = {
+    user: req.session.user,
+    dataReservasi: res.locals.dataReservasi,
+    dataPesanan: res.locals.dataPesanan
+  }
 
-//   ejs.renderFile('views/viewAdmin/pages/pageTransaksi.ejs', data, (err, str) => {
-//     if (err) throw err;
+  ejs.renderFile('views/templatePdf/pagePdfReservasi.ejs', data, (err, str) => {
+    if (err) throw err;
 
-//     pdf.create(str).toFile('transaksiPDF', (err, data) => {
-//       if (err) throw err;
+    pdf.create(str, { format: 'A4' }).toStream((err, pdfStream) => {
+      if (err) throw err;
 
-//       console.log('success!');
+      pdfStream.on('end', () => {
+        return res.end();
+      })
 
-//       next();
-//     });
-//   });
-// }
-
-function createPdfReservasi(req, res, next) { }
+      pdfStream.pipe(res);
+    });
+  });
+}
 
 module.exports = {
   createPdfTransaksi,
+  createPdfReservasi
 };

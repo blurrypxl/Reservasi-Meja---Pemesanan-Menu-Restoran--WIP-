@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<%- include("../viewAdmin/partials/head.ejs"); %>
+  </head>
+
+  <body>
+    <main class="main-content">
+      <div class="content-box">  
+        <div class="container-header mt-3">
+          <h1>DATA RESERVASI /</h1>
+
+          <p>
+            <%= typeof user != "undefined" ? user : "" %>
+          </p>
+        </div>
+
+        <% dataReservasi.forEach(reservasi => { %> 
+          <div class="card mb-4">
+            <div class="card-header start-flex-row"> 
+              <div>
+                <h4 class="mb-3">
+                  <%= reservasi.id_reservasi; %>
+                </h4>
+  
+                <p>
+                  Nama Pelanggan:
+                  <span><%= reservasi.nama_pelanggan; %></span>
+                </p>
+  
+                <p>
+                  Tanggal Reservasi:
+                  <span><%= reservasi.untuk_tanggal; %></span>
+                </p>
+  
+                <p>
+                  Status:
+                  <span><%= reservasi.status_reservasi; %></span>
+                </p>
+              </div>
+            </div>
+  
+            <div class="card-body">
+              <div class="card">
+                <div class="card-header">
+                  <h5>
+                    Detail Reservasi
+                  </h5>
+                </div>
+  
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    <label>Email Pengguna:</label>
+                    <%= reservasi.email; %>
+                  </li>
+    
+                  <li class="list-group-item">
+                    <label>Create At:</label>
+                    <%= reservasi.create_at; %>
+                  </li>
+                  
+                  <li class="list-group-item">
+                    <label for="updateAt">Update At:</label>
+                    <%= reservasi.update_at; %>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </main>
+  </body>
+</html>

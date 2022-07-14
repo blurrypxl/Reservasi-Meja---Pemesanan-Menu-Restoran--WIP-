@@ -6,6 +6,8 @@ const menuServices = require('../services/menu_service');
 const mejaServices = require('../services/meja_service');
 const userChecker = require('../services/auth_service');
 
+// TODO: BUAT STYLE CSS UNTUK HALAMAN PELANGGAN!
+
 // Route ini digunakan untuk keperluan pelanggan
 router.route('/reservasi')
   .get(reservasiServices.readReservasi, mejaServices.readMeja, (req, res) => {

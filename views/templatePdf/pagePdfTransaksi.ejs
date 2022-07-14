@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <%- include("../viewAdmin/partials/head.ejs"); %>
+  </head>
+
+  <body>
+    <main class="main-content">
+      <div class="content-box">  
+        <div class="container-header mt-3">
+          <h1>DATA TRANSAKSI /</h1>
+
+          <p>
+            <%= typeof user !="undefined" ? user : "" %>
+          </p>
+        </div>
+
+        <% dataTransaksi.forEach(reservasi => { %> 
+          <div class="card mb-4">
+            <div class="card-header start-flex-row">  
+              <div>
+                <h4 class="mb-3">
+                  <%= reservasi.id_transaksi; %>
+                </h4>
+  
+                <p>
+                  Total Transaksi:
+                  <span>Rp.<%= reservasi.total_transaksi; %></span>
+                </p>
+  
+                <p>
+                  Metode Pembayaran:
+                  <span><%= reservasi.metode_pembayaran; %></span>
+                </p>
+  
+                <p>
+                  Status:
+                  <span><%= reservasi.status_transaksi; %></span>
+                </p>
+              </div>
+            </div>
+  
+            <div class="card-body">
+              <div class="card">
+                <div class="card-header">
+                  <h5>
+                    Detail Transaksi
+                  </h5>
+                </div>
+  
+                <ul class="list-group list-group-flush">
+                  <li id="role" class="list-group-item">
+                    <label for="role">Validated By:</label>
+                    <%= reservasi.nama_user; %> <b>(<%= reservasi.role; %>)</b>
+                  </li>
+
+                  <li id="idReservasi" class="list-group-item">
+                    <label for="idReservasi">ID Reservasi:</label>
+                    <%= reservasi.id_reservasi; %>
+                  </li>
+
+                  <li id="idPelanggan" class="list-group-item">
+                    <label for="idPelanggan">ID Pelanggan:</label>
+                    <%= reservasi.id_pelanggan; %>
+                  </li>
+
+                  <li id="namaPelanggan" class="list-group-item">
+                    <label for="namaPelanggan">Nama Pelanggan:</label>
+                    <%= reservasi.nama_pelanggan; %>
+                  </li>
+
+                  <li id="emailPelanggan" class="list-group-item">
+                    <label for="emailPelanggan">Email Pelanggan:</label>
+                    <%= reservasi.email; %>
+                  </li>
+
+                  <li id="tglReservasi" class="list-group-item">
+                    <label for="tglReservasi">Tanggal Reservasi:</label>
+                    <%= reservasi.untuk_tanggal; %>
+                  </li>
+
+                  <li id="statusReservasi" class="list-group-item">
+                    <label for="statusReservasi">Status Reservasi:</label>
+                    <%= reservasi.status_reservasi; %>
+                  </li>
+    
+                  <li id="createAt" class="list-group-item">
+                    <label for="createAt">Create At:</label>
+                    <%= reservasi.create_at; %>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="card">
+                <div class="card-header">
+                  <h5>
+                    Pesanan Pelanggan
+                  </h5>
+                </div>
+  
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID Menu</th>
+                      <th scope="col">Nama Menu</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Harga</th>
+                    </tr>
+                  </thead>
+          
+                  <tbody id="view-pesanan">
+                    <!-- # List Pesanan Pelanggan --> 
+                    <% dataPesanan.forEach(dp => { %>
+                      <% if (dp.id_pelanggan === reservasi.id_pelanggan) { %>
+                        <tr>
+                          <td>
+                            <%= dp.id_pesanan; %> 
+                          </td>
+                          <td>
+                            <%= dp.nama_menu; %> 
+                          </td>
+                          <td>
+                            <%= dp.qty; %> 
+                          </td>
+                          <td>
+                            Rp.<%= dp.total_harga; %> 
+                          </td>
+                        </tr>
+                      <% } %> 
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </main>
+  </body>
+</html>

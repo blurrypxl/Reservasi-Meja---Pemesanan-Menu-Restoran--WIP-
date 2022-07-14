@@ -39,6 +39,15 @@
           </div>
         <% } %>
 
+        <div class="card mb-4">
+          <div class="card-body between-center-flex-row">
+            Cetak Data Reservasi
+            <form action="/admin/docs/pdf-reservasi" method="POST">
+              <button class="btn btn-primary" type="submit">CETAK</button>
+            </form>
+          </div>
+        </div>
+
         <% dataReservasi.forEach(reservasi => { %> 
           <details class="card mb-4">
             <summary class="card-header start-flex-row"> 
