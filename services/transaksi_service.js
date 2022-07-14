@@ -144,6 +144,16 @@ function updateBuktiTransaksi(req, res, next) {
   });
 }
 
+function readTransaksi(req, res, next) {
+  db.query(`SELECT transaksi.id AS id_transaksi, users.id AS id_user, users.nama AS nama_user, users.role, transaksi.id_bukti, bukti_transfer.bukti, transaksi.metode_pembayaran, transaksi.total_transaksi, transaksi.status_transaksi, transaksi.create_at, reservasi.id AS id_reservasi, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi, pelanggan.id AS id_pelanggan, pelanggan.nama_pelanggan FROM transaksi JOIN users ON users.id=transaksi.id_user JOIN bukti_transfer ON bukti_transfer.id=transaksi.id_bukti JOIN reservasi ON reservasi.id=bukti_transfer.id_reservasi JOIN pelanggan ON pelanggan.id=reservasi.id_pelanggan`, (err, dataTransaksi) => {
+    if (err) throw err;
+
+    res.locals.dataTransaksi = dataTransaksi;
+
+    next();
+  });
+}
+
 function createTransaksi(req, res, next) {
   const idAdmin = req.session.idUsr;
   const idBukti = req.params.id;
@@ -203,5 +213,6 @@ module.exports = {
   createBuktiTransaksi,
   readBuktiTransaksi,
   updateBuktiTransaksi,
+  readTransaksi,
   createTransaksi
 };

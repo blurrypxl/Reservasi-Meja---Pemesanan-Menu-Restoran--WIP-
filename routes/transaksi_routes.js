@@ -1,12 +1,14 @@
 const router = require('express').Router();
 const reservasiServices = require('../services/reservasi_service');
 const transaksiServices = require('../services/transaksi_service');
+const pemesananServices = require('../services/pemesanan_service');
 const emailServices = require('../services/email_service');
 const userChecker = require('../services/auth_service');
 
+// TODO: Buat Fungsi Cetak ke dalam PDF
 router.route('/admin/transaksi')
-  .get(userChecker.checkAuth, (req, res) => {
-    res.render('viewAdmin/pages/pageTransaksi');
+  .get(userChecker.checkAuth, transaksiServices.readTransaksi, pemesananServices.readPesanan, (req, res) => {
+    res.render('viewAdmin/pages/pageTransaksi', { user: req.session.user, dataTransaksi: res.locals.dataTransaksi, dataPesanan: res.locals.dataPesanan });
   });
 
 router.route('/admin/validasi-transaksi')

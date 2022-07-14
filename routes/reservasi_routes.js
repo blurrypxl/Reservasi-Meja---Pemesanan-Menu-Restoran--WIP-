@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const reservasiServices = require('../services/reservasi_service');
+const transaksiServices = require('../services/transaksi_service');
 const pemesananServices = require('../services/pemesanan_service');
 const menuServices = require('../services/menu_service');
 const mejaServices = require('../services/meja_service');
@@ -67,6 +68,16 @@ router.route('/admin/reservasi')
 router.route('/admin/reservasi/:id')
   .delete(reservasiServices.deleteReservasi, (req, res) => {
     res.redirect('/admin/reservasi');
+  });
+
+router.route('/admin/konfirmasi-reservasi')
+  .get(userChecker.checkAuth, reservasiServices.readValidReservasi, (req, res) => {
+    res.render('viewAdmin/pages/pageKonfirmasiReservasi', { user: req.session.user, dataValidReservasi: res.locals.validReservasi });
+  });
+
+router.route('/admin/konfirmasi-reservasi/:id')
+  .put(userChecker.checkAuth, reservasiServices.updateStatusReservasi, (req, res) => {
+    res.redirect('/admin/konfirmasi-reservasi');
   });
 
 module.exports = router;

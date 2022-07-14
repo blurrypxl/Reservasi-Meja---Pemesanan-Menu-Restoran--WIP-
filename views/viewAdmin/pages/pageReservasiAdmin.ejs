@@ -88,9 +88,11 @@
                     <%= reservasi.update_at; %>
                   </li>
                   
-                  <li class="list-group-item">   
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteReservasi<%= reservasi.id; %>">DELETE?</button>
-                  </li>
+                  <% if (user === 'super-admin') { %> 
+                    <li class="list-group-item">   
+                      <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteReservasi<%= reservasi.id; %>">DELETE?</button>
+                    </li>
+                  <% } %> 
                 </ul>
   
                 <!-- Delete modal -->

@@ -45,6 +45,16 @@ function readDetailReservasi(req, res, next) {
   });
 }
 
+function readValidReservasi(req, res, next) {
+  db.query(`SELECT bukti_transfer.id AS id_transfer, reservasi.id AS id_reservasi, pelanggan.nama_pelanggan, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi, bukti_transfer.bukti, reservasi.update_at FROM bukti_transfer JOIN reservasi ON reservasi.id = bukti_transfer.id_reservasi JOIN pelanggan ON pelanggan.id = reservasi.id_pelanggan WHERE reservasi.status_reservasi = 'Menunggu Kedatangan Tamu' ORDER BY reservasi.update_at ASC`, (err, validReservasi) => {
+    if (err) throw err;
+
+    res.locals.validReservasi = validReservasi;
+
+    next();
+  });
+}
+
 function readTotalReservasi(req, res, next) {
   db.query(`SELECT COUNT(id) AS total FROM reservasi`, (err, results) => {
     if (err) throw err;
@@ -112,7 +122,17 @@ function validasiTanggalReservasi(req, res, next) {
 function updateStatusReservasi(req, res, next) {
   const idTransfer = req.params.id;
   const statusReservasi = req.body.status;
-  const reqStatus = statusReservasi === 'valid' ? 'Menunggu Kedatangan Tamu' : 'Menunggu Validasi Ulang';
+  const reqStatus = (statusReservasi) => {
+    if (statusReservasi === 'valid') {
+      return statusReservasi = 'Menunggu Kedatangan Tamu';
+    }
+    else if (statusReservasi === 'tidak-valid') {
+      return statusReservasi = 'Menunggu Validasi Ulang';
+    }
+    else if (statusReservasi === 'selesai') {
+      return statusReservasi = 'Selesai';
+    }
+  };
 
   db.beginTransaction(err => {
     if (err) throw err;
@@ -122,7 +142,7 @@ function updateStatusReservasi(req, res, next) {
 
       // console.log(dataReservasi);
 
-      db.query(`UPDATE reservasi SET status_reservasi='${reqStatus}', update_at='${timestamp('HH:mm:YYYY-MM-DD')}' WHERE id='${dataReservasi[0].id_reservasi}'`, err => {
+      db.query(`UPDATE reservasi SET status_reservasi='${reqStatus(statusReservasi)}', update_at='${timestamp('HH:mm:YYYY-MM-DD')}' WHERE id='${dataReservasi[0].id_reservasi}'`, err => {
         if (err) return db.rollback(() => { throw err; });
 
         db.commit(err => {
@@ -308,6 +328,7 @@ module.exports = {
   readReservasi,
   readDetailReservasi,
   readReservasiById,
+  readValidReservasi,
   readTotalReservasi,
   validasiTanggalReservasi,
   checkStatusReservasi,

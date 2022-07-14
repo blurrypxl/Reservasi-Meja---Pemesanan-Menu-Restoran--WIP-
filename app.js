@@ -12,6 +12,7 @@ const authService = require("./services/auth_service");
 const dashboardRouter = require("./routes/dashboard_routes");
 const usersRouter = require("./routes/admin_routes");
 const transaksiRouter = require('./routes/transaksi_routes');
+const pdfRouter = require('./routes/pdf_routes');
 
 const app = express();
 
@@ -68,6 +69,9 @@ app.use(pemesananRouter);
 
 // # Transaksi
 app.use(transaksiRouter);
+
+// # PDF
+app.use(pdfRouter);
 
 // # 404 Not Found Handler
 app.use((req, res, next) => {
