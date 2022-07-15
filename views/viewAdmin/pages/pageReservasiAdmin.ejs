@@ -99,17 +99,17 @@
                   
                   <% if (user === 'super-admin') { %> 
                     <li class="list-group-item">   
-                      <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteReservasi<%= reservasi.id; %>">DELETE?</button>
+                      <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteReservasi<%= reservasi.id_reservasi; %>">DELETE?</button>
                     </li>
                   <% } %> 
                 </ul>
   
                 <!-- Delete modal -->
-                <div class="modal fade" id="deleteReservasi<%= reservasi.id; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteReservasi<%= reservasi.id; %>" aria-hidden="true">
+                <div class="modal fade" id="deleteReservasi<%= reservasi.id_reservasi; %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteReservasi<%= reservasi.id_reservasi; %>" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="staticDeleteReservasi<%= reservasi.id; %>">Hapus Data Reservasi</h5>
+                        <h5 class="modal-title" id="staticDeleteReservasi<%= reservasi.id_reservasi; %>">Hapus Data Reservasi</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       
@@ -124,7 +124,6 @@
         
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            
                             <button type="submit" class="btn btn-danger">DELETE</button>
                           </div>
                         </form>

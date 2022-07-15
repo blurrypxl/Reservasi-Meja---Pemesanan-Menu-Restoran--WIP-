@@ -3,7 +3,7 @@ const gUniqId = require('generate-unique-id');
 const timestamp = require("time-stamp");
 
 function readReservasi(req, res, next) {
-  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}' OR reservasi.status_reservasi = '${"Menunggu Validasi"}' OR reservasi.status_reservasi = '${"Menunggu Validasi Ulang"}'`, (err, results) => {
+  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE (reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}' OR reservasi.status_reservasi = '${"Menunggu Validasi"}' OR reservasi.status_reservasi = '${"Menunggu Validasi Ulang"}' OR reservasi.status_reservasi = 'Menunggu Kedatangan Tamu')`, (err, results) => {
     if (err) res.json({ msg: err });
 
     const tglHariIni = new Date(timestamp("YYYY-MM-DD")).setHours(0, 0, 0, 0);

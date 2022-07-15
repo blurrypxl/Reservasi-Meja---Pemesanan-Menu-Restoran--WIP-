@@ -2,10 +2,14 @@
 <html lang="en">
 
 <head>
-  <%- include("../partials/headPelanggan"); %>
+  <%- include("../partials/headPelanggan.ejs"); %>
 </head>
 
 <body>
+  <nav class="navbar navbar-dark bg-dark pe-4">
+    <%- include("../partials/navbarPelanggan.ejs"); %> 
+  </nav>
+
   <!-- Flash Messages -->
   <% if (locals.messages) { %>
     <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
@@ -21,123 +25,130 @@
 
   <main>    
     <form class="form-container" action="/konfirmasi-transaksi/<%= dataReservasi[0].id_pelanggan; %>" method="POST" enctype="multipart/form-data">
-      <div class="card mb-3" style="width: 18rem;">
-        <div class="card-header" style="text-align: center;">
-          Informasi Reservasi
-        </div>
-    
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <p>
-              ID Reservasi:
-            </p>
-  
-            <p>
-              <%= dataReservasi[0].id; %>
-            </p>
-
-            <input type="hidden" name="idReservasi" value="<%= dataReservasi[0].id; %>" required readonly>
-          </li>
-    
-          <li class="list-group-item">
-            <p>
-              Nama Pelanggan:
-            </p>
-  
-            <p>
-              <%= dataReservasi[0].nama_pelanggan; %>
-            </p>
-          </li>
-    
-          <li class="list-group-item">
-            <p>
-              Email:
-            </p>
-  
-            <p>
-              <%= dataReservasi[0].email; %>
-            </p>
-          </li>
-    
-          <li class="list-group-item">
-            <p>
-              Nomor Meja:
-            </p>
-  
-            <p>
-              <%= dataReservasi[0].nomor_meja; %>
-            </p>
-          </li>
-    
-          <li class="list-group-item">
-            <p>
-              Tanggal Reservasi:
-            </p>
-  
-            <p>
-              <%= dataReservasi[0].untuk_tanggal; %>
-            </p>
-          </li>
-        </ul>
-      </div>
-    
-      <div class="card mb-3" style="width: 50%;">
-        <div class="card-header" style="text-align: center;">
-          List Pesanan
-        </div>
+      <div class="container" style="display: flex;">
+        <div class="card me-3" style="width: 25em;">
+          <div class="card-header" style="text-align: center;">
+            Informasi Reservasi
+          </div>
       
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">ID Pesanan</th>
-              <th scope="col">Nama Menu</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Harga</th>
-            </tr>
-          </thead>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <p>
+                ID Reservasi:
+              </p>
+    
+              <p>
+                <%= dataReservasi[0].id; %>
+              </p>
+  
+              <input type="hidden" name="idReservasi" value="<%= dataReservasi[0].id; %>" required readonly>
+            </li>
+      
+            <li class="list-group-item">
+              <p>
+                Nama Pelanggan:
+              </p>
+    
+              <p>
+                <%= dataReservasi[0].nama_pelanggan; %>
+              </p>
+            </li>
+      
+            <li class="list-group-item">
+              <p>
+                Email:
+              </p>
+    
+              <p>
+                <%= dataReservasi[0].email; %>
+              </p>
+            </li>
+      
+            <li class="list-group-item">
+              <p>
+                Nomor Meja:
+              </p>
+    
+              <p>
+                <%= dataReservasi[0].nomor_meja; %>
+              </p>
+            </li>
+      
+            <li class="list-group-item">
+              <p>
+                Tanggal Reservasi:
+              </p>
+    
+              <p>
+                <%= dataReservasi[0].untuk_tanggal; %>
+              </p>
+            </li>
+          </ul>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; width: 100%;">
+          <div class="card mb-3 w-100">
+            <div class="card-header" style="text-align: center;">
+              List Pesanan
+            </div>
           
-          <tbody id="view-pesanan">
-            <!-- # List Pesanan Pelanggan -->
-            <% dataPesanan.forEach(dp => { %>
-              <tr>
-                <td>
-                  <%= dp.id %>
-                </td>
-  
-                <td>
-                  <%= dp.nama_menu%>
-                </td>
-  
-                <td>
-                  <%= dp.qty %>
-                </td>
-  
-                <td>
-                  <%= dp.total_harga %>
-                </td>
-              </tr>
-            <% }); %> 
-          </tbody>
-        </table>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">ID Pesanan</th>
+                  <th scope="col">Nama Menu</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Harga</th>
+                </tr>
+              </thead>
+              
+              <tbody id="view-pesanan">
+                <!-- # List Pesanan Pelanggan -->
+                <% dataPesanan.forEach(dp => { %>
+                  <tr>
+                    <td>
+                      <%= dp.id %>
+                    </td>
       
-        <div>
-          <p>
-            Total: Rp.<%= totalBayar %>
-          </p>
-        </div>
-      </div>
+                    <td>
+                      <%= dp.nama_menu%>
+                    </td>
+      
+                    <td>
+                      <%= dp.qty %>
+                    </td>
+      
+                    <td>
+                      <%= dp.total_harga %>
+                    </td>
+                  </tr>
+                <% }); %> 
+              </tbody>
+            </table>
+          
+            <div>
+              <p>
+                Total: Rp.<%= totalBayar %>
+              </p>
+            </div>
+          </div>
 
-      <div class="card mb-3" style="width: 50%;">
-        <div class="card-header" style="text-align: center;">
-          Form Upload Bukti Transaksi
-        </div>
+          <div class="card mb-3 w-100">
+            <div class="card-header" style="text-align: center;">
+              Form Upload Bukti Transaksi
+            </div>
+    
+            <div class="card-body">
+              <div class="form-group">
+                <label for="bukti_transaksi">Upload Bukti Transaksi:</label>
+                <input type="file" name="bukti_transaksi" accept="image/*" class="form-control-file" id="bukti_transaksi" required>
+              </div>
+            </div>
 
-        <div class="form-group">
-          <label for="bukti_transaksi">Upload Bukti Transaksi:</label>
-
-          <input type="file" name="bukti_transaksi" accept="image/*" class="form-control-file" id="bukti_transaksi">
-
-          <button type="submit" class="btn btn-success">KIRIM BUKTI</button>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-success">KIRIM BUKTI</button>
+            </div>
+          </div>
         </div>
       </div>
     </form>

@@ -7,7 +7,9 @@
 
 <body>
   <main>
-    <!-- <header></header> -->
+    <nav class="navbar navbar-dark bg-dark pe-4">
+      <%- include("../partials/navbarPelanggan.ejs"); %> 
+    </nav>
 
     <!-- Flash Messages -->
     <% if (locals.messages) { %>
@@ -22,99 +24,101 @@
       </div>
     <% } %>
 
-    <div class="card mb-3" style="width: 18rem;">
-      <div class="card-header" style="text-align: center;">
-        Informasi Reservasi
-      </div>
-
-      <form class="form-container" action="/reservasi/<%= dataReservasi[0].id_reservasi; %>?_method=PUT" method="POST">
-        <input type="hidden" name="id_meja" value="<%= dataReservasi[0].id_meja; %>" readonly required>
-
-        <input type="hidden" name="id_reservasi" value="<%= dataReservasi[0].id_reservasi; %>" readonly required>
-
-        <input type="hidden" name="id_pelanggan" value="<%= dataReservasi[0].id_pelanggan; %>" readonly required>
-
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <p>
-              Nama Pelanggan:
-            </p>
-            
-            <input class="w-100" type="text" name="nama" value="<%= dataReservasi[0].nama_pelanggan; %>" readonly required>
-          </li>
-  
-          <li class="list-group-item">
-            <p>
-              Email:
-            </p>
-            <input class="w-100" type="text" name="email" value="<%= dataReservasi[0].email; %>" readonly required>
-          </li>
-  
-          <li class="list-group-item">
-            <p>
-              Nomor Meja:
-            </p>
-            <input class="w-100" type="text" name="nomor_meja" value="<%= dataReservasi[0].nomor_meja; %>" readonly>
-          </li>
-  
-          <li class="list-group-item">
-            <p>
-              Tanggal Reservasi:
-            </p>
-            <input class="w-100" type="text" value="<%= dataReservasi[0].untuk_tanggal %>" readonly required>
-          </li>
-        </ul>
-
-        <div class="datepicker"></div>
-        <input type="hidden" name="untuk_tgl" class="inputdate" required readonly>
-
-        <div class="mt-3">
-          <button type="submit" class="btn btn-warning">Update</button>
+    <div class="container mt-4" style="display: flex;">
+      <div class="card me-3" style="width: 25em;">
+        <div class="card-header" style="text-align: center;">
+          Informasi Reservasi
         </div>
-      </form>
-    </div>
-
-    <div class="card mb-3" style="width: 50%;">
-      <div class="card-header" style="text-align: center;">
-        Data Pesanan
+  
+        <form class="form-container" action="/reservasi/<%= dataReservasi[0].id_reservasi; %>?_method=PUT" method="POST">
+          <input type="hidden" name="id_meja" value="<%= dataReservasi[0].id_meja; %>" readonly required>
+  
+          <input type="hidden" name="id_reservasi" value="<%= dataReservasi[0].id_reservasi; %>" readonly required>
+  
+          <input type="hidden" name="id_pelanggan" value="<%= dataReservasi[0].id_pelanggan; %>" readonly required>
+  
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <p>
+                Nama Pelanggan:
+              </p>
+              
+              <input class="w-100" type="text" name="nama" value="<%= dataReservasi[0].nama_pelanggan; %>" readonly required>
+            </li>
+    
+            <li class="list-group-item">
+              <p>
+                Email:
+              </p>
+              <input class="w-100" type="text" name="email" value="<%= dataReservasi[0].email; %>" readonly required>
+            </li>
+    
+            <li class="list-group-item">
+              <p>
+                Nomor Meja:
+              </p>
+              <input class="w-100" type="text" name="nomor_meja" value="<%= dataReservasi[0].nomor_meja; %>" readonly>
+            </li>
+    
+            <li class="list-group-item">
+              <p>
+                Tanggal Reservasi:
+              </p>
+              <input class="w-100" type="text" value="<%= dataReservasi[0].untuk_tanggal %>" readonly required>
+            </li>
+          </ul>
+  
+          <div class="datepicker"></div>
+          <input type="hidden" name="untuk_tgl" class="inputdate" required readonly>
+  
+          <div class="mt-3">
+            <button type="submit" class="btn btn-warning">Update</button>
+          </div>
+        </form>
       </div>
-
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">ID Menu</th>
-            <th scope="col">Nama Menu</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Harga</th>
-            <!-- <th scope="col">Action</th> -->
-          </tr>
-        </thead>
-
-        <tbody id="view-pesanan">
-          <!-- # List Pesanan Pelanggan -->
-          <% dataPesanan.forEach(dp => { %>
+  
+      <div class="card mb-3 w-100">
+        <div class="card-header" style="text-align: center;">
+          Data Pesanan
+        </div>
+  
+        <table class="table">
+          <thead>
             <tr>
-              <td>
-                <%= dp.id_pesanan; %> 
-              </td>
-              <td>
-                <%= dp.nama_menu; %> 
-              </td>
-              <td>
-                <%= dp.qty; %> 
-              </td>
-              <td>
-                Rp.<%= dp.total_harga; %> 
-              </td>
+              <th scope="col">ID Menu</th>
+              <th scope="col">Nama Menu</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Harga</th>
+              <!-- <th scope="col">Action</th> -->
             </tr>
-          <% }); %> 
-        </tbody>
-      </table>
-
-      <div>
-        <p>
-          Total: Rp.<span id="total-harga-pesanan"><%= ttlHargaPesanan %> </span>
-        </p>
+          </thead>
+  
+          <tbody id="view-pesanan">
+            <!-- # List Pesanan Pelanggan -->
+            <% dataPesanan.forEach(dp => { %>
+              <tr>
+                <td>
+                  <%= dp.id_pesanan; %> 
+                </td>
+                <td>
+                  <%= dp.nama_menu; %> 
+                </td>
+                <td>
+                  <%= dp.qty; %> 
+                </td>
+                <td>
+                  Rp.<%= dp.total_harga; %> 
+                </td>
+              </tr>
+            <% }); %> 
+          </tbody>
+        </table>
+  
+        <div>
+          <p>
+            Total: Rp.<span id="total-harga-pesanan"><%= ttlHargaPesanan %> </span>
+          </p>
+        </div>
       </div>
     </div>
   </main>
