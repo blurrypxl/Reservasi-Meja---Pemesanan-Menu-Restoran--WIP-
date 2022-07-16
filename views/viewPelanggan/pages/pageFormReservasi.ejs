@@ -71,7 +71,7 @@
           </div>
           
           <div style="display: flex; flex-wrap: wrap;">
-            <% dataMenu.forEach(menu=> { %>
+            <% dataMenu.filter(menu => menu.status === 'aktif').forEach(menu=> { %>
               <div class="card mb-4 me-4" style="width: 18em;">
                 <input type="hidden" class="data-menu" value="<%= [menu.id, menu.nama_menu, menu.harga] %>" readonly
                   required>
