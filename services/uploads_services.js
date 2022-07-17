@@ -11,6 +11,15 @@ function removeImageFromDisk(path) {
   });
 }
 
+function filterToImg(req, file, cb) {
+  if (file.mimetype === 'image/jpg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
+    return cb(null, true);
+  }
+  else if (file.mimetype !== 'image/jpg' || file.mimetype !== 'image/png' || file.mimetype !== 'image/jpeg') {
+    return cb(null, false);
+  }
+}
+
 // Uploads Bukti Transaksi - START
 const buktiTransaksiConf = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -23,7 +32,7 @@ const buktiTransaksiConf = multer.diskStorage({
   }
 });
 
-const saveBuktiToStorage = multer({ storage: buktiTransaksiConf }).single('bukti_transaksi');
+const saveBuktiToStorage = multer({ storage: buktiTransaksiConf, filterFile: filterToImg }).single('bukti_transaksi');
 // Uploads Bukti Transaksi - END
 
 // Uploads Gambar Menu - START
@@ -38,7 +47,7 @@ const gambarMenuConf = multer.diskStorage({
   }
 });
 
-const SaveGambarMenuToStorage = multer({ storage: gambarMenuConf }).single('gambar_menu');
+const SaveGambarMenuToStorage = multer({ storage: gambarMenuConf, fileFilter: filterToImg }).single('gambar_menu');
 // Uploads Gambar Menu - END
 
 module.exports = {

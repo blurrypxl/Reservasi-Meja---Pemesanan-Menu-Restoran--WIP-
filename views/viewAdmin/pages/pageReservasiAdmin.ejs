@@ -114,7 +114,7 @@
                       </div>
                       
                       <div class="modal-body">
-                        <form action="/admin/reservasi/<%= reservasi.id_reservasi; %>?_method=DELETE" method="POST">
+                        <form action="/admin/reservasi/<%= reservasi.id_pelanggan; %>?_method=DELETE" method="POST">
                           <div class="card text-dark w-100">
                             <div class="card-header mb-3"><b>Anda yakin ingin menghapus data reservasi <%= reservasi.nama_pelanggan; %> - <%= reservasi.id_reservasi; %>?</b></div>
                             <div class="card-body">

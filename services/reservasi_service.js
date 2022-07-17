@@ -1,9 +1,10 @@
 const db = require("../server");
 const gUniqId = require('generate-unique-id');
 const timestamp = require("time-stamp");
+const uploadServices = require('../services/uploads_services');
 
 function readReservasi(req, res, next) {
-  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE (reservasi.status_reservasi = '${"Menunggu Kedatangan Tamu"}' OR reservasi.status_reservasi = '${"Menunggu Pembayaran"}' OR reservasi.status_reservasi = '${"Menunggu Validasi"}' OR reservasi.status_reservasi = '${"Menunggu Validasi Ulang"}' OR reservasi.status_reservasi = 'Menunggu Kedatangan Tamu')`, (err, results) => {
+  db.query(`SELECT pelanggan.id_meja, reservasi.untuk_tanggal FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id WHERE reservasi.status_reservasi = 'Menunggu Kedatangan Tamu' OR reservasi.status_reservasi = 'Menunggu Pembayaran' OR reservasi.status_reservasi = 'Menunggu Validasi' OR reservasi.status_reservasi = 'Menunggu Validasi Ulang'`, (err, results) => {
     if (err) res.json({ msg: err });
 
     const tglHariIni = new Date(timestamp("YYYY-MM-DD")).setHours(0, 0, 0, 0);
@@ -34,7 +35,7 @@ function readReservasi(req, res, next) {
 }
 
 function readDetailReservasi(req, res, next) {
-  db.query(`SELECT bukti_transfer.id AS id_transfer, bukti_transfer.bukti, pelanggan.id AS id_pelanggan, pelanggan.nama_pelanggan, meja.nomor_meja, reservasi.id AS id_reservasi, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi, reservasi.create_at, reservasi.update_at FROM bukti_transfer JOIN reservasi ON reservasi.id=bukti_transfer.id_reservasi JOIN pelanggan ON pelanggan.id=reservasi.id_pelanggan JOIN meja ON meja.id=pelanggan.id_meja`, (err, dataReservasi) => {
+  db.query(`SELECT pelanggan.id AS id_pelanggan, pelanggan.nama_pelanggan, meja.nomor_meja, reservasi.id AS id_reservasi, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi, reservasi.create_at, reservasi.update_at FROM reservasi JOIN pelanggan ON pelanggan.id=reservasi.id_pelanggan JOIN meja ON meja.id=pelanggan.id_meja`, (err, dataReservasi) => {
     if (err) throw err;
 
     // console.log(dataReservasi);
@@ -262,64 +263,35 @@ function validasiUpdateReservasi(req, res, next) {
 }
 
 function deleteReservasi(req, res, next) {
-  const idReservasi = req.params.id;
+  const idPelanggan = req.params.id;
 
   db.beginTransaction(err => {
     if (err) throw err;
 
-    // Mendapatkan id bukti transfer berdasarkan id reservasi
-    db.query(`SELECT id AS id_bukti FROM bukti_transfer WHERE id_reservasi='${idReservasi}'`, (err, dataBukti) => {
+    db.query(`SELECT id AS id_reservasi FROM reservasi WHERE id_pelanggan='${idPelanggan}'`, (err, dataReservasi) => {
       if (err) return db.rollback(() => { throw err; });
 
-      // Menghapus data transaksi berdasarkan id bukti transfer
-      db.query(`DELETE FROM transaksi WHERE id_bukti='${dataBukti[0].id_bukti}'`, err => {
+      const idReservasi = dataReservasi[0].id_reservasi;
+
+      // Mendapatkan data bukti dari database
+      db.query(`SELECT bukti FROM bukti_transfer WHERE id_reservasi='${idReservasi}'`, (err, dataTransfer) => {
         if (err) return db.rollback(() => { throw err; });
 
-        db.commit(err => {
-          if (err) return db.rollback(() => { throw err; });
+        // Memeriksa ketersediaan data bukti transfer
+        if (dataTransfer.length !== 0) {
+          const filePath = 'public/uploads/bukti-transaksi/' + dataTransfer[0].bukti;
 
-          // Menghapus data bukti transfer berdasarkan id reservasi
-          db.query(`DELETE FROM bukti_transfer WHERE id_reservasi='${idReservasi}'`, err => {
-            if (err) return db.rollback(() => { throw err; });
-  
-            db.commit(err => {
-              if (err) return db.rollback(() => { throw err; });
-              
-              // Mendapatkan id pelanggan dari tabel reservasi berdasarkan id reservasi
-              db.query(`SELECT id_pelanggan FROM reservasi WHERE id='${idReservasi}'`, (err, dataReservasi) => {
-                if (err) return db.rollback(() => { throw err; });
-
-                const idPelanggan = dataReservasi[0].id_pelanggan;
-                
-                // Menghapus data pesanan berdasarkan id pelanggan
-                db.query(`DELETE FROM pesanan WHERE id_pelanggan='${idPelanggan}'`, err => {
-                  if (err) return db.rollback(() => { throw err; });
-    
-                  db.commit(err => {
-                    if (err) return db.rollback(() => { throw err; });
-                    
-                    // Menghapus data reservasi berdasarkan id reservasi
-                    db.query(`DELETE FROM reservasi WHERE id='${idReservasi}'`, err => {
-                      if (err) return db.rollback(() => { throw err; });
-                      
-                      db.commit(err => {
-                        if (err) return db.rollback(() => { throw err; });
-
-                        // Menghapus data pelanggan berdasarkan id pelanggan
-                        db.query(`DELETE FROM pelanggan WHERE id='${idPelanggan}'`, err => {
-                          if (err) return db.rollback(() => { throw err; });
-
-                          next();
-                        });
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
+          // Menghapus bukti transfer dari storage
+          uploadServices.removeImageFromDisk(filePath);
+        }
       });
+
+      // Menghapus data pelanggan dan kawan-kawannya
+      db.query(`DELETE FROM pelanggan WHERE id='${idPelanggan}'`, err => {
+        if (err) return db.rollback(() => { throw err; });
+      });
+    
+      next();
     });
   });
 }
