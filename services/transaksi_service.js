@@ -9,22 +9,22 @@ function readNotaPembayaran(req, res, next) {
   db.beginTransaction(err => {
     if (err) throw err;
 
-    db.query(`SELECT pesanan.id, menu.nama_menu, pesanan.qty, pesanan.total_harga FROM pesanan JOIN pelanggan ON pesanan.id_pelanggan = pelanggan.id JOIN menu ON pesanan.id_menu = menu.id WHERE pelanggan.id='${idPelanggan}'`, (err, results) => {
+    db.query(`SELECT pesanan.id, menu.nama_menu, pesanan.qty, pesanan.total_harga FROM pesanan JOIN pelanggan ON pesanan.id_pelanggan = pelanggan.id JOIN menu ON pesanan.id_menu = menu.id WHERE pelanggan.id='${idPelanggan}'`, (err, dataPesanan) => {
       if (err) return db.rollback(() => { throw err; });
       
       let total = 0;
 
-      results.forEach(item => {
+      dataPesanan.forEach(item => {
         total += parseInt(item.total_harga);
       });
 
-      res.locals.dataPesanan = results;
+      res.locals.dataPesanan = dataPesanan;
       res.locals.total = total;
   
-      db.query(`SELECT reservasi.id, reservasi.id_pelanggan, pelanggan.nama_pelanggan, pelanggan.id_meja, meja.nomor_meja, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id JOIN meja ON pelanggan.id_meja = meja.id WHERE reservasi.id_pelanggan='${idPelanggan}'`, (err, results) => {
+      db.query(`SELECT reservasi.id, reservasi.id_pelanggan, pelanggan.nama_pelanggan, pelanggan.id_meja, meja.nomor_meja, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id JOIN meja ON pelanggan.id_meja = meja.id WHERE reservasi.id_pelanggan='${idPelanggan}'`, (err, dataReservasi) => {
         if (err) return db.rollback(() => { throw err; });
 
-        res.locals.dataReservasi = results;
+        res.locals.dataReservasi = dataReservasi;
 
         next();
       });
@@ -33,10 +33,10 @@ function readNotaPembayaran(req, res, next) {
 }
 
 function readTotalTransaksi(req, res, next) {
-  db.query(`SELECT COUNT(id) AS total FROM transaksi`, (err, results) => {
+  db.query(`SELECT COUNT(id) AS total FROM transaksi`, (err, totalTransaksi) => {
     if (err) throw err;
 
-    res.locals.totalTransaksi = results;
+    res.locals.totalTransaksi = totalTransaksi;
 
     next();
   });
@@ -88,6 +88,12 @@ function createBuktiTransaksi(req, res, next) {
             db.commit(err => {
               if (err) return db.rollback(() => { throw err; });
               
+              req.session.messages = {
+                type: 'success',
+                intro: 'Reservasi & Pemesanan Berhasil!',
+                message: 'Bukti transfer anda sedang diperiksa. Silahkan cek Email anda secara berkala.'
+              }
+
               next();
             });
           });
@@ -125,7 +131,7 @@ function updateBuktiTransaksi(req, res, next) {
     db.query(`SELECT bukti FROM bukti_transfer WHERE id_reservasi='${idReservasi}'`, (err, dataBukti) => {
       if (err) return db.rollback(() => { throw err; });
 
-      console.log(dataBukti);
+      // console.log(dataBukti);
 
       const reqBukti = req.file === undefined ? dataBukti[0].bukti : req.file.filename;
       

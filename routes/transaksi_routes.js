@@ -5,7 +5,6 @@ const pemesananServices = require('../services/pemesanan_service');
 const emailServices = require('../services/email_service');
 const userChecker = require('../services/auth_service');
 
-// TODO: Buat Fungsi Cetak ke dalam PDF
 router.route('/admin/transaksi')
   .get(userChecker.checkAuth, transaksiServices.readTransaksi, pemesananServices.readPesanan, (req, res) => {
     res.render('viewAdmin/pages/pageTransaksi', { user: req.session.user, dataTransaksi: res.locals.dataTransaksi, dataPesanan: res.locals.dataPesanan });

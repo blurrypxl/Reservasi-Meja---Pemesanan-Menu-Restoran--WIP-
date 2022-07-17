@@ -6,8 +6,6 @@ const menuServices = require('../services/menu_service');
 const mejaServices = require('../services/meja_service');
 const userChecker = require('../services/auth_service');
 
-// TODO: BUAT STYLE CSS UNTUK HALAMAN PELANGGAN!
-
 // Route ini digunakan untuk keperluan pelanggan
 router.route('/reservasi')
   .get(reservasiServices.readReservasi, mejaServices.readMeja, (req, res) => {
@@ -43,7 +41,12 @@ router.route('/reservasi/:id')
 
 router.route('/pemesanan')
   .get(menuServices.readMenu, (req, res) => {
-    res.render('viewPelanggan/pages/pageFormReservasi', { dataTglReservasi: req.session.validasiReservasi, dataMenu: res.locals.dataMenu });
+    if (req.session.validasiReservasi) {
+      res.render('viewPelanggan/pages/pageFormReservasi', { dataTglReservasi: req.session.validasiReservasi, dataMenu: res.locals.dataMenu });
+    }
+    else if (!req.session.validasiReservasi) {
+      res.redirect('/reservasi');
+    }
   })
   .post(reservasiServices.validasiTanggalReservasi, (req, res) => {
     if (res.locals.errMsgValidasi === undefined) {

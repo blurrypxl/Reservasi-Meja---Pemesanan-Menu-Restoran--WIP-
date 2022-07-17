@@ -14,7 +14,9 @@
       <!-- Flash Messages -->
       <% if (locals.messages) { %>
         <div style="text-align: center" class="alert alert-<%= messages.type %>" role="alert">
-          <strong><%= messages.intro %></strong> <%= messages.message %>
+          <strong><%= messages.intro %></strong>
+          
+          <%= messages.message %>
 
           <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
         </div>
