@@ -22,7 +22,7 @@
         </div>
       <% } %>
 
-      <div class="container mt-4">
+      <!-- <div class="container mt-4">
         <div class="card mb-4">
           <div class="card-header">
             <h5>
@@ -46,9 +46,9 @@
             </form>
           </div>
         </div>
-      </div>
+      </div> -->
       
-      <div class="container">
+      <div class="container mt-5">
         <div class="card">
           <div class="card-header">
             <h5 class="mb-2">
@@ -57,36 +57,34 @@
           </div>
 
           <div class="card-body" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;">
-            <% dataMeja.filter(meja => meja.status === 'aktif').forEach(meja => { %>
-              <div class="card me-4 mb-4" style="width: 20em;">
-                <div class="card-header">
-                  <h5>
-                    <%= meja.id; %>
-                  </h5>
-                </div>
-      
+            <% dataMeja.filter(meja => meja.status === 'aktif' || meja.status === 'terisi').forEach(meja => { %>
+              <div class="card me-4 mb-4" style="width: 20em">      
                 <div class="card-body">
                   <div class="mb-3">
-                    <p>
-                      Nomor Meja: <%= meja.nomor_meja; %>
-                    </p>
+                    Nomor Meja: <%= meja.nomor_meja; %>
                   </div>
 
                   <div class="mb-3">
-                    <p>
-                      Max Person: <%= meja.max_person; %>
-                    </p>
+                    Max Person: <%= meja.max_person; %>
                   </div>
       
                   <div class="mb-3">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#form-reservasi-box<%= meja.id %>">
-                      RESERVASI
-                    </button>
+                    <% if (meja.status === 'terisi') { %> 
+                      <div class="card-header bg-success">
+                        <h6 class="card-text text-light text-center">
+                          Meja <%= meja.nomor_meja; %> telah direservasi.
+                        </h6>
+                      </div>
+                    <% } else if (meja.status === 'aktif') { %>
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#form-reservasi-box<%= meja.id %>">
+                        RESERVASI
+                      </button>
+                    <% } %>
                   </div>
                 </div>
               </div>
       
-              <!-- Modal -->
+              <!-- Modal Reservasi -->
               <div class="modal fade" id="form-reservasi-box<%= meja.id %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
@@ -104,18 +102,18 @@
                         <!-- Input Nama Field -->
                         <div class="input-group input-group-sm mb-3">
                           <span class="input-group-text" id="inputGroup-sizing-sm">Nama</span>
-                          <input type="text" name="nama" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                          <input type="text" name="nama" placeholder="Masukan nama pelanggan" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
-      
+
                         <!-- Input Email Field -->
                         <div class="input-group input-group-sm mb-3">
                           <span class="input-group-text" id="inputGroup-sizing-sm">Email</span>
-                          <input type="email" name="email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                          <input type="email" name="email" placeholder="Masukan alamat email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                       </div>
       
                       <div class="reservasi-form-box">
-                        <details style="border-bottom: 1px solid black;">
+                        <!-- <details style="border-bottom: 1px solid black;">
                           <summary style="font-weight: bold;">List Reservasi Pada ID Meja <%= meja.id %></summary>
         
                           <% let filteredReservasi = dataReservasi.filter(item => item.id_meja === meja.id); %>
@@ -127,15 +125,13 @@
                               </p>
                             </div>
                           <% }); %>
-                        </details>
-      
-                        <br>
-      
-                        <div class="datepicker"></div>
-                        <input type="hidden" name="untuk_tgl" class="inputdate" required readonly>
+                        </details> -->
+
+                        <!-- <div class="datepicker"></div>
+                        <input type="hidden" name="untuk_tgl" class="inputdate" required readonly> -->
       
                         <div class="modal-footer">
-                          <button type="submit" class="btn btn-success">Validasi</button>
+                          <button type="submit" class="btn btn-success">Reservasi</button>
                         </div>
                       </div>
                     </form>

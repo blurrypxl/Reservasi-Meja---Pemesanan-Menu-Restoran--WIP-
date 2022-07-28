@@ -21,7 +21,7 @@ function readNotaPembayaran(req, res, next) {
       res.locals.dataPesanan = dataPesanan;
       res.locals.total = total;
   
-      db.query(`SELECT reservasi.id, reservasi.id_pelanggan, pelanggan.nama_pelanggan, pelanggan.id_meja, meja.nomor_meja, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id JOIN meja ON pelanggan.id_meja = meja.id WHERE reservasi.id_pelanggan='${idPelanggan}'`, (err, dataReservasi) => {
+      db.query(`SELECT no_invoice.id AS id_invoice, reservasi.id, reservasi.id_pelanggan, pelanggan.nama_pelanggan, pelanggan.id_meja, meja.nomor_meja, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi FROM reservasi JOIN pelanggan ON reservasi.id_pelanggan = pelanggan.id JOIN no_invoice ON no_invoice.id_pelanggan = pelanggan.id JOIN meja ON pelanggan.id_meja = meja.id WHERE reservasi.id_pelanggan='${idPelanggan}'`, (err, dataReservasi) => {
         if (err) return db.rollback(() => { throw err; });
 
         res.locals.dataReservasi = dataReservasi;
@@ -43,7 +43,7 @@ function readTotalTransaksi(req, res, next) {
 }
 
 function readBuktiTransaksi(req, res, next) {
-  db.query(`SELECT bukti_transfer.id AS id_transfer, reservasi.id AS id_reservasi, pelanggan.nama_pelanggan, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi, bukti_transfer.bukti, reservasi.update_at FROM bukti_transfer JOIN reservasi ON reservasi.id = bukti_transfer.id_reservasi JOIN pelanggan ON pelanggan.id = reservasi.id_pelanggan WHERE reservasi.status_reservasi = 'Menunggu Validasi' OR status_reservasi = 'Menunggu Validasi Ulang' ORDER BY reservasi.update_at ASC`, (err, detailReservasi) => {
+  db.query(`SELECT no_invoice.id AS id_invoice, bukti_transfer.id AS id_transfer, reservasi.id AS id_reservasi, pelanggan.id AS id_pelanggan, pelanggan.nama_pelanggan, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi, bukti_transfer.bukti, reservasi.update_at FROM bukti_transfer JOIN reservasi ON reservasi.id = bukti_transfer.id_reservasi JOIN pelanggan ON pelanggan.id = reservasi.id_pelanggan JOIN no_invoice ON no_invoice.id_pelanggan = pelanggan.id WHERE reservasi.status_reservasi = 'Menunggu Validasi' OR reservasi.status_reservasi = 'Menunggu Validasi Ulang' OR reservasi.status_reservasi = 'Menunggu Kedatangan Tamu'`, (err, detailReservasi) => {
     if (err) throw err;
 
     res.locals.detailReservasi = detailReservasi;
@@ -151,7 +151,7 @@ function updateBuktiTransaksi(req, res, next) {
 }
 
 function readTransaksi(req, res, next) {
-  db.query(`SELECT transaksi.id AS id_transaksi, users.id AS id_user, users.nama AS nama_user, users.role, transaksi.id_bukti, bukti_transfer.bukti, transaksi.metode_pembayaran, transaksi.total_transaksi, transaksi.status_transaksi, transaksi.create_at, reservasi.id AS id_reservasi, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi, pelanggan.id AS id_pelanggan, pelanggan.nama_pelanggan FROM transaksi JOIN users ON users.id=transaksi.id_user JOIN bukti_transfer ON bukti_transfer.id=transaksi.id_bukti JOIN reservasi ON reservasi.id=bukti_transfer.id_reservasi JOIN pelanggan ON pelanggan.id=reservasi.id_pelanggan`, (err, dataTransaksi) => {
+  db.query(`SELECT transaksi.id AS id_transaksi, no_invoice.id AS id_invoice, users.id AS id_user, users.nama AS nama_user, users.role, transaksi.id_bukti, bukti_transfer.bukti, transaksi.metode_pembayaran, transaksi.total_transaksi, transaksi.status_transaksi, transaksi.create_at, reservasi.id AS id_reservasi, reservasi.email, reservasi.untuk_tanggal, reservasi.status_reservasi, pelanggan.id AS id_pelanggan, pelanggan.nama_pelanggan FROM transaksi JOIN users ON users.id=transaksi.id_user JOIN bukti_transfer ON bukti_transfer.id=transaksi.id_bukti JOIN reservasi ON reservasi.id=bukti_transfer.id_reservasi JOIN pelanggan ON pelanggan.id=reservasi.id_pelanggan JOIN no_invoice ON no_invoice.id_pelanggan=pelanggan.id`, (err, dataTransaksi) => {
     if (err) throw err;
 
     res.locals.dataTransaksi = dataTransaksi;

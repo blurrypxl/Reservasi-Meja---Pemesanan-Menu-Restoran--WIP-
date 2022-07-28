@@ -151,12 +151,29 @@ function updateStatusReservasi(req, res, next) {
 
           res.locals.validator = statusReservasi;
           res.locals.email = dataReservasi[0].email;
-
-          // console.log(res.locals.validator, res.locals.email);
-
-          next();
         });
       });
+
+      if (statusReservasi === 'selesai') {
+        db.query(`SELECT id_pelanggan FROM reservasi WHERE id='${dataReservasi[0].id_reservasi}'`, (err, dataPelanggan) => {
+          if (err) return db.rollback(() => { throw err; });
+
+          db.query(`SELECT id_meja FROM pelanggan WHERE id='${dataPelanggan[0].id_pelanggan}'`, (err, dataMeja) => {
+            if (err) return db.rollback(() => { throw err; });
+
+            // Update status meja
+            db.query(`UPDATE meja SET status='aktif' WHERE id='${dataMeja[0].id_meja}'`, err => {
+              if (err) return db.rollback(() => { throw err; });
+
+              db.commit(err => {
+                if (err) return db.rollback(() => { throw err; });
+              });
+            });
+          });
+        });
+      }
+
+      next();
     });
   });
 }
@@ -191,8 +208,6 @@ function checkStatusReservasi(req, res, next) {
 function updateDateReservasi(req, res, next) {
   const { id_reservasi, id_meja, untuk_tgl } = req.body;
 
-  // console.log(untuk_tgl);
-
   db.beginTransaction(err => {
     if (err) throw err;
 
@@ -215,7 +230,7 @@ function updateDateReservasi(req, res, next) {
                 intro: 'Tanggal Tidak Valid.',
                 message: 'Tanggal Reservasi sudah dibooking Pelanggan lain. Mohon pilih tanggal yang lain.'
               }
-    
+
               return next();
             }
           }
@@ -232,7 +247,7 @@ function updateDateReservasi(req, res, next) {
                 intro: 'Tanggal Reservasi Berhasil Di Update',
                 message: ''
               }
-    
+
               return next();
             });
           });
@@ -268,10 +283,11 @@ function deleteReservasi(req, res, next) {
   db.beginTransaction(err => {
     if (err) throw err;
 
-    db.query(`SELECT id AS id_reservasi FROM reservasi WHERE id_pelanggan='${idPelanggan}'`, (err, dataReservasi) => {
+    db.query(`SELECT id AS id_reservasi, status_reservasi FROM reservasi WHERE id_pelanggan='${idPelanggan}'`, (err, dataReservasi) => {
       if (err) return db.rollback(() => { throw err; });
 
       const idReservasi = dataReservasi[0].id_reservasi;
+      const statusReservasi = dataReservasi[0].status_reservasi;
 
       // Mendapatkan data bukti dari database
       db.query(`SELECT bukti FROM bukti_transfer WHERE id_reservasi='${idReservasi}'`, (err, dataTransfer) => {
@@ -286,12 +302,56 @@ function deleteReservasi(req, res, next) {
         }
       });
 
+      // Mendapatkan quantity pesanan menu pelanggan
+      db.query(`SELECT id_menu, qty FROM pesanan WHERE id_pelanggan='${idPelanggan}'`, (err, dataPesanan) => {
+        if (err) return db.rollback(() => { throw err; });
+
+        // Kode akan berjalan jika reservasi status reservasi belum selesai
+        if (statusReservasi !== 'Selesai') {
+          for (let i = 0; i < dataPesanan.length; i++) {
+            // Mendapatkan id menu dan qty menu pada tabel menu
+            db.query(`SELECT qty FROM menu WHERE id='${dataPesanan[i].id_menu}'`, (err, dataMenu) => {
+              if (err) return db.rollback(() => { throw err; });
+
+              // Update data quantity menu
+              db.query(`UPDATE menu SET qty='${dataPesanan[i].qty += dataMenu[i].qty}' WHERE id='${dataPesanan[i].id_menu}'`, err => {
+                if (err) return db.rollback(() => { throw err; });
+
+                db.commit(err => {
+                  if (err) return db.rollback(() => { throw err; });
+
+                  console.log('Update Menu Berhasil.');
+                });
+              });
+            });
+          }
+        }
+      });
+
+      // Mendapatkan id meja dari tabel pelanggan
+      db.query(`SELECT id_meja FROM pelanggan WHERE id='${idPelanggan}'`, (err, dataMeja) => {
+        if (err) return db.rollback(() => { throw err; });
+
+        // Update status meja
+        db.query(`UPDATE meja SET status='aktif' WHERE id='${dataMeja[0].id_meja}'`, err => {
+          if (err) return db.rollback(() => { throw err; });
+
+          db.commit(err => {
+            if (err) return db.rollback(() => { throw err; });
+          });
+        });
+      });
+
       // Menghapus data pelanggan dan kawan-kawannya
       db.query(`DELETE FROM pelanggan WHERE id='${idPelanggan}'`, err => {
         if (err) return db.rollback(() => { throw err; });
+
+        db.commit(err => {
+          if (err) return db.rollback(() => { throw err; });
+
+          next();
+        });
       });
-    
-      next();
     });
   });
 }

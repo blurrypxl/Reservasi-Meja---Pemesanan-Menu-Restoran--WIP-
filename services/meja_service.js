@@ -13,7 +13,7 @@ function readMeja(req, res, next) {
 }
 
 function readTotalMeja(req, res, next) {
-  db.query(`SELECT COUNT(*) AS total FROM menu`, (err, results) => {
+  db.query(`SELECT COUNT(*) AS total FROM meja`, (err, results) => {
     if (err) throw err;
 
     res.locals.totalMeja = results;
@@ -128,15 +128,15 @@ function updateMeja(req, res, next) {
   });
 }
 
-function deleteMeja(req, res, next) {
-  const id = parseInt(req.params.id);
+// function deleteMeja(req, res, next) {
+//   const id = parseInt(req.params.id);
 
-  db.query(`DELETE FROM meja WHERE id_meja='${id}'`, err => {
-    if (err) throw err;
+//   db.query(`DELETE FROM meja WHERE id_meja='${id}'`, err => {
+//     if (err) throw err;
 
-    next();
-  });
-}
+//     next();
+//   });
+// }
 
 module.exports = {
   readMeja,

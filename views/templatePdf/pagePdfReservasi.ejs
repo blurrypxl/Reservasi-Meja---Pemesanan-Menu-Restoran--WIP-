@@ -15,59 +15,38 @@
           </p>
         </div>
 
-        <% dataReservasi.forEach(reservasi => { %> 
-          <div class="card mb-4">
-            <div class="card-header start-flex-row"> 
-              <div>
-                <h4 class="mb-3">
-                  <%= reservasi.id_reservasi; %>
-                </h4>
-  
-                <p>
-                  Nama Pelanggan:
-                  <span><%= reservasi.nama_pelanggan; %></span>
-                </p>
-  
-                <p>
-                  Tanggal Reservasi:
-                  <span><%= reservasi.untuk_tanggal; %></span>
-                </p>
-  
-                <p>
-                  Status:
-                  <span><%= reservasi.status_reservasi; %></span>
-                </p>
-              </div>
-            </div>
-  
-            <div class="card-body">
-              <div class="card">
-                <div class="card-header">
-                  <h5>
-                    Detail Reservasi
-                  </h5>
-                </div>
-  
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">
-                    <label>Email Pengguna:</label>
-                    <%= reservasi.email; %>
-                  </li>
-    
-                  <li class="list-group-item">
-                    <label>Create At:</label>
-                    <%= reservasi.create_at; %>
-                  </li>
-                  
-                  <li class="list-group-item">
-                    <label for="updateAt">Update At:</label>
-                    <%= reservasi.update_at; %>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        <% }); %>
+        <div class="card mb-4">
+          <table class="table" style="text-align: center;">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID Reservasi</th>
+                <th scope="col">Nama Pelanggan</th>
+                <th scope="col">Tanggal Reservasi</th>
+                <th scope="col">Status</th>
+                <th scope="col">Email Pengguna</th>
+                <th scope="col">Create At</th>
+                <th scope="col">Update At</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              <% let counter = 0; %> 
+              <% dataReservasi.forEach(reservasi => { %> 
+                <tr>
+                  <td><%= counter += 1; %></td>
+                  <td><%= reservasi.id_reservasi; %></td>
+                  <td><%= reservasi.nama_pelanggan; %></td>
+                  <td><%= reservasi.untuk_tanggal; %></td>
+                  <td><%= reservasi.status_reservasi; %></td>
+                  <td><%= reservasi.email; %></td>
+                  <td><%= reservasi.create_at; %></td>
+                  <td><%= reservasi.update_at; %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </main>
   </body>

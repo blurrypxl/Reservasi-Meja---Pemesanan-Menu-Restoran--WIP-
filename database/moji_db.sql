@@ -30,7 +30,7 @@ CREATE TABLE `bukti_transfer` (
   `update_at` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_reservasi` (`id_reservasi`),
-  CONSTRAINT `bukti_transfer_ibfk_1` FOREIGN KEY (`id_reservasi`) REFERENCES `reservasi` (`id`)
+  CONSTRAINT `bukti_transfer_ibfk_1` FOREIGN KEY (`id_reservasi`) REFERENCES `reservasi` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -40,7 +40,7 @@ CREATE TABLE `bukti_transfer` (
 
 LOCK TABLES `bukti_transfer` WRITE;
 /*!40000 ALTER TABLE `bukti_transfer` DISABLE KEYS */;
-INSERT INTO `bukti_transfer` VALUES ('BKT-buf73n3','RSV-b84x3bj','bukti_transaksi-2022-07-15-687193845.jpg','21:34:2022-07-15','21:34:2022-07-15'),('BKT-gpwwhjt','RSV-yv6k90a','bukti_transaksi-2022-07-15-311250392.jpg','21:03:2022-07-15','21:16:2022-07-15');
+INSERT INTO `bukti_transfer` VALUES ('BKT-a719zlr','RSV-l7eg3oq','bukti_transaksi-2022-07-25-562397651.jpg','03:18:2022-07-25','03:18:2022-07-25'),('BKT-dgt9phc','RSV-mqy0rr2','bukti_transaksi-2022-07-25-383580035.jpg','13:23:2022-07-25','13:30:2022-07-25'),('BKT-mgxyl2c','RSV-qrwvndo','bukti_transaksi-2022-07-25-975620370.jpg','13:20:2022-07-25','13:20:2022-07-25');
 /*!40000 ALTER TABLE `bukti_transfer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -71,7 +71,7 @@ CREATE TABLE `meja` (
 
 LOCK TABLES `meja` WRITE;
 /*!40000 ALTER TABLE `meja` DISABLE KEYS */;
-INSERT INTO `meja` VALUES ('MJA-7za7jce','1',2,6,'aktif','21:49:03/06/2022','08:12:2022-07-08'),('MJA-okeif4a','1',3,2,'aktif','22:00:2022-07-07','08:42:2022-07-08'),('MJA-pz9u054','1',5,6,'aktif','14:29:2022-07-15','14:29:2022-07-15'),('MJA-wmfs4lo','1',4,4,'aktif','14:28:2022-07-15','14:28:2022-07-15'),('MJA-xkmi8ul','1',6,3,'aktif','14:29:2022-07-15','14:29:2022-07-15'),('MJA-ztth1xb','1',1,4,'aktif','21:48:03/06/2022','08:17:2022-07-08');
+INSERT INTO `meja` VALUES ('MJA-7za7jce','1',2,6,'aktif','21:49:03/06/2022','08:12:2022-07-08'),('MJA-okeif4a','1',3,6,'aktif','22:00:2022-07-07','19:00:2022-07-19'),('MJA-pz9u054','1',5,6,'aktif','14:29:2022-07-15','14:29:2022-07-15'),('MJA-wmfs4lo','1',4,4,'terisi','14:28:2022-07-15','14:28:2022-07-15'),('MJA-xkmi8ul','1',6,6,'terisi','14:29:2022-07-15','20:15:2022-07-20'),('MJA-ztth1xb','1',1,4,'terisi','21:48:03/06/2022','08:17:2022-07-08');
 /*!40000 ALTER TABLE `meja` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,8 +105,36 @@ CREATE TABLE `menu` (
 
 LOCK TABLES `menu` WRITE;
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
-INSERT INTO `menu` VALUES ('MNU-hbf3ide','1','Es Kopi Susu','Minuman',6000,'gambar_menu-2022-07-01-611609384.jpg',22,'aktif','15:05:2022-07-01','03:38:2022-07-07'),('MNU-lqv41dy','1','Suki','Makanan',20000,'gambar_menu-2022-07-12-55584399.jpg',31,'aktif','15:03:2022-07-01','22:45:2022-07-12'),('MNU-nfopm6j','1','Chicken','Makanan',35000,'gambar_menu-2022-07-01-176727495.jpg',1,'aktif','20:38:2022-07-01','02:33:2022-07-08'),('MNU-o57gm37','1','US Beef 100g','Makanan',35000,'gambar_menu-2022-07-01-48045720.jpg',19,'aktif','15:02:2022-07-01','15:02:2022-07-01'),('MNU-vmnlsox','1','Es Lemon Tea','Minuman',7000,'gambar_menu-2022-07-01-578542253.jpg',14,'aktif','15:04:2022-07-01','17:36:2022-07-03');
+INSERT INTO `menu` VALUES ('MNU-0ulqzbq','1','Ricebowl Chicken','Makanan',25000,'gambar_menu-2022-07-19-851954273.jpg',44,'aktif','20:10:2022-07-19','04:56:2022-07-25'),('MNU-17k5dwn','1','Suki Medium (3 Orang)','Makanan',80000,'gambar_menu-2022-07-19-195505735.jpg',45,'aktif','20:17:2022-07-19','04:56:2022-07-25'),('MNU-40qt7a5','1','Nasi Putih','Makanan',5000,'gambar_menu-2022-07-19-645751327.jpg',44,'aktif','20:13:2022-07-19','04:56:2022-07-25'),('MNU-cwkti6s','1','Suki Jumbo (4 Orang)','Makanan',100000,'gambar_menu-2022-07-19-965132381.jpg',45,'aktif','20:17:2022-07-19','04:56:2022-07-25'),('MNU-hbf3ide','1','Ricebowl Beef','Makanan',30000,'gambar_menu-2022-07-01-611609384.jpg',44,'aktif','15:05:2022-07-01','04:56:2022-07-25'),('MNU-lqv41dy','1','Suki Value (2 Orang)','Makanan',55000,'gambar_menu-2022-07-12-55584399.jpg',50,'aktif','15:03:2022-07-01','04:57:2022-07-25'),('MNU-n03b0h9','1','Es Teh Manis','Minuman',5000,'gambar_menu-2022-07-19-977485556.jpg',48,'aktif','20:14:2022-07-19','04:57:2022-07-25'),('MNU-nfopm6j','1','Chicken 100gr','Makanan',15000,'gambar_menu-2022-07-01-176727495.jpg',49,'aktif','20:38:2022-07-01','04:57:2022-07-25'),('MNU-o57gm37','1','US Beef 100gr','Makanan',35000,'gambar_menu-2022-07-01-48045720.jpg',50,'aktif','15:02:2022-07-01','04:58:2022-07-25'),('MNU-t00uvew','1','Saikoro 100gr','Makanan',28000,'gambar_menu-2022-07-19-404809365.jpg',50,'aktif','20:07:2022-07-19','04:58:2022-07-25'),('MNU-vmnlsox','1','Es Lemon Tea','Minuman',7000,'gambar_menu-2022-07-01-578542253.jpg',50,'aktif','15:04:2022-07-01','04:57:2022-07-25');
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `no_invoice`
+--
+
+DROP TABLE IF EXISTS `no_invoice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `no_invoice` (
+  `id` varchar(20) NOT NULL,
+  `id_pelanggan` varchar(11) NOT NULL,
+  `create_at` varchar(50) NOT NULL,
+  `update_at` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_pelanggan` (`id_pelanggan`),
+  CONSTRAINT `FKinvoices645485` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `no_invoice`
+--
+
+LOCK TABLES `no_invoice` WRITE;
+/*!40000 ALTER TABLE `no_invoice` DISABLE KEYS */;
+INSERT INTO `no_invoice` VALUES ('INV-2022/07/25-lbbmj','PLG-2xw5asp','03:18:2022-07-25','03:18:2022-07-25'),('INV-2022/07/25-nzd6r','PLG-sh51o3n','13:23:2022-07-25','13:23:2022-07-25'),('INV-2022/07/25-tz51k','PLG-gchu2qg','13:20:2022-07-25','13:20:2022-07-25');
+/*!40000 ALTER TABLE `no_invoice` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -134,7 +162,7 @@ CREATE TABLE `pelanggan` (
 
 LOCK TABLES `pelanggan` WRITE;
 /*!40000 ALTER TABLE `pelanggan` DISABLE KEYS */;
-INSERT INTO `pelanggan` VALUES ('PLG-7mkxp8f','MJA-7za7jce','Person','21:33:2022-07-15','21:33:2022-07-15'),('PLG-htgr1d1','MJA-ztth1xb','Prastiawan','21:02:2022-07-15','21:02:2022-07-15');
+INSERT INTO `pelanggan` VALUES ('PLG-2xw5asp','MJA-xkmi8ul','Diana Haley','03:18:2022-07-25','03:18:2022-07-25'),('PLG-gchu2qg','MJA-ztth1xb','Alip','13:20:2022-07-25','13:20:2022-07-25'),('PLG-sh51o3n','MJA-wmfs4lo','Genoveva Roberts','13:23:2022-07-25','13:23:2022-07-25');
 /*!40000 ALTER TABLE `pelanggan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -156,7 +184,7 @@ CREATE TABLE `pesanan` (
   KEY `id_pelanggan` (`id_pelanggan`),
   KEY `id_menu` (`id_menu`),
   CONSTRAINT `pesanan_ibfk_1` FOREIGN KEY (`id_menu`) REFERENCES `menu` (`id`),
-  CONSTRAINT `pesanan_ibfk_2` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id`)
+  CONSTRAINT `pesanan_ibfk_2` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -166,7 +194,7 @@ CREATE TABLE `pesanan` (
 
 LOCK TABLES `pesanan` WRITE;
 /*!40000 ALTER TABLE `pesanan` DISABLE KEYS */;
-INSERT INTO `pesanan` VALUES ('PSN-1v088ma','PLG-7mkxp8f','MNU-lqv41dy',1,'20000','21:33:2022-07-15'),('PSN-820rep2','PLG-htgr1d1','MNU-nfopm6j',1,'35000','21:02:2022-07-15'),('PSN-e7667k9','PLG-htgr1d1','MNU-vmnlsox',1,'7000','21:02:2022-07-15'),('PSN-pf2sonx','PLG-htgr1d1','MNU-hbf3ide',1,'6000','21:02:2022-07-15'),('PSN-q7qt87v','PLG-7mkxp8f','MNU-hbf3ide',1,'6000','21:33:2022-07-15'),('PSN-qczajmp','PLG-htgr1d1','MNU-lqv41dy',1,'20000','21:02:2022-07-15');
+INSERT INTO `pesanan` VALUES ('PSN-5g45403','PLG-sh51o3n','MNU-hbf3ide',1,'30000','13:23:2022-07-25'),('PSN-p22z3y1','PLG-2xw5asp','MNU-40qt7a5',1,'5000','03:18:2022-07-25'),('PSN-rlx9gly','PLG-2xw5asp','MNU-cwkti6s',1,'100000','03:18:2022-07-25'),('PSN-rn5nbv0','PLG-gchu2qg','MNU-nfopm6j',1,'15000','13:20:2022-07-25');
 /*!40000 ALTER TABLE `pesanan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -187,7 +215,7 @@ CREATE TABLE `reservasi` (
   `update_at` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_pelanggan` (`id_pelanggan`),
-  CONSTRAINT `FKreservasi682468` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id`)
+  CONSTRAINT `FKreservasi682468` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -197,7 +225,7 @@ CREATE TABLE `reservasi` (
 
 LOCK TABLES `reservasi` WRITE;
 /*!40000 ALTER TABLE `reservasi` DISABLE KEYS */;
-INSERT INTO `reservasi` VALUES ('RSV-b84x3bj','PLG-7mkxp8f','person@gmail.com','2022-07-16','Menunggu Validasi','21:33:2022-07-15','21:34:2022-07-15'),('RSV-yv6k90a','PLG-htgr1d1','alifnurda@gmail.com','2022-07-20','Menunggu Kedatangan Tamu','21:02:2022-07-15','21:16:2022-07-15');
+INSERT INTO `reservasi` VALUES ('RSV-l7eg3oq','PLG-2xw5asp','diana.haley70@ethereal.email','2022-07-25','Menunggu Kedatangan Tamu','03:18:2022-07-25','03:19:2022-07-25'),('RSV-mqy0rr2','PLG-sh51o3n','genoveva.roberts@ethereal.email','2022-07-25','Menunggu Kedatangan Tamu','13:23:2022-07-25','13:30:2022-07-25'),('RSV-qrwvndo','PLG-gchu2qg','alifnurda@gmail.com','2022-07-25','Menunggu Kedatangan Tamu','13:20:2022-07-25','13:20:2022-07-25');
 /*!40000 ALTER TABLE `reservasi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -221,7 +249,7 @@ CREATE TABLE `transaksi` (
   KEY `id_user` (`id_user`),
   KEY `id_bukti` (`id_bukti`),
   CONSTRAINT `FKtransaksi17932` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`),
-  CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_bukti`) REFERENCES `bukti_transfer` (`id`)
+  CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_bukti`) REFERENCES `bukti_transfer` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -231,7 +259,7 @@ CREATE TABLE `transaksi` (
 
 LOCK TABLES `transaksi` WRITE;
 /*!40000 ALTER TABLE `transaksi` DISABLE KEYS */;
-INSERT INTO `transaksi` VALUES ('TRS-4ex9l3q','1','BKT-gpwwhjt','transfer','68000','valid','21:16:2022-07-15','21:16:2022-07-15');
+INSERT INTO `transaksi` VALUES ('TRS-4saj91y','1','BKT-mgxyl2c','transfer','15000','valid','13:20:2022-07-25','13:20:2022-07-25'),('TRS-8gwmcl8','1','BKT-a719zlr','transfer','105000','valid','03:19:2022-07-25','03:19:2022-07-25'),('TRS-h99id02','1','BKT-dgt9phc','transfer','30000','valid','13:30:2022-07-25','13:30:2022-07-25');
 /*!40000 ALTER TABLE `transaksi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -275,4 +303,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-07-16 15:11:14
+-- Dump completed on 2022-07-25 13:57:09

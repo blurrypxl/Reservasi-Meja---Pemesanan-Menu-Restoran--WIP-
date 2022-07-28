@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const reservasiServices = require('../services/reservasi_service');
-const transaksiServices = require('../services/transaksi_service');
 const pemesananServices = require('../services/pemesanan_service');
 const menuServices = require('../services/menu_service');
 const mejaServices = require('../services/meja_service');
 const userChecker = require('../services/auth_service');
+const transaksiServices = require('../services/transaksi_service');
 
 // Route ini digunakan untuk keperluan pelanggan
 router.route('/reservasi')
@@ -31,7 +31,7 @@ router.route('/reservasi/:id')
   .put(reservasiServices.updateDateReservasi, (req, res) => {
     // console.log(req.session.messages);
 
-    if (req.session.messages.type === 'warning') {      
+    if (req.session.messages.type === 'warning') {
       res.redirect('/reservasi/' + res.locals.idReservasi);
     }
     else if (req.session.messages.type === 'success') {
@@ -62,6 +62,15 @@ router.route('/pemesanan')
 
       res.redirect('/reservasi');
     }
+  });
+
+router.route('/cetak-bukti-reservasi/:id')
+  .get(transaksiServices.readBuktiTransaksi, pemesananServices.readPesanan, (req, res) => {
+    const filterDetailReservasi = res.locals.detailReservasi.filter(reservasi => reservasi.id_transfer == req.params.id);
+
+    const filterPesanan = res.locals.dataPesanan.filter(pesanan => pesanan.id_pelanggan == filterDetailReservasi[0].id_pelanggan);
+
+    res.render('viewPelanggan/pages/pageCetakBuktiReservasi.ejs', { detailReservasi: filterDetailReservasi, dataPesanan: filterPesanan });
   });
 
 // Route ini digunakan untuk keperluan admin & super-admin

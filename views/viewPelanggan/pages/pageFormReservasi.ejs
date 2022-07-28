@@ -20,13 +20,13 @@
 
         <%= messages.message %>
 
-          <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+        <button class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
       </div>
     <% } %>
 
     <form class="form-container" action="/api/transaksi" method="POST">
       <div class="container" style="display: flex;">
-        <div class="card mb-3 me-4" style="width: 50em;">
+        <div class="card mb-3 me-4" style="width: 40em;">
           <div class="card-header" style="text-align: center;">
             Informasi Reservasi
           </div>
@@ -60,21 +60,21 @@
               <p>
                 Tanggal Reservasi:
               </p>
+
               <input class="w-100" type="text" name="untuk_tgl" value="<%= dataTglReservasi[5]; %>" readonly required>
             </li>
           </ul>
         </div>
   
-        <div class="card mb-3">
+        <div class="card mb-3 w-100">
           <div class="card-header" style="text-align: center;">
             Pilih Pesanan Menu
           </div>
           
-          <div style="display: flex; flex-wrap: wrap;">
+          <div class="pt-4" style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
             <% dataMenu.filter(menu => menu.status === 'aktif').forEach(menu=> { %>
-              <div class="card mb-4 me-4" style="width: 18em;">
-                <input type="hidden" class="data-menu" value="<%= [menu.id, menu.nama_menu, menu.harga] %>" readonly
-                  required>
+              <div class="card mb-4" style="width: 18em;">
+                <input type="hidden" class="data-menu" value="<%= [menu.id, menu.nama_menu, menu.harga] %>" readonly required>
     
                 <img class="card-img-top" src="../uploads/menu/<%= menu.gambar_menu; %>" alt="gambar <%= menu.nama_menu %>" height="300">
     
@@ -94,8 +94,10 @@
                   <p class="card-text">
                     <%= menu.status %>
                   </p>
-    
-                  <button type="button" class="btn btn-primary select-menu">
+                </div>
+
+                <div class="card-footer">
+                  <button type="button" class="btn btn-primary select-menu w-100">
                     Pilih Menu
                   </button>
                 </div>
@@ -117,7 +119,8 @@
                 <th scope="col">ID Menu</th>
                 <th scope="col">Nama Menu</th>
                 <th scope="col">Quantity</th>
-                <th scope="col">Harga</th>
+                <th scope="col">Harga Satuan</th>
+                <th scope="col">Subtotal</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -126,14 +129,16 @@
               <!-- # List Pesanan Pelanggan -->
             </tbody>
           </table>
-  
-          <div>
-            <p>
-              Total: Rp.<span id="total-harga-pesanan">0</span>
-            </p>
-  
-            <input type="hidden" id="total-val-input" name="total_harga">
-          </div>
+
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <h5 style="text-align: right;">
+                Total: Rp.<span id="total-harga-pesanan">0</span>
+              </h5>
+
+              <input type="hidden" id="total-val-input" name="total_harga">
+            </li>
+          </ul>
   
           <input type="hidden" name="arr_pesanan" id="arr-pesanan" readonly required>
           <!-- <input type="hidden" name="total" id="total" readonly required> -->
@@ -259,11 +264,12 @@
           const tdNamaMenu = trElement.insertCell(1);
           const tdQtyMenu = trElement.insertCell(2);
           const tdHargaMenu = trElement.insertCell(3);
-          const tdActionMenu = trElement.insertCell(4);
-          const tdCancelPesanan = trElement.insertCell(5);
+          const tdSubtotal = trElement.insertCell(4);
+          const tdActionMenu = trElement.insertCell(5);
+          const tdCancelPesanan = trElement.insertCell(6);
 
           // Tambah Data Menu Kedalam List Pesanan
-          tambahPesanan(dataHargaPesanan, { idMenu: dataMenu[i].value.split(',')[0], namaMenu: dataMenu[i].value.split(',')[1], qty: qtyMenu, total: parseInt(dataMenu[i].value.split(',')[2]) });
+          tambahPesanan(dataHargaPesanan, { idMenu: dataMenu[i].value.split(',')[0], namaMenu: dataMenu[i].value.split(',')[1], qty: qtyMenu, hargaSatuan: parseInt(dataMenu[i].value.split(',')[2]), total: parseInt(dataMenu[i].value.split(',')[2]) });
 
           // Menampilkan Data Menu Pada List Pesanan
           const valPesanan = dataHargaPesanan.filter(pesanan => pesanan.idMenu === dataMenu[i].value.split(',')[0]);
@@ -274,7 +280,9 @@
 
           tdQtyMenu.innerHTML = qtyMenu;
 
-          tdHargaMenu.innerHTML = "Rp." + valPesanan[0].total;
+          tdHargaMenu.innerHTML = "Rp." + valPesanan[0].hargaSatuan;
+
+          tdSubtotal.innerHTML = "Rp." + valPesanan[0].total;
 
           tdActionMenu.innerHTML = `
                         <button type="button" id="btnKurang${i}">-</button>
@@ -304,7 +312,7 @@
             id_menu: dataMenu[i].value.split(',')[0],
             harga_satuan: parseInt(dataMenu[i].value.split(',')[2]),
             el_td_qty: tdQtyMenu,
-            el_td_harga: tdHargaMenu,
+            el_td_harga: tdSubtotal,
             el_ttl_harga: ttlHargaPesanan,
             el_input_ttl: totalValInput,
             ttl_val: totalHargaVal,
@@ -318,7 +326,7 @@
             id_menu: dataMenu[i].value.split(',')[0],
             harga_satuan: parseInt(dataMenu[i].value.split(',')[2]),
             el_td_qty: tdQtyMenu,
-            el_td_harga: tdHargaMenu,
+            el_td_harga: tdSubtotal,
             el_ttl_harga: ttlHargaPesanan,
             el_input_ttl: totalValInput,
             ttl_val: totalHargaVal,

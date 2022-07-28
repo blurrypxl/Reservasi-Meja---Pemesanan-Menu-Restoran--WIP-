@@ -24,9 +24,23 @@
   <% } %>
 
   <main>    
+    <div class="container mt-3">
+      <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between;">
+          <h4>
+            Nomor Invoice: <span class="text-success"><%= dataReservasi[0].id_invoice; %></span>
+          </h4>
+
+          <form action="/docs/pdf-invoice-pelanggan/<%= dataReservasi[0].id_pelanggan; %>" method="POST" target="_blank">
+            <button class="btn btn-primary" type="submit">CETAK</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <form class="form-container" action="/konfirmasi-transaksi/<%= dataReservasi[0].id_pelanggan; %>" method="POST" enctype="multipart/form-data">
       <div class="container" style="display: flex;">
-        <div class="card me-3" style="width: 25em;">
+        <div class="card me-3" style="width: 40em;">
           <div class="card-header" style="text-align: center;">
             Informasi Reservasi
           </div>
@@ -83,10 +97,20 @@
                 <%= dataReservasi[0].untuk_tanggal; %>
               </p>
             </li>
+
+            <li class="list-group-item">
+              <p>
+                Metode Pembayaran:
+              </p>
+    
+              <p>
+                Transfer Bank
+              </p>
+            </li>
           </ul>
         </div>
         
-        <div style="display: flex; flex-direction: column; width: 100%;">
+        <div class="w-100" style="display: flex; flex-direction: column;">
           <div class="card mb-3 w-100">
             <div class="card-header" style="text-align: center;">
               List Pesanan
@@ -98,7 +122,7 @@
                   <th scope="col">ID Pesanan</th>
                   <th scope="col">Nama Menu</th>
                   <th scope="col">Quantity</th>
-                  <th scope="col">Harga</th>
+                  <th scope="col">Subtotal</th>
                 </tr>
               </thead>
               
@@ -119,18 +143,50 @@
                     </td>
       
                     <td>
-                      <%= dp.total_harga %>
+                      Rp.<%= dp.total_harga %>
                     </td>
                   </tr>
                 <% }); %> 
               </tbody>
             </table>
-          
-            <div>
-              <p>
-                Total: Rp.<%= totalBayar %>
-              </p>
+
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <h5 style="text-align: right;">
+                  Total: Rp.<%= totalBayar %>
+                </h5>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card mb-3 w-100">
+            <div class="card-header" style="text-align: center;">
+              Nomor Rekening Restoran
             </div>
+
+            <div class="card-body">
+              *Silahkan melakukan pembayaran, melalui salah satu nomor rekening bank yang sudah disediakan.
+            </div>
+
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <h5>
+                  BCA: <span class="text-success fs-5 text">8735089xxx</span> <span class="fs-6 text">(a.n Alif Panglima Nurda)</span>
+                </h5>
+              </li>
+
+              <li class="list-group-item">
+                <h5>
+                  Mandiri: <span class="text-success fs-5 text">1410013032xxx</span> <span class="fs-6 text">(a.n Alif Panglima Nurda)</span>
+                </h5>
+              </li>
+
+              <li class="list-group-item">
+                <h5>
+                  BRI: <span class="text-success fs-5 text">034101000743xxx</span> <span class="fs-6 text">(a.n Alif Panglima Nurda)</span>
+                </h5>
+              </li>
+            </ul>
           </div>
 
           <div class="card mb-3 w-100">
@@ -139,14 +195,11 @@
             </div>
     
             <div class="card-body">
-              <div class="form-group">
-                <label for="bukti_transaksi">Upload Bukti Transaksi:</label>
-                <input type="file" name="bukti_transaksi" accept="image/*" class="form-control-file" id="bukti_transaksi" required>
-              </div>
-            </div>
+              <div class="input-group">
+                <input type="file" name="bukti_transaksi" accept="image/*" class="form-control" aria-describedby="inputGroupFileAddon04" aria-label="Upload" id="bukti_transaksi" required>
 
-            <div class="card-footer">
-              <button type="submit" class="btn btn-success">KIRIM BUKTI</button>
+                <button type="submit" id="inputGroupFileAddon04" class="btn btn-outline-secondary btn-success text-light">KIRIM BUKTI</button>
+              </div>
             </div>
           </div>
         </div>

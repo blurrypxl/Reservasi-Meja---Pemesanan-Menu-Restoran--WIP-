@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <%- include("../partials/headPelanggan.ejs"); %>
+  </head>
+
+  <body>
+    <main class="main-content">
+      <div class="content-box">  
+        <div class="container-header">
+          <form action="/docs/pdf-bukti-reservasi/<%= detailReservasi[0].id_transfer; %>" method="POST">
+            <button type="submit" class="btn btn-primary">CETAK</button>
+          </form>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header start-flex-row">  
+            <div>
+              <h1 class="mb-3">
+                <%= detailReservasi[0].id_invoice; %>
+              </h1>
+
+              <p>
+                Nama Pelanggan:
+                <span><%= detailReservasi[0].nama_pelanggan; %></span>
+              </p>
+
+              <p>
+                Tanggal Reservasi:
+                <span><%= detailReservasi[0].untuk_tanggal; %></span>
+              </p>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="card">
+              <div class="card-header">
+                <h5>
+                  Detail Transaksi
+                </h5>
+              </div>
+
+              <ul class="list-group list-group-flush">
+                <li id="idReservasi" class="list-group-item">
+                  <label for="idReservasi">ID Reservasi:</label>
+                  <%= detailReservasi[0].id_reservasi; %>
+                </li>
+
+                <li id="idPelanggan" class="list-group-item">
+                  <label for="idPelanggan">ID Pelanggan:</label>
+                  <%= detailReservasi[0].id_pelanggan; %>
+                </li>
+
+                <li id="namaPelanggan" class="list-group-item">
+                  <label for="namaPelanggan">Nama Pelanggan:</label>
+                  <%= detailReservasi[0].nama_pelanggan; %>
+                </li>
+
+                <li id="emailPelanggan" class="list-group-item">
+                  <label for="emailPelanggan">Email Pelanggan:</label>
+                  <%= detailReservasi[0].email; %>
+                </li>
+  
+                <li id="createAt" class="list-group-item">
+                  <label for="createAt">Create At:</label>
+                  <%= detailReservasi[0].update_at; %>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="card">
+              <h5>
+                Pesanan Pelanggan
+              </h5>
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">ID Menu</th>
+                    <th scope="col">Nama Menu</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Harga Satuan</th>
+                    <th scope="col">Subtotal</th>
+                  </tr>
+                </thead>
+        
+                <tbody id="view-pesanan">
+                  <!-- # List Pesanan Pelanggan -->
+                  <% let totalBayar = 0; %> 
+                  <% dataPesanan.forEach(dp => { %>
+                    <!-- Menghitung total bayar -->
+                    <% totalBayar += parseInt(dp.total_harga); %>
+
+                    <tr>
+                      <td>
+                        <%= dp.id_pesanan; %> 
+                      </td>
+                      <td>
+                        <%= dp.nama_menu; %> 
+                      </td>
+                      <td>
+                        <%= dp.qty; %> 
+                      </td>
+                      <td>
+                        Rp.<%= dp.harga; %> 
+                      </td>
+                      <td>
+                        Rp.<%= dp.total_harga; %> 
+                      </td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+              <div class="list-group-item" style="text-align: right;">
+                <h2>
+                  Total: Rp.<%= totalBayar; %>
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </body>
+</html>

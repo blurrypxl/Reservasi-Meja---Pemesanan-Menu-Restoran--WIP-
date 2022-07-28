@@ -1,4 +1,6 @@
 const nodemailer = require('nodemailer');
+// const fs = require('fs');
+const ejs = require('ejs');
 require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
@@ -14,17 +16,32 @@ const transporter = nodemailer.createTransport({
 function createMessageConfig(req, res, next) {
   const reqConfig = res.locals.configMessage;
 
-  const messagesConfig = {
-    from: process.env.EMAIL_ADMIN,
-    to: reqConfig.email_pelanggan,
-    priority: reqConfig.priority,
-    subject: reqConfig.subject,
-    html: reqConfig.message
-  }
+  const filterDetailReservasi = res.locals.detailReservasi.filter(reservasi => reservasi.id_transfer == req.params.id);
 
-  res.locals.sendMail = transporter.sendMail(messagesConfig);
+  const filterPesanan = res.locals.dataPesanan.filter(pesanan => pesanan.id_pelanggan == filterDetailReservasi[0].id_pelanggan);
 
-  next();
+  let cetakBuktiPdf = '';
+
+  if (reqConfig.validator === 'valid') cetakBuktiPdf = `<a href="http://localhost:3000/cetak-bukti-reservasi/${filterDetailReservasi[0].id_transfer}" class="btn btn-primary">CETAK BUKTI RESERVASI</a>`;
+
+  console.log(filterDetailReservasi);
+  console.log(filterPesanan);
+
+  ejs.renderFile(reqConfig.message, { user: req.session.user, detailReservasi: filterDetailReservasi, dataPesanan: filterPesanan }, (err, data) => {
+    if (err) throw err;
+
+    const messagesConfig = {
+      from: process.env.EMAIL_ADMIN,
+      to: reqConfig.email_pelanggan,
+      priority: reqConfig.priority,
+      subject: reqConfig.subject,
+      html: cetakBuktiPdf + data
+    }
+  
+    res.locals.sendMail = transporter.sendMail(messagesConfig);
+  
+    next();
+  });
 }
 
 function createBuktiReservasi(req, res, next) {

@@ -16,54 +16,32 @@ router.route('/admin/validasi-transaksi')
   });
 
 router.route('/admin/validasi-transaksi/:id')
-  .put(userChecker.checkAuth, reservasiServices.updateStatusReservasi, reservasiServices.readDetailReservasi, (req, res, next) => {
+  .put(userChecker.checkAuth, reservasiServices.updateStatusReservasi, transaksiServices.readBuktiTransaksi, pemesananServices.readPesanan, (req, res, next) => {
     let reqSubject;
     let reqMessage;
 
-    const filterDetailReservasi = res.locals.dataReservasi.filter(reservasi => reservasi.id_transfer.toString() === req.params.id.toString());
-
-    // console.log(filterDetailReservasi);
-    // console.log(filterPesanan);
-
     if (res.locals.validator === 'valid') {
       reqSubject = 'BUKTI VALIDASI RESERVASI';
-      reqMessage = `
-      <h2> BUKTI RESERVASI </h2>
-      <table style='border: 1px solid black;'>
-        <tr style='border: 1px solid black;'>
-          <th style='border: 1px solid black;' style='border: 1px solid black;'>ID Reservasi</th>
-          <th style='border: 1px solid black;' style='border: 1px solid black;'>Nama Pelanggan</th>
-          <th style='border: 1px solid black;' style='border: 1px solid black;'>Tanggal Reservasi</th>
-          <th style='border: 1px solid black;' style='border: 1px solid black;'>Status Reservasi</th>
-        </tr>
-        <tr style='border: 1px solid black;'>
-          <td style='border: 1px solid black;'>${filterDetailReservasi[0].id_reservasi}</td>
-          <td style='border: 1px solid black;'>${filterDetailReservasi[0].nama_pelanggan}</td>
-          <td style='border: 1px solid black;'>${filterDetailReservasi[0].untuk_tanggal}</td>
-          <td style='border: 1px solid black;'>${filterDetailReservasi[0].status_reservasi}</td>
-        </tr>
-      </table>`;
+      reqMessage = 'views/templateEmail/pageEmailBuktiReservasi.ejs';
     }
     else if (res.locals.validator === 'tidak-valid') {
       reqSubject = 'BUKTI TRANSFER TIDAK VALID';
-      reqMessage = `
-      <h3> Silahkan masukan bukti transfer yang valid ke dalam link dibawah ini. </h3>
-      <a href='http://localhost:3000/update-bukti-transaksi/${filterDetailReservasi[0].id_pelanggan}'>FORM BUKTI TRANSFER</a>
-      `;
+      reqMessage = 'views/templateEmail/pageEmailUpdateBukti.ejs';
     }
 
     res.locals.configMessage = {
       email_pelanggan: res.locals.email,
       priority: 'high',
       subject: reqSubject,
-      message: reqMessage
+      message: reqMessage,
+      validator: res.locals.validator
     }
 
     next();
   }, emailServices.createMessageConfig, (req, res, next) => {
     console.log(res.locals.validator);
 
-    res.locals.sendMail;
+    // res.locals.sendMail;
 
     if (res.locals.validator === 'valid') {
       next();

@@ -39,57 +39,7 @@
           </div>
         <% } %>
 
-        <!-- <div class="card mb-4">
-          <div class="card-body between-center-flex-row">
-            Tambah Data Meja
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahMeja">TAMBAH</button>
-          </div>
-
-          <div class="modal fade" id="tambahMeja" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticTambahMeja" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="staticTambahMeja">Tambah Data Meja</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                
-                <div class="modal-body">
-                  <form action="/admin/meja" method="POST">
-                    <div class="mb-3">
-                      <label for="nomor_meja" class="form-label">Nomor Meja:</label>
-
-                      <input type="number" class="form-control" min="1" name="nomor_meja" id="nomor_meja" required>
-                    </div>
-      
-                    <div class="mb-3">
-                      <label for="max" class="form-label">Max Person:</label>
-
-                      <input type="number" class="form-control" min="2" name="max_person" id="max" required>
-                    </div>
-      
-                    <div class="mb-3">
-                      <label for="status_akun" class="form-label">Status Meja</label>
-      
-                      <select class="form-select form-select-md" aria-label=".form-select-md" name="status" required>
-                        <option selected value="">Tambah status meja</option>
-                        <option value="aktif">Aktif</option>
-                        <option value="non-aktif">Non-Aktif</option>
-                      </select>
-                    </div>
-        
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-                      <button type="submit" class="btn btn-success">CREATE MEJA</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
-        <% detailReservasi.forEach(reservasi => { %> 
+        <% detailReservasi.filter(reservasi => reservasi.status_reservasi !== 'Menunggu Kedatangan Tamu').forEach(reservasi => { %> 
           <details class="card mb-4">
             <summary class="card-header start-flex-row">  
               <div>
@@ -211,7 +161,7 @@
       </div>
     </main>
 
-    <script src="/styles/funcModals.js"></script>
+    <!-- <script src="/styles/funcModals.js"></script> -->
   </body>
 
 </html>

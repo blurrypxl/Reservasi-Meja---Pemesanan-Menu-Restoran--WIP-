@@ -12,11 +12,11 @@ function removeImageFromDisk(path) {
 }
 
 function filterToImg(req, file, cb) {
-  if (file.mimetype === 'image/jpg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
+  if (file.mimetype == 'image/jpg' || file.mimetype == 'image/png' || file.mimetype == 'image/jpeg') {
     return cb(null, true);
   }
-  else if (file.mimetype !== 'image/jpg' || file.mimetype !== 'image/png' || file.mimetype !== 'image/jpeg') {
-    return cb(null, false);
+  else if (file.mimetype != 'image/jpg' || file.mimetype != 'image/png' || file.mimetype != 'image/jpeg') {
+    return cb(null, false, new Error('Only .png, .jpg and .jpeg format allowed.'));
   }
 }
 
@@ -32,7 +32,7 @@ const buktiTransaksiConf = multer.diskStorage({
   }
 });
 
-const saveBuktiToStorage = multer({ storage: buktiTransaksiConf, filterFile: filterToImg }).single('bukti_transaksi');
+const saveBuktiToStorage = multer({ storage: buktiTransaksiConf, fileFilter: filterToImg }).single('bukti_transaksi');
 // Uploads Bukti Transaksi - END
 
 // Uploads Gambar Menu - START

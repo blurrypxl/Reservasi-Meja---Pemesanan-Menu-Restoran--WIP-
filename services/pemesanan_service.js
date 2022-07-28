@@ -70,6 +70,24 @@ function createReservasiDanPesanan(req, res, next) {
         });
       }
 
+      // Membuat nomor invoice
+      db.query(`INSERT INTO no_invoice (id, id_pelanggan, create_at, update_at) VALUES ('${"INV-" + timestamp('YYYY/MM/DD') + "-" + gUniqId({ length: 5 })}', '${idPelanggan}', '${timestamp('HH:mm:YYYY-MM-DD')}', '${timestamp('HH:mm:YYYY-MM-DD')}')`, err => {
+        if (err) return db.rollback(() => { throw err }); //Jika terjadi Error, Maka akan menarik kembali perubahan yang terjadi
+
+        db.commit(err => {
+          if (err) return db.rollback(() => { throw err }); //Jika terjadi Error, Maka akan menarik kembali perubahan yang terjadi
+        });
+      });
+
+      // Update Status Meja
+      db.query(`UPDATE meja SET status='terisi' WHERE id='${id_meja}'`, err => {
+        if (err) return db.rollback(() => { throw err }); //Jika terjadi Error, Maka akan menarik kembali perubahan yang terjadi
+
+        db.commit(err => {
+          if (err) return db.rollback(() => { throw err }); //Jika terjadi Error, Maka akan menarik kembali perubahan yang terjadi
+        });
+      });
+
       // Menyimpan Data Reservasi
       db.query(`INSERT INTO reservasi (id, id_pelanggan, email, untuk_tanggal, status_reservasi, create_at, update_at) VALUES ('${"RSV-" + gUniqId({ length: 7 })}', '${idPelanggan}', '${email}', '${untuk_tgl}', 'Menunggu Pembayaran', '${timestamp("HH:mm:YYYY-MM-DD")}', '${timestamp("HH:mm:YYYY-MM-DD")}')`, err => {
         if (err) return db.rollback(() => { throw err }); //Jika terjadi Error, Maka akan menarik kembali perubahan yang terjadi
@@ -128,7 +146,7 @@ function readPesananById(req, res, next) {
         res.locals.ttlHargaPesanan = ttl;
     
         // console.log(res.locals.dataPesanan);
-        console.log(res.locals.ttlHargaPesanan);
+        // console.log(res.locals.ttlHargaPesanan);
     
         next();
       });

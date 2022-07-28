@@ -11,4 +11,10 @@ router.route('/admin/docs/pdf-transaksi')
 router.route('/admin/docs/pdf-reservasi')
   .post(userChecker.checkAuth, reservasiServices.readDetailReservasi, pemesananServices.readPesanan, pdfServices.createPdfReservasi);
 
+router.route('/docs/pdf-invoice-pelanggan/:id')
+  .post(transaksiServices.readNotaPembayaran, pdfServices.createPdfInvoicePelanggan);
+
+router.route('/docs/pdf-bukti-reservasi/:id')
+  .post(transaksiServices.readBuktiTransaksi, pemesananServices.readPesanan, pdfServices.createPdfBuktiReservasi);
+
 module.exports = router;
