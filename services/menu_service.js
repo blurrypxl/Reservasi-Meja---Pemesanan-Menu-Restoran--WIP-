@@ -4,7 +4,7 @@ const timestamp = require('time-stamp');
 const uploadServices = require('../services/uploads_services');
 
 function readMenu(req, res, next) {
-  db.query("SELECT * FROM menu ORDER BY id ASC", (err, results) => {
+  db.query("SELECT * FROM menu ORDER BY jenis_menu='Makanan' ASC", (err, results) => {
     if (err) throw err;
 
     res.locals.dataMenu = results;

@@ -40,7 +40,7 @@ CREATE TABLE `bukti_transfer` (
 
 LOCK TABLES `bukti_transfer` WRITE;
 /*!40000 ALTER TABLE `bukti_transfer` DISABLE KEYS */;
-INSERT INTO `bukti_transfer` VALUES ('BKT-a719zlr','RSV-l7eg3oq','bukti_transaksi-2022-07-25-562397651.jpg','03:18:2022-07-25','03:18:2022-07-25'),('BKT-dgt9phc','RSV-mqy0rr2','bukti_transaksi-2022-07-25-383580035.jpg','13:23:2022-07-25','13:30:2022-07-25'),('BKT-mgxyl2c','RSV-qrwvndo','bukti_transaksi-2022-07-25-975620370.jpg','13:20:2022-07-25','13:20:2022-07-25');
+INSERT INTO `bukti_transfer` VALUES ('BKT-9fqbz5p','RSV-nfrlixb','bukti_transaksi-2022-07-28-542645896.jpg','14:02:2022-07-28','14:02:2022-07-28'),('BKT-dgt9phc','RSV-mqy0rr2','bukti_transaksi-2022-07-25-383580035.jpg','13:23:2022-07-25','13:30:2022-07-25'),('BKT-l88ayb5','RSV-jai85r1','bukti_transaksi-2022-07-26-947710770.jpg','17:20:2022-07-26','17:21:2022-07-26'),('BKT-q8tfnjg','RSV-5lusx8w','bukti_transaksi-2022-07-29-985086362.jpg','03:53:2022-07-29','03:53:2022-07-29');
 /*!40000 ALTER TABLE `bukti_transfer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -71,7 +71,7 @@ CREATE TABLE `meja` (
 
 LOCK TABLES `meja` WRITE;
 /*!40000 ALTER TABLE `meja` DISABLE KEYS */;
-INSERT INTO `meja` VALUES ('MJA-7za7jce','1',2,6,'aktif','21:49:03/06/2022','08:12:2022-07-08'),('MJA-okeif4a','1',3,6,'aktif','22:00:2022-07-07','19:00:2022-07-19'),('MJA-pz9u054','1',5,6,'aktif','14:29:2022-07-15','14:29:2022-07-15'),('MJA-wmfs4lo','1',4,4,'terisi','14:28:2022-07-15','14:28:2022-07-15'),('MJA-xkmi8ul','1',6,6,'terisi','14:29:2022-07-15','20:15:2022-07-20'),('MJA-ztth1xb','1',1,4,'terisi','21:48:03/06/2022','08:17:2022-07-08');
+INSERT INTO `meja` VALUES ('MJA-7za7jce','1',2,6,'terisi','21:49:03/06/2022','08:12:2022-07-08'),('MJA-okeif4a','1',3,6,'aktif','22:00:2022-07-07','19:00:2022-07-19'),('MJA-pz9u054','1',5,6,'aktif','14:29:2022-07-15','14:29:2022-07-15'),('MJA-wmfs4lo','1',4,4,'terisi','14:28:2022-07-15','14:28:2022-07-15'),('MJA-xkmi8ul','1',6,6,'aktif','14:29:2022-07-15','20:15:2022-07-20'),('MJA-ztth1xb','1',1,4,'aktif','21:48:03/06/2022','08:17:2022-07-08');
 /*!40000 ALTER TABLE `meja` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,7 +105,7 @@ CREATE TABLE `menu` (
 
 LOCK TABLES `menu` WRITE;
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
-INSERT INTO `menu` VALUES ('MNU-0ulqzbq','1','Ricebowl Chicken','Makanan',25000,'gambar_menu-2022-07-19-851954273.jpg',44,'aktif','20:10:2022-07-19','04:56:2022-07-25'),('MNU-17k5dwn','1','Suki Medium (3 Orang)','Makanan',80000,'gambar_menu-2022-07-19-195505735.jpg',45,'aktif','20:17:2022-07-19','04:56:2022-07-25'),('MNU-40qt7a5','1','Nasi Putih','Makanan',5000,'gambar_menu-2022-07-19-645751327.jpg',44,'aktif','20:13:2022-07-19','04:56:2022-07-25'),('MNU-cwkti6s','1','Suki Jumbo (4 Orang)','Makanan',100000,'gambar_menu-2022-07-19-965132381.jpg',45,'aktif','20:17:2022-07-19','04:56:2022-07-25'),('MNU-hbf3ide','1','Ricebowl Beef','Makanan',30000,'gambar_menu-2022-07-01-611609384.jpg',44,'aktif','15:05:2022-07-01','04:56:2022-07-25'),('MNU-lqv41dy','1','Suki Value (2 Orang)','Makanan',55000,'gambar_menu-2022-07-12-55584399.jpg',50,'aktif','15:03:2022-07-01','04:57:2022-07-25'),('MNU-n03b0h9','1','Es Teh Manis','Minuman',5000,'gambar_menu-2022-07-19-977485556.jpg',48,'aktif','20:14:2022-07-19','04:57:2022-07-25'),('MNU-nfopm6j','1','Chicken 100gr','Makanan',15000,'gambar_menu-2022-07-01-176727495.jpg',49,'aktif','20:38:2022-07-01','04:57:2022-07-25'),('MNU-o57gm37','1','US Beef 100gr','Makanan',35000,'gambar_menu-2022-07-01-48045720.jpg',50,'aktif','15:02:2022-07-01','04:58:2022-07-25'),('MNU-t00uvew','1','Saikoro 100gr','Makanan',28000,'gambar_menu-2022-07-19-404809365.jpg',50,'aktif','20:07:2022-07-19','04:58:2022-07-25'),('MNU-vmnlsox','1','Es Lemon Tea','Minuman',7000,'gambar_menu-2022-07-01-578542253.jpg',50,'aktif','15:04:2022-07-01','04:57:2022-07-25');
+INSERT INTO `menu` VALUES ('MNU-0ulqzbq','1','Ricebowl Chicken','Makanan',25000,'gambar_menu-2022-07-29-439453719.png',44,'aktif','20:10:2022-07-19','00:00:2022-07-29'),('MNU-17k5dwn','1','Suki Medium (3 Orang)','Makanan',80000,'gambar_menu-2022-07-19-195505735.jpg',44,'aktif','20:17:2022-07-19','04:56:2022-07-25'),('MNU-40qt7a5','1','Nasi Putih','Makanan',5000,'gambar_menu-2022-07-29-285367542.jpg',44,'aktif','20:13:2022-07-19','00:16:2022-07-29'),('MNU-cwkti6s','1','Suki Jumbo (4 Orang)','Makanan',100000,'gambar_menu-2022-07-19-965132381.jpg',42,'aktif','20:17:2022-07-19','04:56:2022-07-25'),('MNU-hbf3ide','1','Ricebowl Beef','Makanan',30000,'gambar_menu-2022-07-29-209745037.jpg',43,'aktif','15:05:2022-07-01','00:17:2022-07-29'),('MNU-lqv41dy','1','Suki Value (2 Orang)','Makanan',55000,'gambar_menu-2022-07-12-55584399.jpg',49,'aktif','15:03:2022-07-01','04:57:2022-07-25'),('MNU-n03b0h9','1','Es Teh Manis','Minuman',5000,'gambar_menu-2022-07-29-883315399.jpg',40,'aktif','20:14:2022-07-19','00:17:2022-07-29'),('MNU-nfopm6j','1','Chicken 100gr','Makanan',15000,'gambar_menu-2022-07-29-904547475.jpg',43,'aktif','20:38:2022-07-01','00:18:2022-07-29'),('MNU-o57gm37','1','US Beef 100gr','Makanan',35000,'gambar_menu-2022-07-29-122064126.jpg',47,'aktif','15:02:2022-07-01','00:18:2022-07-29'),('MNU-t00uvew','1','Saikoro 100gr','Makanan',28000,'gambar_menu-2022-07-29-674405256.jpg',50,'aktif','20:07:2022-07-19','00:18:2022-07-29'),('MNU-vmnlsox','1','Es Lemon Tea','Minuman',7000,'gambar_menu-2022-07-29-826273844.png',44,'aktif','15:04:2022-07-01','00:18:2022-07-29');
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,7 +133,7 @@ CREATE TABLE `no_invoice` (
 
 LOCK TABLES `no_invoice` WRITE;
 /*!40000 ALTER TABLE `no_invoice` DISABLE KEYS */;
-INSERT INTO `no_invoice` VALUES ('INV-2022/07/25-lbbmj','PLG-2xw5asp','03:18:2022-07-25','03:18:2022-07-25'),('INV-2022/07/25-nzd6r','PLG-sh51o3n','13:23:2022-07-25','13:23:2022-07-25'),('INV-2022/07/25-tz51k','PLG-gchu2qg','13:20:2022-07-25','13:20:2022-07-25');
+INSERT INTO `no_invoice` VALUES ('INV-2022/07/25-nzd6r','PLG-sh51o3n','13:23:2022-07-25','13:23:2022-07-25'),('INV-2022/07/26-gpse4','PLG-lelfouh','17:19:2022-07-26','17:19:2022-07-26'),('INV-2022/07/28-6h44a','PLG-vejktrb','14:01:2022-07-28','14:01:2022-07-28'),('INV-2022/07/29-t7or4','PLG-jjltwzk','03:50:2022-07-29','03:50:2022-07-29');
 /*!40000 ALTER TABLE `no_invoice` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,7 +162,7 @@ CREATE TABLE `pelanggan` (
 
 LOCK TABLES `pelanggan` WRITE;
 /*!40000 ALTER TABLE `pelanggan` DISABLE KEYS */;
-INSERT INTO `pelanggan` VALUES ('PLG-2xw5asp','MJA-xkmi8ul','Diana Haley','03:18:2022-07-25','03:18:2022-07-25'),('PLG-gchu2qg','MJA-ztth1xb','Alip','13:20:2022-07-25','13:20:2022-07-25'),('PLG-sh51o3n','MJA-wmfs4lo','Genoveva Roberts','13:23:2022-07-25','13:23:2022-07-25');
+INSERT INTO `pelanggan` VALUES ('PLG-jjltwzk','MJA-7za7jce','Gerry Rolfson','03:50:2022-07-29','03:50:2022-07-29'),('PLG-lelfouh','MJA-wmfs4lo','Hiram Borer','17:19:2022-07-26','17:19:2022-07-26'),('PLG-sh51o3n','MJA-wmfs4lo','Genoveva Roberts','13:23:2022-07-25','13:23:2022-07-25'),('PLG-vejktrb','MJA-wmfs4lo','Sarah Hill','14:01:2022-07-28','14:01:2022-07-28');
 /*!40000 ALTER TABLE `pelanggan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,7 +194,7 @@ CREATE TABLE `pesanan` (
 
 LOCK TABLES `pesanan` WRITE;
 /*!40000 ALTER TABLE `pesanan` DISABLE KEYS */;
-INSERT INTO `pesanan` VALUES ('PSN-5g45403','PLG-sh51o3n','MNU-hbf3ide',1,'30000','13:23:2022-07-25'),('PSN-p22z3y1','PLG-2xw5asp','MNU-40qt7a5',1,'5000','03:18:2022-07-25'),('PSN-rlx9gly','PLG-2xw5asp','MNU-cwkti6s',1,'100000','03:18:2022-07-25'),('PSN-rn5nbv0','PLG-gchu2qg','MNU-nfopm6j',1,'15000','13:20:2022-07-25');
+INSERT INTO `pesanan` VALUES ('PSN-0fvx74g','PLG-lelfouh','MNU-nfopm6j',3,'45000','17:19:2022-07-26'),('PSN-3wr2w8h','PLG-lelfouh','MNU-cwkti6s',1,'100000','17:19:2022-07-26'),('PSN-5g45403','PLG-sh51o3n','MNU-hbf3ide',1,'30000','13:23:2022-07-25'),('PSN-7cth0nn','PLG-vejktrb','MNU-vmnlsox',2,'14000','14:01:2022-07-28'),('PSN-bx5znio','PLG-lelfouh','MNU-n03b0h9',4,'20000','17:19:2022-07-26'),('PSN-hc1jdqc','PLG-jjltwzk','MNU-nfopm6j',3,'45000','03:50:2022-07-29'),('PSN-m8g80yd','PLG-jjltwzk','MNU-vmnlsox',4,'28000','03:50:2022-07-29'),('PSN-p78h53y','PLG-vejktrb','MNU-n03b0h9',2,'10000','14:01:2022-07-28'),('PSN-pwizs2g','PLG-jjltwzk','MNU-cwkti6s',1,'100000','03:50:2022-07-29'),('PSN-ztdi9oh','PLG-vejktrb','MNU-cwkti6s',1,'100000','14:01:2022-07-28');
 /*!40000 ALTER TABLE `pesanan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -225,7 +225,7 @@ CREATE TABLE `reservasi` (
 
 LOCK TABLES `reservasi` WRITE;
 /*!40000 ALTER TABLE `reservasi` DISABLE KEYS */;
-INSERT INTO `reservasi` VALUES ('RSV-l7eg3oq','PLG-2xw5asp','diana.haley70@ethereal.email','2022-07-25','Menunggu Kedatangan Tamu','03:18:2022-07-25','03:19:2022-07-25'),('RSV-mqy0rr2','PLG-sh51o3n','genoveva.roberts@ethereal.email','2022-07-25','Menunggu Kedatangan Tamu','13:23:2022-07-25','13:30:2022-07-25'),('RSV-qrwvndo','PLG-gchu2qg','alifnurda@gmail.com','2022-07-25','Menunggu Kedatangan Tamu','13:20:2022-07-25','13:20:2022-07-25');
+INSERT INTO `reservasi` VALUES ('RSV-5lusx8w','PLG-jjltwzk','gerry.rolfson70@ethereal.email','2022-07-29','Menunggu Kedatangan Tamu','03:50:2022-07-29','03:53:2022-07-29'),('RSV-jai85r1','PLG-lelfouh','hiram.borer@ethereal.email','2022-07-26','Selesai','17:19:2022-07-26','18:46:2022-07-26'),('RSV-mqy0rr2','PLG-sh51o3n','genoveva.roberts@ethereal.email','2022-07-25','Selesai','13:23:2022-07-25','15:44:2022-07-26'),('RSV-nfrlixb','PLG-vejktrb','sarah.hilll@ethereal.email','2022-07-28','Menunggu Kedatangan Tamu','14:01:2022-07-28','14:09:2022-07-28');
 /*!40000 ALTER TABLE `reservasi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,7 +259,7 @@ CREATE TABLE `transaksi` (
 
 LOCK TABLES `transaksi` WRITE;
 /*!40000 ALTER TABLE `transaksi` DISABLE KEYS */;
-INSERT INTO `transaksi` VALUES ('TRS-4saj91y','1','BKT-mgxyl2c','transfer','15000','valid','13:20:2022-07-25','13:20:2022-07-25'),('TRS-8gwmcl8','1','BKT-a719zlr','transfer','105000','valid','03:19:2022-07-25','03:19:2022-07-25'),('TRS-h99id02','1','BKT-dgt9phc','transfer','30000','valid','13:30:2022-07-25','13:30:2022-07-25');
+INSERT INTO `transaksi` VALUES ('TRS-h99id02','1','BKT-dgt9phc','transfer','30000','valid','13:30:2022-07-25','13:30:2022-07-25'),('TRS-hv9etwi','1','BKT-9fqbz5p','transfer','124000','valid','14:09:2022-07-28','14:09:2022-07-28'),('TRS-if4xf5e','1','BKT-q8tfnjg','transfer','173000','valid','03:53:2022-07-29','03:53:2022-07-29'),('TRS-tgzuu1i','1','BKT-l88ayb5','transfer','165000','valid','17:21:2022-07-26','17:21:2022-07-26');
 /*!40000 ALTER TABLE `transaksi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -303,4 +303,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-07-25 13:57:09
+-- Dump completed on 2022-07-30 13:54:43

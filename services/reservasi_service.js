@@ -306,6 +306,8 @@ function deleteReservasi(req, res, next) {
       db.query(`SELECT id_menu, qty FROM pesanan WHERE id_pelanggan='${idPelanggan}'`, (err, dataPesanan) => {
         if (err) return db.rollback(() => { throw err; });
 
+        // console.log(dataPesanan);
+
         // Kode akan berjalan jika reservasi status reservasi belum selesai
         if (statusReservasi !== 'Selesai') {
           for (let i = 0; i < dataPesanan.length; i++) {
@@ -313,8 +315,11 @@ function deleteReservasi(req, res, next) {
             db.query(`SELECT qty FROM menu WHERE id='${dataPesanan[i].id_menu}'`, (err, dataMenu) => {
               if (err) return db.rollback(() => { throw err; });
 
+              // console.log('qty pesanan: '+dataPesanan[i].qty);
+              // console.log(dataMenu);
+
               // Update data quantity menu
-              db.query(`UPDATE menu SET qty='${dataPesanan[i].qty += dataMenu[i].qty}' WHERE id='${dataPesanan[i].id_menu}'`, err => {
+              db.query(`UPDATE menu SET qty='${dataPesanan[i].qty += dataMenu[0].qty}' WHERE id='${dataPesanan[i].id_menu}'`, err => {
                 if (err) return db.rollback(() => { throw err; });
 
                 db.commit(err => {
